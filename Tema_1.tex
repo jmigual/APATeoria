@@ -4,6 +4,8 @@
 \usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
 \usepackage[margin=2cm]{geometry}
+\usepackage{tikz}
+\usepackage{pgfplots}
 
 \setlength{\parindent}{0pt}
 
@@ -16,7 +18,7 @@
 
 Tenim N dades i volem ajustar-les a una funció polinòmica de grau M hauríem de crear el següent polinomi:
 
-\[ y(c, x_n) = \sum_{i=1}^{M} c_i·x^i \]
+\[ y(c, x_n) = \sum_{i=0}^{M} c_i·x^i \]
 
 Ja que el nostre objectiu és relacionar una entrada amb una sortida determinada (per exemple en reconeixement facial volem acceptar o denegar l'accés) direm $t_n$ al resultat de la nostra funció d'interpolació que hem de ``deduir".
 
@@ -31,6 +33,23 @@ Així doncs la nostra funció d'error serà la següent:
 	\item Com que el grau de $M=3$ està inclòs al grau $M=9$, perquè no podem ajustar només al grau 9?
 	
 	Els coeficients sobrants no tendeixen a 0 necessàriament. Això passarà a mesura que $N \rightarrow \infty$ . Un polinomi que tingui excés de complexitat ($N > 3$) sobreajustarà. El problema del sobreajust es ca solucionant a mesura que N creix.
+	
+	Per solucionar el problema i escollir la $M$ correcta es generen unes dades de prova i unes dades de comprovació d'error de manera que escollirem la funció que tingui el mínim error.
+	
+	\begin{tikzpicture}
+		\begin{axis}[
+			xlabel=$x$,
+			ylabel=$Error$,
+			axis x line=middle,
+			axis y line=middle,
+			domain=0:10,
+			xtick={0, ..., 10}
+			]
+			\addplot[blue]{exp(-x/2)};
+			\addplot[red]{0.002*(3*x-8)^2};
+		\end{axis};
+	\end{tikzpicture}
+	
 	\item Què hem d'entendre per \textbf{complexitat } d'un model? Si un modelés lineal la seva complexitat és el nombre de coeficients (necessitem una manera de controlar la complexitat) $\rightarrow$ \textbf{Regularització}.
 \end{itemize}
 
@@ -55,23 +74,25 @@ L'objectiu és trobar una estimació dels paràmetres de $\theta$ basada en $\ma
 \begin{itemize}
 	\item La tècnica de \textbf{màxima versemblança} (MV) consisteix en trobar els valors de $\theta$ (diguem-li  $\hat{\theta}$).
 	
-	\item Definim $l(\theta) := ln\ \mathcal{L}(\theta) = \sum_{n=1}^{N} ln(p(x_n, \theta))$. 
-	
-	Maximitzar $l(\mu, \sigma^2) \leftrightarrow$ minimitzar $-l(\mu, \sigma^2)$
-	
-	$ -l(\mu, \sigma^2) = -\sum_{n=1}^N ln\ p(x_n, \mu, \sigma^2) =  -\sum_{n=1}^N ln\left\{ \frac{1}{\sqrt{2\pi\sigma}} exp\left(-\frac{(x_n - \mu)^2}{2\sigma^2}\right) \right\} = $ 
-	
-	$ = \boxed{\sum_{n=1}^N \left\{ ln(\sqrt{2\pi\sigma} + \frac{(x_n - \mu)^2}{2\sigma^2}) \right\}}$
-
-	\item $ \frac{\partial(-l)}{\partial\mu} = \sum_{n=1}{N} \frac{1}{\sigma^2} (x_n-\mu)(-1) = 0 $
-	
-	$ \sum_{n=1}{N} (x_n - \mu) = 0$ 
-	
-	$\sum_{n=1}^N x_n = \sum_{n=1}^N \mu \Rightarrow \boxed{\hat{\mu} = \frac{1}{N}\sum_{n=1}^N x_n}$
-	\item $\frac{\partial(-l)}{\partial\sigma^2} = \frac{N}{2\sigma^2} - \frac{1}{2\sigma^4}\sum_{n=1}^N (x_n - \mu)^2 = 0$
-	
-	substituïm $\mu$ per $\hat{\mu}$ i aïllem $\sigma^2 \Rightarrow \hat{\sigma}^2 = \frac{1}{N} \sum_{n=1}^N (x_n - \hat{\mu})^2$ 
+	\item Definim la funció log-versemblança com $l(\theta) := ln\ \mathcal{L}(\theta) = \sum_{n=1}^{N} ln(p(x_n, \theta))$. 
 \end{itemize}
+	
+\textbf{Exemple} Gaussiana
+
+\[ \text{Equació Gaussiana: } \frac{1}{\sqrt{2\pi\sigma}} exp\left(-\frac{(x_n - \mu)^2}{2\sigma^2}\right) \]
+
+Primer de tot busquem la funció de log-versemblança $l(\theta) \rightarrow l(\mu, \sigma^2)$. Així doncs, maximitzar $l(\mu, \sigma^2) \leftrightarrow$ minimitzar $-l(\mu, \sigma^2)$
+
+\[ -l(\mu, \sigma^2) = -\sum_{n=1}^N ln\ p(x_n, \mu, \sigma^2) =  -\sum_{n=1}^N ln\left\{ \frac{1}{\sqrt{2\pi\sigma}} exp\left(-\frac{(x_n - \mu)^2}{2\sigma^2}\right) \right\} = \underbrace{\boxed{-\sum_{n=1}^N \left\{ ln(\sqrt{2\pi\sigma}) + \frac{(x_n - \mu)^2}{2\sigma^2} \right\}} }_{\text{Funció } -l(\mu, \sigma^2)}\]
+
+Ara busquem $\hat{\mu}$ que és de MV, com que aquest $\hat{\mu}$ fa que $-l(\mu, \sigma^2)$ sigui mínim ho buscarem a partir de la primera derivada.
+
+\[ \frac{\partial(-l)}{\partial\mu} = \sum_{n=1}^N \frac{1}{\sigma^2} (x_n-\mu)(-1) = 0 \implies \sum_{n=1}^N (x_n - \mu) = 0 \implies  \sum_{n=1}^N x_n = \sum_{n=1}^N \mu \implies \boxed{\hat{\mu} = \frac{1}{N}\sum_{n=1}^N x_n}  \]
+
+\[\frac{\partial(-l)}{\partial\sigma^2} = \frac{N}{2\sigma^2} - \frac{1}{2\sigma^4}\sum_{n=1}^N (x_n - \mu)^2 = 0 \]
+
+substituïm $\mu$ per $\hat{\mu}$ i aïllem $\sigma^2 \implies \hat{\sigma}^2 = \frac{1}{N} \sum_{n=1}^N (x_n - \hat{\mu})^2$ 
+
 
 \subsection{Com de bons són aquests estimadors?}
 
