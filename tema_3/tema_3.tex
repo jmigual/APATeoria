@@ -1,0 +1,61 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
+\usepackage[catalan]{babel} % Language 
+\usepackage{fontspec}
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+
+\title{Tema 3: Mètodes de \emph{clustering}}
+
+\begin{document}
+	
+\maketitle
+
+\textbf{Objectiu}: El nostre objectiu és trobar agrupacions naturals de dades. Un grup o subgrup de dades és un \emph{cluster}
+
+Les observacions que pertanyen al mateix \emph{cluster} s'assemblen entre elles
+
+Les observacions que \textbf{no} pertanyen al mateix \emph{cluster} no s'assemblen tant
+
+\textbf{\emph{clustering}}
+
+\begin{itemize}
+	\item el \textbf{procés} de trobar els \emph{clusters} presents en les dades
+	\item el \textbf{resultat} del procés.
+\end{itemize}
+
+% Figures 1 i 2
+
+\subsection{Mètodes de \emph{clustering}}
+
+Un tipus de mètode són els mètodes jeràrquics:
+\begin{itemize}
+	\item \textbf{divisius} es dediquen a separar les dades en dos grups recursivament fins que només queda un punt.
+	\item \textbf{aglomeratius} es dediquen a agrupar les dades des d'un punt fins a obtenir el \emph{cluster} final.
+\end{itemize}
+
+% Figura 3
+
+També hi ha els mètodes combinatoris. Hi ha un algoritme voraç amb una funció de qualitat.
+
+Hi ha els algoritmes probabilístics. De quantes maneres es poden agrupar $N$ dades en $K$ \emph{clusters}?
+
+$$ S(N, K) = \frac{1}{K!} \sum_{k=1}^K (-1)^{K-k} \begin{pmatrix}
+K \\ k
+\end{pmatrix} \text{, nº d'Stirling del 2n tipus} $$
+
+$$ S(19,4) \simeq = 10^10 $$
+
+$$ \underbrace{B(N)}_{\text{nº de Bell}} \sum_{K=1}^{N} S(N,K) \implies \text{ ex.: } B(79) \simeq 3.89·10^85 $$
+
+Així doncs hi ha diferents mètodes de \emph{clustering} per trobar els grups.
+
+\subsection{Algorisme de $k$-means}
+
+Tenim una mostra $\mathcal{D} = \{ x_1,..., x_N \} , x_i \in \mathbb{R}, 1 \le i \le N$. Fixa't $K$ externament, escollim un conjunt de $K$ \textbf{prototips}:
+
+$$ \mathcal{P} = \{ \mu_1, ..., \mu_K \}, \mu \in \mathbb{R}^d $$
+
+\end{document}
