@@ -1,9 +1,11 @@
 \documentclass[a4paper]{article}
 
-\usepackage{amsmath,amssymb,amsfonts,amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
 \usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
 \usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1em}
@@ -24,9 +26,14 @@
 	
 	\textbf{Objectiu}: reduir la dimensió preservant la major part de la informació \emph{rellevant} (variància). 
 	
-	\textbf{Exemple}: es vol projectar un llapis (objecte en 3D) en un pla (2D).
+	\textbf{Exemple}: es vol projectar un llapis (objecte en 3D) en un pla (2D) (Figura~\ref{fig:llapis}).
 	
-	
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=0.5\linewidth]{llapis.jpg}
+		\caption{Representació projecció llapis}
+		\label{fig:llapis}
+	\end{figure}
 	
 	Podem escollir diversos plans on projectar el llapis. Si es fa una projecció en alçat es veurà el llapis estirat i segons com es projecti de perfil només es veurà un cercle.
 	
@@ -38,15 +45,16 @@
 	
 	També es poden representar les dades sobre l'eix de revolució del llapis. O sobre un eix perpendicular a aquest. El que busquem és que les dades tinguin la màxima variabilitat possible.
 	
-	\textbf{Formalització}: Tenim una mostra de dades $\{x_1, ..., x_n\}$ tal que $x_n \in \mathbb{R}^d$; provenen d'un vector aleatori $X = (X_1, ..., X_d)^T$ que té mitjana $\mu \in \mathbb{R}^d$ i una matriu de covariàncies $\Sigma = \sigma_{ij}^2$.
+	\textbf{Formalització}: Tenim una mostra de dades $\{x_1, ..., x_n\}$ tal que $x_i \in \mathbb{R}^d$; provenen d'un vector aleatori $X = (X_1, ..., X_d)^T$ que té mitjana $\mu \in \mathbb{R}^d$ i una matriu de covariàncies $\Sigma = \left\{ \sigma_{ij}^2 \right\}$.
 	
 	\begin{itemize}
-		\item $\mathbb{E}(X) = \mathbb{E}(X_1, ..., X_d) = \mu$
-		\item $\mathbb{E}((X - \mu)(X-\mu)^T) = \Sigma$
+		\item $\mu = \mathbb{E}(X) = \mathbb{E}(X_1, ..., X_d)$
+		\item $\Sigma = \mathbb{E}\left((X - \mu)(X-\mu)^T\right)$
 		
-		En particular $CoVar(X_i, X_j) = \sigma_{ij}^2$
-		
-		$CoVar(X_i, X_i) = Var(X_i) = \sigma_{ii}^2=\sigma_i^2$
+		\begin{flalign*}
+		\text{En particular } & CoVar(X_i, X_j) = \sigma_{ij}^2  &\\
+		 & CoVar(X_i, X_i) = \sigma_{ii}^2 = Var(X_i) =\sigma_i^2 &
+		\end{flalign*}
 	\end{itemize}
 	
 	Considerem el problema de trobar unes variables noves $Y = (Y_1, ..., Y_d)^T$ tal que:
@@ -63,8 +71,8 @@
 	(Transformació \textbf{ortogonal})
 	
 	\subsection{Tria de $a_1$}
-	Cal que $a_1$ maximitzi la $Var(Y_1)$ subjecte a $||a||^=1$
-	\[Var(Y_1) = Var(a_1^TX) = a_1^TVar(X)a_1 = a_1^T\Sigma a_1\]
+	Cal que $a_1$ maximitzi la $Var(Y_1)$ subjecte a $||a_1||^2=1$
+	$$ Var(Y_1) = Var(a_1^TX) = a_1^TVar(X)a_1 = a_1^T\Sigma a_1 $$
 	
 	\textbf{Excursió}: multiplicadors de Lagrange
 	
@@ -72,10 +80,10 @@
 	
 	Una manera de fer-ho és construir el Lagrangià:
 	
-	\[ L(x) = f(x) - \lambda(g(x) - c) \]
+	$$  L(x) = f(x) - \lambda(g(x) - c)  $$
 	
 	La solució és un punt estacionari (les derivades s'anu\lgem en).
-	\[ \frac{\partial L}{\partial x_i} - \lambda \frac{\partial g}{\partial x_i} = 0, i = 1, ..., d \implies L(a_1) = a_1^T\Sigma a_1 - \lambda(||a||^2 - 1) \]
+	$$  \frac{\partial L}{\partial x_i} - \lambda \frac{\partial g}{\partial x_i} = 0, i = 1, ..., d \implies L(a_1) = a_1^T\Sigma a_1 - \lambda(||a||^2 - 1)  $$
 	
 	\begin{itemize}
 		\item $\frac{\partial L}{\partial a_1} = 2\Sigma a_1 - 2\lambda a1 = 0$
@@ -91,11 +99,11 @@
 	
 	\subsection{Tria de $a_2$}
 	
-	$Y_2 = a_2^TX$ on $||a_2||^2 = 1$ i \[CoVar(Y_2, Y_1) = CoVar(a_2^TX, a_1^TX) = a_2^T\Sigma a_1 \underbrace{= 0}_\text{Volem que sigui 0}\] 
+	$Y_2 = a_2^TX$ on $||a_2||^2 = 1$ i $$ CoVar(Y_2, Y_1) = CoVar(a_2^TX, a_1^TX) = a_2^T\Sigma a_1 \underbrace{= 0}_\text{Volem que sigui 0} $$ 
 	
-	\[ = a_2^T(\Sigma a_1) = a_2^T(\lambda_1 a_1) = \lambda_1 (a_2^Ta_1) \underbrace{= 0}_\text{volem que ho sigui} \Leftrightarrow a_1 \bot a_2 \]
+	$$  = a_2^T(\Sigma a_1) = a_2^T(\lambda_1 a_1) = \lambda_1 (a_2^Ta_1) \underbrace{= 0}_\text{volem que ho sigui} \Leftrightarrow a_1 \bot a_2  $$
 	
-	\[ L(a_2) = a_2^T\Sigma a_2 - \lambda(||a_2||^2 - 1) - \delta(a_2^Ta_1) \implies \Sigma a_2 = \lambda a_2 \]
+	$$  L(a_2) = a_2^T\Sigma a_2 - \lambda(||a_2||^2 - 1) - \delta(a_2^Ta_1) \implies \Sigma a_2 = \lambda a_2  $$
 	
 	Triem $a_2$ com el vector associat al segon VAP més gran de $\Sigma \rightarrow \lambda_2$
 	
@@ -104,29 +112,27 @@
 		\item Si diem $\Delta$ a la matriu de covariàncies de $Y$, és clar que
 		\[ \Delta = 
 		\begin{pmatrix}
-		\lambda_1 & 0 & \cdots & 0 \\
-		0 & \lambda_2 & \ddots  & \vdots \\
-		\vdots & \ddots & \ddots & 0 \\
-		0 & \cdots & 0 &  \lambda_d
+		\lambda_1 &   &   & \text{\huge0 } \\
+		 & \lambda_2 &   &  \\
+		 &  & \ddots &  \\
+		 \text{ 5\huge0} &  &  &  \lambda_d
 		\end{pmatrix} \]
 		
-		donats: $a_3, ..., a_d$ es deriven igual els $a_1, ..., a_d$ es diuen \textbf{components principals}.
+		donats: $a_3, ..., a_d$ es deriven igual els $a_1, ..., a_d$ i es diuen \textbf{components principals}.
 		
 		\item Per construcció
-		\begin{equation}			
-			\overset{Var(Y_1)\ >}{\underset{\lambda_1}{\verteq}} \overset{Var(Y_2)\ >}{\underset{\lambda_2}{\verteq}}
-			\overset{...\ >\ Var(Y_d)}{\underset{\lambda_d}{\verteq}}
-		\end{equation}
+		\begin{flalign*}			
+			& \overset{Var(Y_1)\ >}{\underset{\lambda_1}{\verteq}} \overset{Var(Y_2)\ >}{\underset{\lambda_2}{\verteq}}
+			\overset{...\ >\ Var(Y_d)}{\underset{\lambda_d}{\verteq}} &
+		\end{flalign*}
 		 
 		
-		\item $\sum_{i=1}^d Var(Y_i) = \sum_{i=1}^d \lambda_i \underbrace{=}_\text{teorema} Tr(\Sigma)$
-		
-		$ = \sum_{i=1}^d \sigma_i^2 = \sum_{i=1}^d Var(X_i)$
+		\item $\sum_{i=1}^d Var(Y_i) = \sum_{i=1}^d \lambda_i \underbrace{=}_\text{teorema} Tr(\Sigma) = \sum_{i=1}^d \sigma_i^2 = \sum_{i=1}^d Var(X_i)$
 	\end{enumerate}
 	
-	\textbf{Idea} quedar-se amb els $k$ primers components principals $a_1, ..., a_k (k < d)$
+	\textbf{Idea}: quedar-se amb els $k$ primers components principals $a_1, ..., a_k\ (k<d)$ (Per visualitzar $k=\{2,3\})$. Si decidim quedar-nos amb les $k$ primeres:
 	
-	Si decidim quedar-nos amb els k primers 
+	$$ \%\text{de variància retinguda } = \frac{\sum_{i=1}^k \lambda(i)}{\sum_{i=1}^d \lambda(i)}·100 $$
 	
 	% Formula 1 aquí
 	
@@ -141,13 +147,13 @@
 	\end{itemize}
 	
 	\section{Anàlisi discriminant de Fisher}
-	\[ \mathcal{D} = \{(x_1, t_1), ..., (x_N, t_N)\}, x_n \in \mathbb{R}^d, t_n \in \{-1, +1 \} \]
+	$$  \mathcal{D} = \{(x_1, t_1), ..., (x_N, t_N)\}, x_n \in \mathbb{R}^d, t_n \in \{-1, +1 \}  $$
 	
 	% Figura 2
 	
 	\textbf{Notació}
 	
-	\[ c_+, c_- \]
+	$$  c_+, c_-  $$
 	
 	\begin{equation}
 		\begin{aligned}
@@ -162,19 +168,19 @@
 	
 	La \textbf{dispersió} (\emph{scatter}) d'una classe projectada:
 	
-	\[ x_+^2 := \sum_{n \in c_+} (w^Tx_n - w^Tm_+)^2 \]
+	$$  x_+^2 := \sum_{n \in c_+} (w^Tx_n - w^Tm_+)^2  $$
 	(és la variància, excepte la divisió per $|c_+| - 1$)
 
 	$s_-^2$ anàlogament
 	
 	La \textbf{dispersió total} és $s_+^2 + s_-^2$.
 	
-	El criteri de Fisher és \[ J(w) = \underbrace{\frac{|w^T(m_+-m_-)|}{s_+^2 + s_-^2}}_\text{a maximitzar} \]
+	El criteri de Fisher és $$  J(w) = \underbrace{\frac{|w^T(m_+-m_-)|}{s_+^2 + s_-^2}}_\text{a maximitzar}  $$
 	
 	La solució és $w^* = S_w^-1(m_- - m_+)$
 	
 	$S_w$ és la matriu de dispersió intra-classe (within-class scatter matrix).
 	
-	\[ S_w = \sum_{n \in c_+} (x_n - m_+)(x_n - m_+)^T + \sum_{n \in c_-} (x_n - m_-)(x_n - m_-)^T \]
+	$$  S_w = \sum_{n \in c_+} (x_n - m_+)(x_n - m_+)^T + \sum_{n \in c_-} (x_n - m_-)(x_n - m_-)^T  $$
 	
 \end{document}
