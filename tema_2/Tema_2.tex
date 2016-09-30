@@ -26,6 +26,8 @@
 	
 	\textbf{Exemple}: es vol projectar un llapis (objecte en 3D) en un pla (2D).
 	
+	
+	
 	Podem escollir diversos plans on projectar el llapis. Si es fa una projecció en alçat es veurà el llapis estirat i segons com es projecti de perfil només es veurà un cercle.
 	
 	Quina de les dues representacions és millor? Què volem? 
@@ -138,7 +140,7 @@
 		ret $A \leftarrow (a_1, a_2, ..., a_k)$
 	\end{itemize}
 	
-	\section{Anàlisi discriminiant de Fisher}
+	\section{Anàlisi discriminant de Fisher}
 	\[ \mathcal{D} = \{(x_1, t_1), ..., (x_N, t_N)\}, x_n \in \mathbb{R}^d, t_n \in \{-1, +1 \} \]
 	
 	% Figura 2
@@ -158,10 +160,10 @@
 	
 	Busquem un $w$ tal que maximitzi la separació entre les mitjanes projectades $|w^Tm_+ - w^Tm_-| = |w^T(m_+ - m_-)|$
 	
-	La \textbf{dispersió} (scatter) d'una classe projectada:
+	La \textbf{dispersió} (\emph{scatter}) d'una classe projectada:
 	
 	\[ x_+^2 := \sum_{n \in c_+} (w^Tx_n - w^Tm_+)^2 \]
-	(és la variància, excepta la divisió per $|c_+| - 1$)
+	(és la variància, excepte la divisió per $|c_+| - 1$)
 
 	$s_-^2$ anàlogament
 	
