@@ -98,12 +98,82 @@ $$ \mathcal{P} = \{ \mu_1, ..., \mu_K \}, \mu \in \mathbb{R}^d $$
 		
 		$\sum_{n=1}^N r_{nk}\mu_k = \sum_{n=1}^N r_{nk}x_n \implies \mu_k\sum_{n=1}^N r_{nk} = \sum_{n=1}^N r_{nk}x_n \implies \boxed{\mu_k = \frac{\sum_{n=1}^N r_{nk}}{\sum_{n=1}^N r_{nk}}}$
 		
-		\item $\frac{\partial ||z||^2}{\partial z} = \begin{pmatrix}
+		\item Tenint en compte que $\frac{\partial ||\vec{z}||^2}{\partial \vec{z}} = \begin{pmatrix}
 		2z_1 \\ 2z_2 \\ \vdots \\ 2z_d
-		\end{pmatrix} = 2z$
+		\end{pmatrix} = 2\vec{z}$
 	\end{itemize}
 \end{itemize}
 
+\subsection{Algorisme}
+
+Inicialitzar $\mathcal{P}$
+
+\textbf{Repetir}:
+\begin{itemize}
+	\item Re-calcular els $r_{nk}$ usant $\mathcal{P}$
+	\item Re-calcular $\mathcal{P}$ usant els $r_{nk}$
+\end{itemize}
+\textbf{fins que} convergeixi
+
+\textbf{retornar} $\mathcal{P},r_{nk}$
 
 
+\subsection{Comentaris}
+
+\begin{enumerate}
+	\item $\Downarrow$ Cal una inicialització de $\mathcal{P}$, que és un problema en sí mateix
+	\item $\Downarrow$ L'assignació de dades als \emph{clusters} $\{r_{nk}\}$ és \textbf{binària} per tant és difícil.
+	\item $\Downarrow$ Cal un procediment extern de determinació de $K$.
+\end{enumerate}
+
+\section{Barreges de Gaussianes (Mixture of Gaussians)}
+
+Determinació de \textbf{funcions de densitat de probabilitat (pdf)}. Tenim una mostra de dades  $\{x_1,...,x_n\}$ i.i.d (simple) generar una pdf $p(x)$. Això és impossible a no ser que reduïm les possibilitats.
+
+El que farem serà agafar unes quantes gaussianes i comprovar quin percentatge de la solució final representen.
+
+% Figura 5
+
+En dues dimensions es tenen unes dades podem trobar uns conjunts de gaussianes, es solaparan perquè les gaussianes tenen amplada infinit. Un cop trobades les ponderem i busquem la densitat final.
+
+% Figura 6
+
+Una barreja de Gaussianes és una pdf de la forma:
+
+$$ p(x) = \sum_{k=1}^K \underbrace{\pi_k}_{\text{Coeficients}}·\underbrace{N(x, \mu_k, \Sigma_k)}_{\text{Components de la barreja}}, 0 \le \pi_k \le 1, \sum_{k=1}^K \pi_k = 1$$
+
+\begin{align*}
+	\{\pi_k, \mu_k, \Sigma_k\} & \text{  desconegudes, paràmetres} \\
+	K & \text{  desconegudea (hiper-paràmetre)}
+\end{align*}
+
+A vegades generalitzar el problema ajudar a trobar solucions que a simple vista no es poden veure per casos particulars. 
+
+En principi la distribució $p$ només pertany de les variables $x$. Creem una nova variable aleatòria $z$ que ens ajuda a veure el problema de manera més general.
+
+$$ p(\underbrace{x}_{x \in \mathbb{R}^d}) \rightarrow p(x,z) = p(x|z)·p(z)$$
+
+$$ z = \begin{pmatrix}
+z1 \\ \vdots \\ z_K
+\end{pmatrix} \text{Només una component de z és 1} $$
+
+S'interpreta com que ha estat la coponent $k$ la que ha generat X. Aquestes $z$ s'anomenen \textbf{variables aleatòries latents o ocultes}.
+
+\begin{description}
+	\item[Distribució marginal sobre z] $p(z_k = 1) = \pi_k$
+	
+	$p(z) = \prod_{k=1}^K {\pi_k}^{z_k}$
+	
+	\item[Distribució condicional] de $x$ respecte $z$
+	
+	$p(x|z_k = 1) = N(x, \mu_k, \Sigma_k)$
+	
+	\item[Distribució marginal sobre $x$] ara eliminem la $z$
+	
+	$p(x) = \sum_z p(x|z)p(z) = \sum_{k=1}^K \pi_k N(x, \mu_k, \Sigma_k)$
+	
+	\item[Distribució condicional] de $z$ respecte $x$
+	
+	$p(z|x) = \frac{p(x|z)p(z)}{p(x)}$
+\end{description}
 \end{document}
