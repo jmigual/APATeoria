@@ -7,6 +7,11 @@
 \usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2cm}
+
+\newcommand{\verteq}{\rotatebox{90}{$\,=$}}
+
 \title{Tema 3: Mètodes de \emph{clustering}}
 
 \begin{document}
@@ -19,8 +24,7 @@ Les observacions que pertanyen al mateix \emph{cluster} s'assemblen entre elles
 
 Les observacions que \textbf{no} pertanyen al mateix \emph{cluster} no s'assemblen tant
 
-\textbf{\emph{clustering}}
-
+\textbf{\emph{Clustering:}}
 \begin{itemize}
 	\item el \textbf{procés} de trobar els \emph{clusters} presents en les dades
 	\item el \textbf{resultat} del procés.
@@ -28,7 +32,7 @@ Les observacions que \textbf{no} pertanyen al mateix \emph{cluster} no s'assembl
 
 % Figures 1 i 2
 
-\subsection{Mètodes de \emph{clustering}}
+\section{Mètodes de \emph{clustering}}
 
 Un tipus de mètode són els mètodes jeràrquics:
 \begin{itemize}
@@ -44,18 +48,62 @@ Hi ha els algoritmes probabilístics. De quantes maneres es poden agrupar $N$ da
 
 $$ S(N, K) = \frac{1}{K!} \sum_{k=1}^K (-1)^{K-k} \begin{pmatrix}
 K \\ k
-\end{pmatrix} \text{, nº d'Stirling del 2n tipus} $$
-
-$$ S(19,4) \simeq = 10^10 $$
+\end{pmatrix} \text{, nº d'Stirling del 2n tipus} \implies S(19,4) \simeq 10^{10} $$
 
 $$ \underbrace{B(N)}_{\text{nº de Bell}} \sum_{K=1}^{N} S(N,K) \implies \text{ ex.: } B(79) \simeq 3.89·10^85 $$
 
 Així doncs hi ha diferents mètodes de \emph{clustering} per trobar els grups.
 
-\subsection{Algorisme de $k$-means}
+\section{Algorisme de $k$-means}
 
 Tenim una mostra $\mathcal{D} = \{ x_1,..., x_N \} , x_i \in \mathbb{R}, 1 \le i \le N$. Fixa't $K$ externament, escollim un conjunt de $K$ \textbf{prototips}:
 
 $$ \mathcal{P} = \{ \mu_1, ..., \mu_K \}, \mu \in \mathbb{R}^d $$
+
+% Figura 4
+
+\begin{itemize}
+	\item El nostre objectiu és trobar un conjunt de prototips $\mathcal{P}$ tal que les dades de $\mathcal{D}$ que estiguin assignades al \emph{cluster} $k$ es trobin més a prop de $\mu_k$ que de cap altre.
+	\item Definim les variables indicadores:
+	
+	$$ r_{nk} =
+	\begin{cases}
+	1 & \text{si } k = argmin ||x_n - \mu_j||\ 1 \le j \le K \\ 0 & \text{en cas contrari}
+	\end{cases}$$
+	
+	\item Definim un criteri de qualitat, a minimitzar, tenint en compte que minimitzar la distància al quadrat és el mateix que minimitzar la distància:
+	
+	$$ J(\mathcal{P}, \{r_{nk}\}) = \sum_{n=1}^N \sum_{k=1}^K r_{nk} ||x_n - \mu_k||^2 $$
+	
+	\begin{itemize}
+		\item Si sapiguessim la solució per $\mathcal{P}$, com trobaríem la solució pells $\{r_{nk}\}$? Calculant les distàncies als $\mathcal{P}$.
+		
+		\item Si sapiguessim la solució per $\{r_{nk}\}$ com trobaríem la solució per $\mathcal{P}$? El prototip òptim és el centroide (la mitjana) de les dades assignades a cada \emph{cluster}.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Formalització}
+\begin{itemize}
+	\item Donat $\mathcal{P} = \{ \mu_1, ..., \mu_K \}$ recalcular els $\{r_{nk}\}$
+	
+	$$ r_{nk} =
+	\begin{cases}
+	1 & \text{si } k = argmin ||x_n - \mu_j||\ 1 \le j \le K \\ 0 & \text{en cas contrari}
+	\end{cases}$$
+	
+	\item Recalcular $\mathcal{P}$ a partir dels $\{r_{nk}\}$
+	
+	\begin{itemize}
+		\item $\frac{\partial J}{\partial \mu_k} = \sum_{n=1}^N r_{nk} \underbrace{\frac{\partial ||x_n - \mu_k||^2}{\partial \mu_k}}_{-2(x_n - \mu_k)} = 2\sum_{n=1}^N r_{nk} (\mu_k - x_n) = 0$
+		
+		$\sum_{n=1}^N r_{nk}\mu_k = \sum_{n=1}^N r_{nk}x_n \implies \mu_k\sum_{n=1}^N r_{nk} = \sum_{n=1}^N r_{nk}x_n \implies \boxed{\mu_k = \frac{\sum_{n=1}^N r_{nk}}{\sum_{n=1}^N r_{nk}}}$
+		
+		\item $\frac{\partial ||z||^2}{\partial z} = \begin{pmatrix}
+		2z_1 \\ 2z_2 \\ \vdots \\ 2z_d
+		\end{pmatrix} = 2z$
+	\end{itemize}
+\end{itemize}
+
+
 
 \end{document}
