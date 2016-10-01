@@ -53,13 +53,27 @@ $$ f(x) = \frac{1}{N}\sum_{n=1}^N(x - x_n)^2 $$
 
 \begin{enumerate}
 
-\item \textbf{Demostreu que $f$ té un únic mínim a $x* = \frac{1}{N} \sum_{n=1}^N x_n$ i interpreteu el resultat.}
+\item \textbf{Demostreu que $f$ té un únic mínim a $x^* = \frac{1}{N} \sum_{n=1}^N x_n$ i interpreteu el resultat.}
+
+Primer buscarem els extrems de la funció, per fer-ho buscarem $f'(x)$ i després comprovarem que aquests extrems són mínims i que correspon amb el valor dona't per l'enunciat.
+
+$$ f'(x) = \frac{2}{N}\sum_{n=1}^N (x - x_n) = \frac{2}{N}\left(\sum_{n=1}^N x - \sum_{n=1}^N x_n \right) = \frac{2}{N}\left(Nx - \sum_{n=1}^N x_n \right) = \underline{\underline{2x - \frac{2}{N}\sum_{n=1}^N x_ns}} $$
+
+$$ f'(x^*) = 0 \implies 2x^* - \frac{2}{N}\sum_{n=1}^N x_n = 0 \implies \boxed{x^* = \frac{1}{N}\sum_{n=1}^N x_n} $$
+
+Així trobem un extrem de $f(x)$ ara hem de demostrar que és un mínim. Així doncs, buscarem $f''(x)$ i comprovarem que $f''(x^*) > 0$.
+
+$$ f''(x) = \frac{2}{N}x \implies f''(x^*) = \frac{2}{N}\frac{1}{N}\sum_{n=1}^N x_n = \frac{2}{N^2} \sum_{n=1}^N x_n$$
+
+Així doncs si $\sum_{n=1}^N x_n > 0$ serà un mínim, si $\sum_{n=1}^N < 0$ serà un màxim i si $\sum_{n=1}^N = 0$ serà indeterminat. Com es pot veure hem obtingut el mateix valor que l'enunciat.
 
 \item \textbf{Considereu ara la nova funció:}
 
 $$ f(x) = \sum_{n=1}^N p_n (x - x_n)^2 $$
 
 \textbf{on ponderem cada $x_n$ per un factor $p_n > 0$ que compleix $\sum_{n=1}^N p_n = 1$. Recalculeu la solució. Comproveu que es redueix al cas anterior quan $p_n = 1/N$.}
+
+Aplicarem el mateix mètode que a l'apartat anterior.
 
 \item \textbf{[R] Apliqueu el darrer resultat a una seqüència de 1.000 nombres independents Gaussians de mitjana zero i desviació tipus 2. Useu una ponderació basada en nombres independents uniformes en (0,1).}
 
