@@ -3,12 +3,14 @@
 \usepackage{amsmath}
 \usepackage{amssymb,amsfonts}
 \usepackage[catalan]{babel} % Language 
-\usepackage{fontspec} % <-- AQUESTA LINEA EM PETA (RAUL)
+\usepackage{fontspec}
 \usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage[makeroom]{cancel}
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -57,15 +59,15 @@ $$ f(x) = \frac{1}{N}\sum_{n=1}^N(x - x_n)^2 $$
 
 Primer buscarem els extrems de la funció, per fer-ho buscarem $f'(x)$ i després comprovarem que aquests extrems són mínims i que correspon amb el valor dona't per l'enunciat.
 
-$$ f'(x) = \frac{2}{N}\sum_{n=1}^N (x - x_n) = \frac{2}{N}\left(\sum_{n=1}^N x - \sum_{n=1}^N x_n \right) = \frac{2}{N}\left(Nx - \sum_{n=1}^N x_n \right) = \underline{\underline{2x - \frac{2}{N}\sum_{n=1}^N x_ns}} $$
+$$ f'(x) = \frac{2}{N}\sum_{n=1}^N (x - x_n) = \frac{2}{N}\left(\sum_{n=1}^N x - \sum_{n=1}^N x_n \right) = \frac{2}{N}\left(Nx - \sum_{n=1}^N x_n \right) = \underline{\underline{2x - \frac{2}{N}\sum_{n=1}^N x_n}} $$
 
 $$ f'(x^*) = 0 \implies 2x^* - \frac{2}{N}\sum_{n=1}^N x_n = 0 \implies \boxed{x^* = \frac{1}{N}\sum_{n=1}^N x_n} $$
 
-Així trobem un extrem de $f(x)$ ara hem de demostrar que és un mínim. Així doncs, buscarem $f''(x)$ i comprovarem que $f''(x^*) > 0$.
+Així trobem un extrem de $f(x)$ ara hem de demostrar que és un mínim. Per tant, buscarem $f''(x)$ i comprovarem que $f''(x^*) > 0$.
 
-$$ f''(x) = \frac{2}{N}x \implies f''(x^*) = \frac{2}{N}\frac{1}{N}\sum_{n=1}^N x_n = \frac{2}{N^2} \sum_{n=1}^N x_n$$
+$$ f''(x) = 2 \implies f''(x^*) > 0 $$
 
-Així doncs si $\sum_{n=1}^N x_n > 0$ serà un mínim, si $\sum_{n=1}^N < 0$ serà un màxim i si $\sum_{n=1}^N = 0$ serà indeterminat. Com es pot veure hem obtingut el mateix valor que l'enunciat.
+Així doncs queda demostrat que $x^*$ és un mínim (mentre $ N \ne \infty $).
 
 \item \textbf{Considereu ara la nova funció:}
 
@@ -73,9 +75,53 @@ $$ f(x) = \sum_{n=1}^N p_n (x - x_n)^2 $$
 
 \textbf{on ponderem cada $x_n$ per un factor $p_n > 0$ que compleix $\sum_{n=1}^N p_n = 1$. Recalculeu la solució. Comproveu que es redueix al cas anterior quan $p_n = 1/N$.}
 
-Aplicarem el mateix mètode que a l'apartat anterior.
+Aplicarem el mateix mètode que a l'apartat anterior. Primer buscarem $f'(x)$ i obtindrem els extrems i, a continuació, comprovarem que aquests extrems siguin mínims a partir de $f''(x)$
+
+$$ 
+f'(x) = \frac{2}{N} \sum_{n=1}^N p_n(x - x_n) = 
+\frac{2}{N}\left(\sum_{n=1}^N p_n x - \sum_{n=1}^N p_n x_n\right) = 
+\frac{2}{N}\left(x\sum_{n=1}^N p_n - \sum_{n=1}^N p_n x_n\right) = 
+\underline{\underline{\frac{2}{N}\left(x - \sum_{n=1}^N p_n x_n\right)}} 
+$$
+$$
+f'(x) = 0 \implies \cancel{\frac{2}{N}}\left(x^* - \sum_{n=1}^N p_n x_n\right) \implies
+\boxed{x^* = \sum_{n=1}^N p_n x_n}
+$$
+$$
+\text{Si } p_n = \frac{1}{N} \implies \boxed{x^* = \frac{1}{N}\sum_{n=1}^N x_n}
+$$
+
+Ara que hem trobat un extrem de $f(x)$ buscarem $f''(x)$ per comprovar que és un mínim veient que $f''(x^*) > 0$.
+
+$$
+f''(x) = \frac{2}{N}\sum_{n=1}^N p_n = \frac{2}{N} \implies f''(x^*) > 0
+$$
 
 \item \textbf{[R] Apliqueu el darrer resultat a una seqüència de 1.000 nombres independents Gaussians de mitjana zero i desviació tipus 2. Useu una ponderació basada en nombres independents uniformes en (0,1).}
+
+Si desenvolupem una mica la funció podrem veure que ens queda un polinomi de 2n grau:
+
+$$
+f(x) = \frac{1}{N} \sum_{n=1}^N (x - x_n)^2 =
+\frac{1}{N} \sum_{n=1}^N p_n \left( x^2 - 2x_n x + x_n^2 \right) =
+\frac{1}{N} \left( \sum_{n=1}^N p_n x^2 - 2\sum_{n=1}^N p_n x_n x + \sum_{n=1}^N p_n x_n^2 \right)=
+$$
+$$
+\underbrace{\frac{1}{N}}_a x^2 - x \underbrace{\frac{2}{N}\sum_{n=1}^N p_n x_n}_b + \underbrace{\frac{1}{N}\sum_{n=1}^N p_n x_n^2}_c
+$$
+
+A la \autoref{fig:grafic} es pot veure la funció trobada i com hi ha un mínim proper al 0.
+
+\vspace{0.5cm}
+
+\lstinputlisting[language=R]{problema_1.R}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{problema_1_plot}
+    \caption{Gràfic de la funció generat per R}
+    \label{fig:grafic}
+\end{figure}
 
 \end{enumerate}
 
