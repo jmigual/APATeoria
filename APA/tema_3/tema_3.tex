@@ -1,4 +1,4 @@
-%\documentclass[a4paper]{article}
+\documentclass[a4paper]{article}
 
 \usepackage{amsmath}
 \usepackage{amssymb,amsfonts}
@@ -6,6 +6,7 @@
 \usepackage{fontspec}
 \usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
+\usepackage[makeroom]{cancel}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -152,11 +153,29 @@ A vegades generalitzar el problema ajudar a trobar solucions que a simple vista 
 
 En principi la distribució $p$ només pertany de les variables $x$. Creem una nova variable aleatòria $z$ que ens ajuda a veure el problema de manera més general.
 
-$$ p(\underbrace{x}_{x \in \mathbb{R}^d}) \rightarrow p(x,z) = p(x|z)·p(z)$$
+$$
+p(\underbrace{x}_{x \in \mathbb{R}^d}) \rightarrow p(x,z) = p(x|z)·p(z)
+$$
 
-$$ z = \begin{pmatrix}
+$$ 
+z = 
+\begin{pmatrix}
 z1 \\ \vdots \\ z_K
-\end{pmatrix} \text{Només una component de z és 1} $$
+\end{pmatrix} \text{Només una component de z és 1} 
+$$
+
+$$
+z = 
+\begin{pmatrix}
+0 \\
+0 \\
+1 \\
+0 \\
+0
+\end{pmatrix}
+\rightarrow
+\parbox{14em}{La $x$ associada a $z$ ha estat generada per la componen $k=3$ (amb probabilitat $\pi_3$)}
+$$
 
 S'interpreta com que ha estat la coponent $k$ la que ha generat X. Aquestes $z$ s'anomenen \textbf{variables aleatòries latents o ocultes}.
 
@@ -175,6 +194,52 @@ S'interpreta com que ha estat la coponent $k$ la que ha generat X. Aquestes $z$ 
 	
 	\item[Distribució condicional] de $z$ respecte $x$
 	
-	$p(z|x) = \frac{p(x|z)p(z)}{p(x)}$
+	$p(z_k = 1|x) = \frac{p(x|z_k = 1)p(z_k = 1)}{p(x)} = 
+	\frac{N(x, \mu_k, \Sigma_k)·\pi_k}{\sum_{j=1}^K \pi_j · N(x, \mu_j, \Sigma_j)}$
+	
+	$\gamma_k(x) := p(z_k = 1 | x) \rightarrow \parbox{14em}{Probabilitat de que $x$ hagi estat generada per la component $k$ }$
+	
+	$\pi_k \rightarrow$ Prioritat a priori
+	
+	$p(z_k = 1 | x) \rightarrow$ Prioritat a posteriori
 \end{description}
+
+\subsection{Problema d'estimació de paràmetres: $\{\pi_k\}, \{ \mu_k \}, \{ \Sigma_k \}$ }
+
+\subsubsection{Màxima versemblança}
+
+$$ \{\pi_k\}, \{ \mu_k \}, \{ \Sigma_k \} = \theta $$
+
+$$ 
+\ell(\theta) = ln \mathcal{L}(\theta) = ln P(\mathcal{D}|\theta) =
+ln \prod_{n=1}^N P(x_n | \{\pi_k, \mu_k, \Sigma_k \}) =
+ln \prod_{n=1}^N \sum_{k=1}^K \pi_k N(x_n, \mu_k, \Sigma_k) = 
+\sum_{n=1}^N ln\left(\sum_{k=1}^K \pi_k N\left(x_n, \mu_k, \Sigma_k \right) \right)
+$$
+
+$$
+N(x, \mu, \Sigma) = \underbrace{|\Sigma|^{-\frac{1}{2}}·(2\pi)^{-\frac{d}{2}}}_C·exp\left( -\frac{1}{2}(x - \mu)^T \Sigma^{-1}(x-\mu) \right)
+$$
+
+$$
+\frac{\partial \ell}{\partial \mu_k} = \sum_{n=1}^N =
+\frac{1}{\sum_{j=1}^K \pi_j · N(x_n, \mu_j, \Sigma_j)}·\pi_k · \frac{\partial N(x_n, \mu_k, \Sigma_k}{\partial \mu_k} = 
+\sum_{n=1}^N 
+\underbrace{
+	\frac{\pi_k·N(x_n, \mu_k, \Sigma_k)}{\sum_{j=1}^K \pi_j · N(x_n, \mu_j, \Sigma_j)}
+}_{\gamma_k(x_n)} \Sigma_k^{-1} (x_n - \mu_k) = 
+$$
+$$
+\sum_{n=1}^N \gamma_k (x_n) · \Sigma_k^{-1} (x_n - \mu_k) = 0 \implies \sum_{n=1}^N \gamma_k (x_n) · \Sigma_k^{-1} x_n = \sum_{n=1}^N \gamma_k(x_n) · \Sigma_k^{-1} \mu_k \implies 
+$$
+$$
+\cancel{\Sigma_k^{-1}} \left(\sum_{n=1}^N \gamma_k(x_n)·x_n \right) = \cancel{\Sigma_k^{-1}} \mu_k \left( \sigma_{n=1}^N \gamma_k(x_n) \right) \implies
+\boxed{\mu_k = \frac{\sum_{n=1}^N \gamma_k (x_n) · x_n}{\sum_{n=1}^N \gamma_k(x_n)}}
+$$
+
+$$ \frac{\partial N(x, \mu, \Sigma}{\partial \mu} = 
+C·exp\left( -\frac{1}{2}(x - \mu)^T \Sigma^{-1}(x-\mu) \right) · \left(\cancel{-\frac{1}{2}}\right)·\underbrace{\frac{\partial \left\{ (x - \mu)^T \Sigma^{-1} (x - \mu) \right\} }{\partial \mu}}_{\cancel{-2}\Sigma^{-1}(x-\mu)} = 
+N(x,\mu,\Sigma)\Sigma^{-1}(x-\mu)$$
+
+$$\frac{\partial z^T A z}{\partial z} = (A + A^T) z \underbrace{=}_{\parbox{3em}{\tiny Si A és simètrica}} 2Az $$
 \end{document}
