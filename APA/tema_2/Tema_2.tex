@@ -164,16 +164,22 @@
 	
 	La \textbf{dispersió} (\emph{scatter}) d'una classe projectada:
 	
-	$$  x_+^2 := \sum_{n \in c_+} (w^Tx_n - w^Tm_+)^2  $$
+	$$  
+	s_+^2 := \sum_{n \in c_+} (w^T x_n - w^T m_+)^2  
+	$$
 	(és la variància, excepte la divisió per $|c_+| - 1$)
 
-	$s_-^2$ anàlogament
+	$s_-^2$ anàlogament 
+	
+	$$
+	s_-^2 := \sum_{n \in c_-} (w^T x_n - w^T m_-)^2
+	$$
 	
 	La \textbf{dispersió total} és $s_+^2 + s_-^2$.
 	
 	El criteri de Fisher és $$  J(w) = \underbrace{\frac{|w^T(m_+-m_-)|}{s_+^2 + s_-^2}}_\text{a maximitzar}  $$
 	
-	La solució és $w^* = S_w^-1(m_- - m_+)$
+	La solució és $w^* = S_w^{-1}(m_- - m_+)$
 	
 	$S_w$ és la matriu de dispersió intra-classe (within-class scatter matrix).
 	
