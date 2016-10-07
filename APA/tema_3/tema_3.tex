@@ -222,7 +222,7 @@ N(x, \mu, \Sigma) = \underbrace{|\Sigma|^{-\frac{1}{2}}·(2\pi)^{-\frac{d}{2}}}_
 $$
 
 \begin{flalign*}
-	\textbullet &\frac{\partial \ell}{\partial \mu_k} = \sum_{n=1}^N =
+	\textbullet &\frac{\partial \ell(\theta)}{\partial \mu_k} = \sum_{n=1}^N =
 	\frac{1}{\sum_{j=1}^K \pi_j · N(x_n, \mu_j, \Sigma_j)}·\pi_k · \frac{\partial N(x_n, \mu_k, \Sigma_k}{\partial \mu_k} = 
 	\sum_{n=1}^N 
 	\underbrace{
@@ -243,15 +243,18 @@ $$
 \end{flalign*}
 
 \begin{flalign*}
-	\textbullet\frac{\partial \ell}{\partial \Sigma_k} = 0 \implies 
+	\textbullet\frac{\partial \ell(\theta)}{\partial \Sigma_k} = 0 \implies 
 	\boxed{\Sigma_k = \frac{\sum_{n=1}^N \gamma_k(x_n) (x_n - \mu_k)(x_n - \mu_k)^T}{\sum_{n=1}^N \gamma_k (x_n)}}
 	&&
 \end{flalign*}
 
 \begin{flalign*}
-	\textbullet &\frac{\partial \ell}{\partial \pi_k} \implies 
-	\sum_{n=1}^K \pi_k = 1 \implies mcx\ \ell(\theta) + \lambda·\left( \sum_{k=1}^K \pi_k - 1 \right) && \\
-	& \boxed{\pi_k = \frac{1}{N} \sum_{n=1}^N \gamma_k(x_n)}
+	\textbullet &\sum_{n=1}^K \pi_k = 1 \implies mcx\ \ell(\theta) + \lambda·\left( \sum_{k=1}^K \pi_k - 1 \right) \\
+	& \frac{\partial \ell(\theta)}{\partial \pi_k} =
+	\sum_{n=1}^N \frac{1}{\sum_{j=1}^K \pi_j·N(x_n,\mu_j, \Sigma_j)}·N(x_n,\mu_k,\Sigma_k) + \lambda = 0 \underset{\times\pi_k}{\implies} \underset{\forall k, 1 \le k \le K}{\sum_{n=1}^N \gamma_k(x_n) + \lambda \pi_k = 0} \implies
+	\\
+	& \sum_{k=1}^K \sum_{n=1}^N \gamma_k(x_n) + \lambda \underbrace{\sum_{k=1}^K \pi_k}_1 = 0 \implies \sum_{n=1}^N \underbrace{\sum_{k=1}^K \gamma_k(x_n)}_1 + \lambda = 0 \implies N + \lambda = 0 \implies \boxed{\lambda = -N}\\
+	& \boxed{\pi_k = \frac{1}{N} \sum_{n=1}^N \gamma_k(x_n)} &&
 \end{flalign*}
 
 \subsubsection{Algorisme E-M Moos $(\mathcal{D},K)$}
