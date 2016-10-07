@@ -115,7 +115,7 @@
 		\lambda_1 &   &   & \text{\huge0 } \\
 		 & \lambda_2 &   &  \\
 		 &  & \ddots &  \\
-		 \text{ 5\huge0} &  &  &  \lambda_d
+		 \text{ \huge0} &  &  &  \lambda_d
 		\end{pmatrix} \]
 		
 		donats: $a_3, ..., a_d$ es deriven igual els $a_1, ..., a_d$ i es diuen \textbf{components principals}.
@@ -152,17 +152,13 @@
 	% Figura 2
 	
 	\textbf{Notació}
-	
 	$$  c_+, c_-  $$
-	
-	\begin{equation}
-		\begin{aligned}
-			c_+ &:= \{ n  t_n = +1 \} \\
-			c_- &:= \{ n | t_n = -1 \} \\
-			m_+ &:= \frac{1}{|c_+|} \sum_{n\in c_+} x_n \\
-			m_- &:= \frac{1}{|c_-|} \sum_{n\in c_-} x_n \\
-		\end{aligned}
-	\end{equation}
+	\begin{align*}
+		c_+ &:= \{ n | t_n = +1 \} \\
+		c_- &:= \{ n | t_n = -1 \} \\
+		m_+ &:= \frac{1}{|c_+|} \sum_{n\in c_+} x_n \\
+		m_- &:= \frac{1}{|c_-|} \sum_{n\in c_-} x_n \\
+	\end{align*}
 	
 	Busquem un $w$ tal que maximitzi la separació entre les mitjanes projectades $|w^Tm_+ - w^Tm_-| = |w^T(m_+ - m_-)|$
 	
