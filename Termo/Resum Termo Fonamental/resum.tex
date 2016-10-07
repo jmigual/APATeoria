@@ -3,6 +3,9 @@
 \usepackage{fontspec}
 
 \usepackage[catalan]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
 \usepackage{csquotes}
 
 \setlength{\parindent}{0pt}
@@ -29,11 +32,46 @@ $$
 \Delta U = Q - W
 $$
 
+$$
+Q_P + W_{altres} = \Delta H = \int_{T_1}^{T_2} m C_P dT
+$$
+
+$$
+Q_V + W_{altres} = \Delta H = \int_{T_1}^{T_2} m C_V dT
+$$
+
 On:
 \begin{description}
 	\item[\boldmath $\Delta U$] és la variació d'energia del sistema
 	\item[\boldmath $Q$] és la calor intercanviada pel sistema a través de les parets
 	\item[\boldmath $W$] és el treball intercanviat pel sistema amb el seu entorn
 \end{description}
+
+\section{Segon principi de la termodinàmica}
+
+\begin{displayquote}
+	\em
+	La quantitat d'entropia de l'univers tendeix a incrementar durant el temps.
+\end{displayquote}
+
+$$
+dS \ge \frac{\delta Q}{T} \implies
+\begin{cases}
+\Delta S &= \int \frac{\delta Q}{T} \\
+Q_{rev} &= \int T dS \\
+Q_{rev,isoter} &= T \Delta S
+\end{cases}
+$$
+
+$$
+\Delta S_{uni} = \Delta S_{sistema} + \Delta S_{entorn} = \Delta S_{sistema} + \frac{\pm Q_0}{T_0} \ge 0
+$$
+
+\begin{align*}
+	\text{Procés adiabàtic irreversible} &\implies \Delta S_{sist} = (S_2 - S_1) > 0 \\
+	\text{Procés adiabàtic reversible}  &\implies \Delta S_{sist} = (S_2 - S_1) = 0 \\
+	\text{Proces isentròpic} &\implies S_2 = S_1
+\end{align*}
+
 
 \end{document}
