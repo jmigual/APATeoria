@@ -1,7 +1,9 @@
 \documentclass[a4paper]{article}
 
 \usepackage{amsmath}
-\usepackage{amssymb,amsfonts}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsbsy}
 \usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
 \usepackage[margin=2cm]{geometry}
@@ -147,42 +149,48 @@
 	\end{itemize}
 	
 	\section{Anàlisi discriminant de Fisher}
-	$$  \mathcal{D} = \{(x_1, t_1), ..., (x_N, t_N)\}, x_n \in \mathbb{R}^d, t_n \in \{-1, +1 \}  $$
+	$$  \mathcal{D} = \{(x_1, t_1), ..., (x_N, t_N)\}, \underline{\boldsymbol{x_n \in \mathbb{R}^d}}, t_n \in \{-1, +1 \}  $$
 	
 	% Figura 2
 	
 	\textbf{Notació}
-	$$  c_+, c_-  $$
+	$$  C_+, C_-  $$
 	\begin{align*}
-		c_+ &:= \{ n | t_n = +1 \} \\
-		c_- &:= \{ n | t_n = -1 \} \\
-		m_+ &:= \frac{1}{|c_+|} \sum_{n\in c_+} x_n \\
-		m_- &:= \frac{1}{|c_-|} \sum_{n\in c_-} x_n \\
+		C_+ &:= \{ n | t_n = +1 \} \\
+		C_- &:= \{ n | t_n = -1 \} \\
+		\vec{m}_+ &:= \frac{1}{|C_+|} \sum_{n\in C_+} \vec{x}_n \\
+		\vec{m}_- &:= \frac{1}{|C_-|} \sum_{n\in C_-} \vec{x}_n \\
 	\end{align*}
 	
-	Busquem un $w$ tal que maximitzi la separació entre les mitjanes projectades $|w^Tm_+ - w^Tm_-| = |w^T(m_+ - m_-)|$
+	Si suposem que tenim un vector $D$-dimensional i el volem projectar a una dimensió estem buscant un $w$ tal que $y_n = w^T \vec{x}_n$. Així doncs, busquem un $w$ tal que maximitzi la separació entre les mitjanes projectades $m_+ - m_- = \vec{w}^T(\vec{m}_+ - \vec{m}_-)$ on $m_k = w^T \vec{m}_k$.
 	
 	La \textbf{dispersió} (\emph{scatter}) d'una classe projectada:
 	
 	$$  
-	s_+^2 := \sum_{n \in c_+} (w^T x_n - w^T m_+)^2  
+	s_+^2 := \sum_{n \in C_+} (y_n - m_+)^2 = 
+	\sum_{m \in C_+} (\vec{w}^T \vec{x}_n - \vec{w}^T \vec{m}_+)^2
 	$$
 	(és la variància, excepte la divisió per $|c_+| - 1$)
 
 	$s_-^2$ anàlogament 
 	
 	$$
-	s_-^2 := \sum_{n \in c_-} (w^T x_n - w^T m_-)^2
+	s_-^2 := \sum_{n \in C_-} (y_n - m_-)^2 = 
+	\sum_{m \in C_-} (\vec{w}^T \vec{x}_n - \vec{w}^T \vec{m}_-)^2
 	$$
 	
 	La \textbf{dispersió total} és $s_+^2 + s_-^2$.
 	
-	El criteri de Fisher és $$  J(w) = \underbrace{\frac{|w^T(m_+-m_-)|}{s_+^2 + s_-^2}}_\text{a maximitzar}  $$
+	El criteri de Fisher és $$  J(\vec{w}) = \underbrace{\frac{|\vec{w}^T(\vec{m}_+-\vec{m}_-)|}{s_+^2 + s_-^2}}_\text{a maximitzar}  $$
 	
-	La solució és $w^* = S_w^{-1}(m_- - m_+)$
+	La solució és $\vec{w}^* = S_w^{-1}(\vec{m}_- - \vec{m}_+)$
 	
 	$S_w$ és la matriu de dispersió intra-classe (within-class scatter matrix).
 	
-	$$  S_w = \sum_{n \in c_+} (x_n - m_+)(x_n - m_+)^T + \sum_{n \in c_-} (x_n - m_-)(x_n - m_-)^T  $$
+	$$
+	S_w = S_+ + S_- = 
+	\underbrace{\sum_{n \in C_+} (x_n - \vec{m}_+)(x_n - \vec{m}_+)^T}_{S_+} +
+	\underbrace{\sum_{n \in C_-} (x_n - \vec{m}_-)(x_n - \vec{m}_-)^T}_{S_-}  
+	$$
 	
 \end{document}
