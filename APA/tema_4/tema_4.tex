@@ -14,10 +14,12 @@
 \setlength{\parskip}{0.2cm}
 
 \title{Tema 4: Models lineals per regressió}
+\author{Joan Marcè Iguals}
 
 \begin{document}
 \maketitle
 
+\section{Introducció}
 El problema de la regressió consisteix en, donat un vector $x \in \mathbb{R}^d$, predir un escalar $t \in \mathbb{R}$, on la relació (la dependència) entre $t$ i $x$ és estocàstica, així doncs escrivim:
 
 
@@ -27,6 +29,141 @@ i) \quad &\mathbb{E}(\varepsilon) = 0 \\
 ii)\quad & Var(\varepsilon) = \sigma^2 < \infty
 \end{align*}
 
+Veiem unes dades:
 
+$$
+\mathcal{D} = \{ (x_1, t_1), ... (x_n, t_n)  \} \quad x_n \in R^d, t_n \in R^d \quad m.a.s.
+$$
+
+\textbf{Exemple:} ajust polinòmic
+
+$$
+y(x, c) = co + \sum_{i=1}^M c_i x^i \quad x \in \mathbb{R}
+$$
+$$
+x \in \mathbb{R}^d\ ? \text{ els polinomis \textbf{no escalen} a més d'una variable}
+$$
+
+Introduïm el concepte de \textbf{funcions de base}
+
+$$
+\phi_i: \mathbb{R}^d \rightarrow \mathbb{R}, \quad i = 1,...,M
+$$
+\begin{align*}
+y(x, \omega) &= \omega_0 + \sum_{i=1}^{M-1} \omega_i \phi_i (x) \\
+&=  \sum_{i=0}^{M-1} \omega_i \phi_i (x), \quad \phi_0 (x) = 1
+\end{align*}
+\textbf{Exemple:} $\phi_i (x) = x^i$
+
+Escrivim
+$$
+y(x, \omega) = \sum_{i=0}^{M-1} \omega_i \phi_i (x) = \vec{\omega}^T \vec{\phi} (x)
+$$
+
+$$
+\vec{\omega} = 
+\begin{pmatrix}
+\omega_0 \\ \omega_1 \\ \vdots \\ \omega_{M-1}
+\end{pmatrix};\quad
+\vec{\phi}(x) = 
+\begin{pmatrix}
+\phi_0 (x) = 1 \\
+\phi_1 (x) \\
+\vdots \\
+\phi_{M-1}
+\end{pmatrix}
+$$
+
+\section{Regressió clàssica}
+
+$$
+\varepsilon ~ N(0, \sigma^2)
+$$
+
+Si tenim una distribució normal (veure figura 1) l'amplada del pic de la gaussiana depèn de $\sigma^2$.
+
+
+% FIGURA 1
+
+$ t = f(x) + N(0, \sigma^2) $ és equivalent a escriure $T ~ N(f(x), \sigma^2) $.
+
+Així doncs si s'agafa la mitjana de $x$ i s'uneixen els punts, la funció resultant és la millor possible. Així doncs la funció de regressió $f^*(x) = \mathbb{E}(T|X)$.
+
+L'únic que ens falta és posar les dades en una matriu:
+
+$$
+\vec{X}_{N \times d} =
+\begin{pmatrix}
+\leftarrow x_1 \rightarrow \\
+\leftarrow x_2 \rightarrow \\
+\vdots \\
+\leftarrow x_N \rightarrow
+\end{pmatrix}
+$$
+
+Així doncs tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $\omega$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
+
+$$
+\theta = (\omega, \sigma^2)
+$$
+
+\begin{align*}
+-\ell (\theta) &= -ln \mathcal{L} (\theta) = 
+-ln \mathcal{\omega, \sigma^2} =
+-ln P(t | X, \omega, \sigma^2) \underbrace{=}_{m.a.s.} \\
+-ln \prod_{n=1}^N P(t_n | x_n, \omega, \sigma^2) &\underbrace{=}_{modelat}
+-ln \prod_{n=1}^N \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) =
+- \sum_{n=1}^N ln \ \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) = \\
+- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} &= 
+\sum_{n=1}^N \left\{ ln(\sqrt{2\pi}\sigma) + \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = \\
+N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,\omega))^2 & \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, \omega))^2 = E(\omega)
+\end{align*}
+
+$$
+\boxed{y(x, \omega) = \omega^T \phi(x)} \text{ és convinent }
+$$
+
+$$
+\Phi_{N \times M} =
+\begin{pmatrix}
+\phi_0 (x_1) & \phi_1(x_1) & \ldots & \phi_{M-1} (x_1) \\
+\phi_0 (x_2) & \phi_1(x_2) & \ldots & \phi_{M-1} (x_2) \\
+\vdots & \vdots & \ddots & \vdots \\
+\phi_0 (x_N) & \phi_1(x_N) & \ldots & \phi_{M-1} (x_N)
+\end{pmatrix}
+\text{ matriu de disseny}
+$$
+
+$$
+\mathcal{N}(t, \mu, \sigma^2) = \frac{1}{\sqrt{2 \pi} \sigma} exp \left( - \frac{(t - \mu)^2}{2\sigma^2} \right)
+$$
+
+Expressem \textbf{l'error quadràtic}
+$$
+E(\omega) = \frac{1}{2} || \vec{t} - \Phi \vec{\omega} ||^2 = \frac{1}{2} \left\{ ||\vec{t}||^2 + ||\Phi \vec{\omega}||^2 - 2t^T(\Phi \vec{\omega}) \right\}
+$$
+
+$$
+\frac{\partial E}{\partial \vec{\omega}} = \frac{1}{2} \left\{ 0 + 2 \Phi^T \Phi \hat{\vec{\omega}} - 2 \Phi^T \vec{t} \right\} = \Phi^T \Phi \hat{\vec{\omega}} - \Phi^T \vec{t} = \vec{0} \implies
+$$
+$$
+\left( \Phi^T \Phi \right) \hat{\vec{\omega}} = \Phi^T \vec{t} \implies
+\boxed{\hat{\vec{\omega}} = (\Phi^T \Phi)^{-1} \Phi \vec{t}} = \Phi^+ \vec{t}
+$$
+$$
+\frac{\partial E}{\partial \sigma^2} = \frac{1}{N} \sum_{n=1}^N (t_n - \vec{\omega}^T \phi(x_n))^2 = \frac{2}{N} E(\omega)
+$$
+
+\textbf{Teorema} ("mínims quadrats")
+Sigui $\Phi_{N\times M}, \quad N > M$. Si els vectors columna de $\Phi$ són linealment independents, és a dir, $rang(\Phi) = M$ (\emph{full rank}), llavors:
+
+\begin{enumerate}
+	\item La matriu $\Phi^T\Phi$ és simètrica i semi-definida positiva
+	\item El problema de mínims quadrats: 
+	$\underset{\vec{\omega}}{min} ||\vec{t} - \Phi \vec{\omega}||^2$ té solució única.
+	\item Per trobar-la, cal resoldre el sistema d'equacions: $\Phi^T\Phi \vec{\omega} = \Phi^T \vec{t}$ (equacions normals de'n Gauss)
+\end{enumerate}
+
+La matriu $ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T $ és pseudo-inversa (inversa de Moore-Penrose) $ \Phi^+ \Phi = I $
 
 \end{document}
