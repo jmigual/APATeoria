@@ -234,5 +234,92 @@ $$
 $$
 E_{\lambda} (\vec{\omega}) := E(\vec{\omega}) + \underbrace{\frac{\lambda}{2}}_{\text{ct. regularització}}·||\vec{\omega}||^2, \ \lambda > 0
 $$
+$$
+E_{\lambda}(\vec{\omega}) = \frac{1}{2} || t - \Phi \omega ||^2 + \frac{\lambda}{2} || \vec{\omega} ||^2
+$$
+$$
+\frac{\partial E}{\partial \vec{\omega}} = 
+\Phi^T \Phi \vec{\omega} - \Phi^T t \implies
+\frac{\partial E}{\partial \vec{\omega}} = 
+\Phi^T \Phi \vec{\omega} - \Phi^T t + \lambda \vec{\omega} = 0 \implies
+\Phi^T \Phi \vec{\omega} + \lambda \vec{\omega} = \Phi^T t
+$$
+$$
+\left( \Phi^T \Phi + \lambda I \right) \vec{\omega} = \Phi^T t \rightarrow
+\text{ si } \left( \Phi^T \Phi + \lambda \vec{\omega} \right)^{-1} 
+\text{ existeix, llavors: } \hat{\vec{\omega}} = 
+\left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T t
+$$
 
+\textbf{Avantatges:}
+
+\begin{enumerate}[i)]
+	\item La regularització permet expressar models més complexes del necessari i penalitzar l'excés de complexitat.
+	$$
+	\begin{cases}
+		\lambda \rightarrow 0 &\text{sobreajusta} \\
+		\lambda \rightarrow \infty &\text{infra ajust}
+	\end{cases}
+	$$
+	
+	\item $\left( \Phi^T \Phi + \lambda I \right)^{-1}$ sempre existeix, $\forall \lambda > 0$.
+\end{enumerate}
+
+\subsubsection{\textsc{Cross-Validation}}
+
+% FIGURA 2
+
+Si es pinten totes les dades en un vector, cada punt és una fila de dades. S'escull un enter $K, \ 2 \le K \le N$. Si per exemple agafem $K=5$ dividim les dades en 5 parts. 
+
+\verb|5-cross-validation| consistiria en fer 5 experiments. Les 4 primeres parts s'utilitzen per entrenar i la 5a part s'utilitza per validar les dades. Així es van fent experiments movent el conjunt de validació de lloc.
+
+D'aquesta manera s'obtenen diferents errors de validació (5 errors diferents) que permeten obtenir l'error de validació creuada:
+$$
+error = \frac{1}{K} \sum_{i=1}^K va_i
+$$
+
+\textbf{Observacions:}
+\begin{itemize}
+	\item Totes les dades passen $K - 1$ vegades per entrenament i 1 vegada per validació.
+	\item Els entrenaments que es fan no utilitzen totes les dades per entrenar degut a que s'utilitza un conjunt per validar.
+	\item Si no hi ha \emph{cross-validation} només s'ha de fer un entrenament però utilitzant aquest mètode s'hauran de fer $K$ entrenaments.
+\end{itemize}
+
+Cas extrem: $\boldsymbol{K=N}$. A aquest mètode se li diu \textsc{Leave-One-Out-Cross-Validation} (LOOCV). En aquest mètode el biaix és petit i la variància és gran. Usat quan hi ha poques dades.
+
+$\boldsymbol{K=2}$. Usant aquest valor de $K$ el biaix és gran i la variància és petita. Usat quan hi ha moltes dades.
+
+$\boldsymbol{K=\{5,10\}}$. Aquest valor s'usa quan hi ha un valor mig de dades (ni moltes ni molt poques).
+
+Tot i així és impossible trobar un valor òptim de $K$ ja que és molt difícil i realment no té molt sentit.
+
+\verb|K-CV| s'utilitza per se\lgem eccionar els millors hiper-paràmetres (paràmetres que el propi algoritme no pot optimitzar) d'una vàries tècniques $\rightarrow$ model selectiu.
+
+Per exemple: proposar una seqüència de valors de $\lambda$ i provar-les totes calculant l'error de \verb|K-CV| per cadascuna.
+
+Per \textbf{models lineals}, existeix una formula que calcula exactament l'error de LOOCV:
+$$
+error(LOOCV) = \frac{1}{N} \sum_{n=1}^N \frac{\left(t_n - y(x_n)\right)^2}{(1 - h_{nn})^2} \underset{\text{versió simplificada}}{\longrightarrow}
+\frac{1}{N} \sum_{n=1}^N \frac{(t_n - y(x_n))^2}{\left(1 - \frac{Tr(H)}{N}\right)^2} = GCV
+$$
+$$
+y(x_n) = \hat{\vec{\omega}}^T \phi (x_n) \text{ (model lineal)}
+$$
+$$
+H = (h_{ij}), \quad H = \Phi \Phi^+ \text{ si no hi ha regularització}
+$$
+$$
+H = \Phi \left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T \text{ si hi ha regularització}
+$$
+
+\begin{itemize}
+	\item Regressió regularitzada amb $||·||_2$:
+	\begin{itemize}
+		\item \textbf{matemàtic}: regularització de Tikhonov
+		\item \textbf{APA}: regularització $L_2$
+		\item \textbf{estadístic}: ridge regression
+	\end{itemize}
+	\item $||\omega||_1 = \sum_{i=1}^n |\omega_i|$
+	
+\end{itemize}
 \end{document}
