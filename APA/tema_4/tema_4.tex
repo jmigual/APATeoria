@@ -50,14 +50,14 @@ $$
 \phi_i: \mathbb{R}^d \rightarrow \mathbb{R}, \quad i = 1,...,M
 $$
 \begin{align*}
-y(x, \omega) &= \omega_0 + \sum_{i=1}^{M-1} \omega_i \phi_i (x) \\
-&=  \sum_{i=0}^{M-1} \omega_i \phi_i (x), \quad \phi_0 (x) = 1
+y(\vec{x}, \vec{\omega}) &= \omega_0 + \sum_{i=1}^{M-1} \omega_i \phi_i (\vec{x}) \\
+&=  \sum_{i=0}^{M-1} \omega_i \phi_i (\vec{x}), \quad \phi_0 (\vec{x}) = 1
 \end{align*}
 \textbf{Exemple:} $\phi_i (x) = x^i$
 
 Escrivim
 $$
-y(x, \omega) = \sum_{i=0}^{M-1} \omega_i \phi_i (x) = \vec{\omega}^T \vec{\phi} (x)
+y(\vec{x}, \vec{\omega}) = \sum_{i=0}^{M-1} \omega_i \phi_i (\vec{x}) = \vec{\omega}^T \vec{\phi} (\vec{x})
 $$
 
 $$
@@ -65,19 +65,19 @@ $$
 \begin{pmatrix}
 \omega_0 \\ \omega_1 \\ \vdots \\ \omega_{M-1}
 \end{pmatrix};\quad
-\vec{\phi}(x) = 
+\vec{\phi}(\vec{x}) = 
 \begin{pmatrix}
-\phi_0 (x) = 1 \\
-\phi_1 (x) \\
+\phi_0 (\vec{x}) = 1 \\
+\phi_1 (\vec{x}) \\
 \vdots \\
-\phi_{M-1}
+\phi_{M-1} (\vec{x})
 \end{pmatrix}
 $$
 
 \section{Regressió clàssica}
 
 $$
-\varepsilon ~ N(0, \sigma^2)
+\varepsilon \sim N(0, \sigma^2)
 $$
 
 Si tenim una distribució normal (veure figura 1) l'amplada del pic de la gaussiana depèn de $\sigma^2$.
@@ -85,7 +85,7 @@ Si tenim una distribució normal (veure figura 1) l'amplada del pic de la gaussi
 
 % FIGURA 1
 
-$ t = f(x) + N(0, \sigma^2) $ és equivalent a escriure $T ~ N(f(x), \sigma^2) $.
+$ t = f(x) + N(0, \sigma^2) $ és equivalent a escriure $T \sim N(f(x), \sigma^2) $.
 
 Així doncs si s'agafa la mitjana de $x$ i s'uneixen els punts, la funció resultant és la millor possible. Així doncs la funció de regressió $f^*(x) = \mathbb{E}(T|X)$.
 
@@ -94,33 +94,33 @@ L'únic que ens falta és posar les dades en una matriu:
 $$
 \vec{X}_{N \times d} =
 \begin{pmatrix}
-\leftarrow x_1 \rightarrow \\
-\leftarrow x_2 \rightarrow \\
+\longleftarrow x_1 \longrightarrow \\
+\longleftarrow x_2 \longrightarrow \\
 \vdots \\
-\leftarrow x_N \rightarrow
+\longleftarrow x_N \longrightarrow
 \end{pmatrix}
 $$
 
-Així doncs tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $\omega$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
+D'aquesta manera tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $\omega$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
 
 $$
 \theta = (\omega, \sigma^2)
 $$
 
-\begin{align*}
--\ell (\theta) &= -ln \mathcal{L} (\theta) = 
--ln \mathcal{\omega, \sigma^2} =
+\begin{gather*}
+-\ell (\theta) = -ln \mathcal{L} (\theta) = 
+-ln \mathcal{L}(\omega, \sigma^2) =
 -ln P(t | X, \omega, \sigma^2) \underbrace{=}_{m.a.s.} \\
--ln \prod_{n=1}^N P(t_n | x_n, \omega, \sigma^2) &\underbrace{=}_{modelat}
+-ln \prod_{n=1}^N P(t_n | x_n, \omega, \sigma^2) \underbrace{=}_{modelat}
 -ln \prod_{n=1}^N \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) =
 - \sum_{n=1}^N ln \ \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) = \\
-- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} &= 
+- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = 
 \sum_{n=1}^N \left\{ ln(\sqrt{2\pi}\sigma) + \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = \\
-N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,\omega))^2 & \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, \omega))^2 = E(\omega)
-\end{align*}
+N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,\omega))^2 \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, \omega))^2 = E(\omega)
+\end{gather*}
 
 $$
-\boxed{y(x, \omega) = \omega^T \phi(x)} \text{ és convinent }
+\boxed{y(x, \vec{\omega}) = \vec{\omega}^T \Phi(x)} \text{ és convinent }
 $$
 
 $$
