@@ -9,6 +9,7 @@
 \usepackage{graphicx}
 \usepackage[makeroom]{cancel}
 \usepackage{float}
+\usepackage{enumerate}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -165,5 +166,73 @@ Sigui $\Phi_{N\times M}, \quad N > M$. Si els vectors columna de $\Phi$ són lin
 \end{enumerate}
 
 La matriu $ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T $ és pseudo-inversa (inversa de Moore-Penrose) $ \Phi^+ \Phi = I $
+
+\section{La Descomposició en Valors Singulars (SVD)}
+
+La solució de la regressió lineal requereix el càlcul de la matriu pseudo-inversa de la matriu de disseny ($\Phi$):
+
+$$ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T\left( \Phi^T \Phi \right)^{-1} \Phi^T,\quad \Phi_{N \times M \ (N > M)} $$
+
+El càlcul directe té dos problemes:
+\begin{enumerate}[i)]
+	\item $\Phi^T \Phi$ és $M \times M$; la inversió d'aquesta matriu és un procés numèric subjecte a errors de precisió. Si $M$ és gran, el cost computacional es dispara $\rightarrow O(M^3)$.
+	\item Tot i tenir inversa si la matriu $\Phi^T \Phi$ està a prop de ser singular (està a prop de no tenir inversa) el procés d'inversió és delicat numèricament.
+\end{enumerate}
+
+Així doncs prenem una matriu $\Phi_{N \times M, \ N > M}$. Qualsevol tal matriu es pot expressar com:
+
+$$
+\Phi = U \Delta V^T
+$$
+
+\begin{itemize}
+	\item $U_{N \times M}$ i conté els \textbf{vectors propis} de la matriu $\Phi \Phi^T$, per columnes ($U$ és \textbf{ortogonal}: $U U^T = U^T U = I$)
+	\item $V_{M \times M}$ i conté els \textbf{vectors propis} de la matriu $\Phi^T \Phi$, per columnes ($V$ és \textbf{ortogonal})
+	\item $\Delta$ és una matriu quasi-diagonal:
+	$$
+	\begin{pmatrix}
+	\lambda_1 & 0 & \cdots &  0 \\
+	0 & \lambda_2 & \ddots &  \vdots \\
+	\vdots & \ddots & \ddots & 0 & \\
+	0 & \cdots & 0 &\lambda_r \\
+	0 & \cdots & \cdots & 0 \\
+	\vdots & & & \vdots \\
+	0 & \cdots & \cdots & 0
+	\end{pmatrix}
+	$$
+	
+	\item  $r = rang(\Phi) \le min(N,M) = M$ $\lambda_i$ són les arrels quadrades dels valors propis de la matriu $\Phi^T \Phi$ (tots ells són $\ge 0$) $\implies \lambda_1, ...,\lambda_r > 0$.
+\end{itemize}
+
+\textbf{Teorema:} Donat un problema de mínims quadrats $ \Phi \vec{\omega} = t $, on cal minimitzar $ ||t - \Phi \vec{\omega} ||^2 $ respecte $\vec{\omega}$, la solució es pot trobar fent:
+
+$$
+\hat{\vec{\omega}} = V · diag \underbrace{\left( \frac{1}{\lambda_i}\right)_+}_{\begin{cases}
+	\frac{1}{\lambda_i} &\text{ si } \lambda_i > 0 \\
+	0 & \text{ si } \lambda_i = 0
+	\end{cases}}  · U^T · t
+$$
+
+\textbf{Demostració:}
+
+\begin{align*}
+\hat{\vec{\omega}} &= \left( \Phi^T \Phi \right)^{-1} \Phi^T t =
+\left[ \left( U \Delta V^T \right)^T \left( U\Delta V^T \right) \right]^{-1}
+\left(U\Delta V^T\right)^T t \\
+& = \left[ V\Delta \cancel{\left( U^T U \right)} \Delta V^T \right] 
+\left( V \Delta U^T \right) t = 
+\left( V \Delta^2 V^T \right)^{-1} \left( V \Delta U^T \right) t \\ 
+&=
+\left( V \Delta^{-2} \cancel{V^T} \right) \left( \cancel{V} \Delta U^T \right) t = V \Delta^{-1} U^T t = 
+\boxed{V diag\left(\frac{1}{\lambda_i}\right)_+ U^T t}
+\end{align*}
+
+\subsection{Regressió lineal regularitzada}
+
+\textbf{Objectiu:} tenir un control explícit de l'ajust.
+
+$$
+E_{\lambda} (\vec{\omega}) := E(\vec{\omega}) + \underbrace{\frac{\lambda}{2}}_{\text{ct. regularització}}·||\vec{\omega}||^2, \ \lambda > 0
+$$
 
 \end{document}
