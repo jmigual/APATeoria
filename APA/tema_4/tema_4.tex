@@ -1,15 +1,16 @@
 \documentclass[a4paper]{article}
+%\usepackage[margin=2cm]{geometry}
 
+\usepackage[catalan]{babel} % Language 
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
-\usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
-%\usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage[makeroom]{cancel}
 \usepackage{float}
 \usepackage{enumerate}
+\usepackage{mathtools}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -171,7 +172,7 @@ La matriu $ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T $ és pseudo-invers
 
 La solució de la regressió lineal requereix el càlcul de la matriu pseudo-inversa de la matriu de disseny ($\Phi$):
 
-$$ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T\left( \Phi^T \Phi \right)^{-1} \Phi^T,\quad \Phi_{N \times M \ (N > M)} $$
+$$ \Phi^+ := ( \Phi^T \Phi)^{-1} \Phi^T \qquad \Phi_{N \times M \ (N > M)} $$
 
 El càlcul directe té dos problemes:
 \begin{enumerate}[i)]
@@ -207,10 +208,12 @@ $$
 \textbf{Teorema:} Donat un problema de mínims quadrats $ \Phi \vec{\omega} = t $, on cal minimitzar $ ||t - \Phi \vec{\omega} ||^2 $ respecte $\vec{\omega}$, la solució es pot trobar fent:
 
 $$
-\hat{\vec{\omega}} = V · diag \underbrace{\left( \frac{1}{\lambda_i}\right)_+}_{\begin{cases}
-	\frac{1}{\lambda_i} &\text{ si } \lambda_i > 0 \\
-	0 & \text{ si } \lambda_i = 0
-	\end{cases}}  · U^T · t
+\hat{\vec{\omega}} = V · diag \underbrace{\left( \frac{1}{\lambda_i}\right)_+}_{
+	\mathclap{
+		\begin{cases}
+			\frac{1}{\lambda_i} &\text{ si } \lambda_i > 0 \\
+			0 & \text{ si } \lambda_i = 0
+		\end{cases}}} · U^T · t
 $$
 
 \textbf{Demostració:}
@@ -232,7 +235,7 @@ $$
 \textbf{Objectiu:} tenir un control explícit de l'ajust.
 
 $$
-E_{\lambda} (\vec{\omega}) := E(\vec{\omega}) + \underbrace{\frac{\lambda}{2}}_{\text{ct. regularització}}·||\vec{\omega}||^2, \ \lambda > 0
+E_{\lambda} (\vec{\omega}) := E(\vec{\omega}) + \underbrace{\frac{\lambda}{2}}_{\mathclap{\text{ct. regularització}}}·||\vec{\omega}||^2, \ \lambda > 0
 $$
 $$
 E_{\lambda}(\vec{\omega}) = \frac{1}{2} || t - \Phi \omega ||^2 + \frac{\lambda}{2} || \vec{\omega} ||^2
