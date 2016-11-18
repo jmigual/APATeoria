@@ -1,0 +1,245 @@
+\documentclass[a4paper]{article}
+%\usepackage[margin=2cm]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[catalan]{babel} % Language 
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage[makeroom]{cancel}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{pgfplots}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{ifthen}
+\usepackage{array}
+
+\pgfplotsset{compat=1.13}
+
+\tikzset{%
+	every neuron/.style={
+		circle,
+		draw,
+		minimum size=1cm
+	},
+	neuron missing/.style={
+		draw=none, 
+		scale=4,
+		text height=0.333cm,
+		execute at begin node=\color{black}$\vdots$
+	},
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2cm}
+
+\title{Tema 7: Xarxes neuronals (artificials)}
+\author{Joan Marcè Igual}
+
+
+\begin{document}
+\maketitle
+
+\section{Introducció}
+Models $y(x) = g(w^T \phi (x)),\ x \in \mathbb{R}^d, w \in \mathbb{R}^{d + 1}$.
+$$
+\phi(x) = 
+\begin{pmatrix}
+\phi_0(x) = 1 \\
+\phi_1(x)\\
+\vdots\\
+\phi_M(x)
+\end{pmatrix}
+\quad 
+g : f_n \ g:\mathbb{R} \rightarrow \mathbb{R} \text{(inversa global)}; 
+\quad \phi : \mathbb{R}^d \rightarrow \mathbb{R}^M
+$$
+$$
+X_{N \times d+ 1} \xrightarrow{\phi} \Phi_{N \times (M + 1)}
+$$
+
+La manera usual d'obtenir models \emph{no lineals} és establir funcions de base \emph{parametritzades}. La presència d'aquests paràmetres no lineals fa que les $\phi$ no es puguin pre-calcular.
+
+En Xarxes Neuronals, la tria d'aquestes funcions de base es fa de la següent manera:
+$$
+\phi_i(x) := \phi (\psi(x, v_i))
+$$
+\begin{align*}
+	&v_i & \text{és un vector de paràmetres (no lineals)} \\
+	&\psi : \mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}
+	& \text{és una funció de combinació} \\
+	&\phi : \mathbb{R} \rightarrow (a,b) &
+	\text{és una funció d'activació}
+\end{align*}
+
+$\psi$ calcula una similitud entre dos vectors: $x_1 v_i$.
+$\phi$ determina el valor final d'activació de $\phi_i$.
+
+\textbf{Definició}: diem que una funció $\phi \mathbb{R} \rightarrow (a,b)$ és \emph{sigmoidal} si:
+\begin{enumerate}
+	\item $\lim\limits_{z \rightarrow - \infty} \phi(b) = a$
+	\item $\lim\limits_{z \rightarrow + \infty} \phi(z) = b$
+	\item $\phi'(z) > 0,\ \forall z \qquad \phi'(z) < 0,\ \forall z$ i $\phi'$ té forma de campana.
+\end{enumerate}
+
+\textbf{Exemples}:
+
+\begin{enumerate}
+	\item La funció logística $\phi(z) = \frac{1}{1 + e^{-z}} \in (0, 1)$
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+		xmin=-7,xmax=7,ymin=0,ymax=1,
+		domain=-10:10,
+		axis x line=center,
+		axis y line=center
+		]
+		\addplot+[mark=none] {1/(1 + exp(-x))};
+		\end{axis}
+		\end{tikzpicture}
+		\caption{Gràfic funció logística}
+		\label{fig:logistic}
+	\end{figure}
+
+	\item La tangent hiperbòlica $\phi(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}} \in (0,1)$.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}
+		\begin{axis}[
+		xmin=-5,xmax=5,ymin=-1.05,ymax=1.05,
+		domain=-5:5,
+		axis x line=center,
+		axis y line=center
+		]
+		\addplot+[mark=none] {(exp(x) - exp(-x))/(exp(x) + exp(-x))};
+		\end{axis}
+		\end{tikzpicture}
+		\caption{Gràfic funció inversa hiperbòlica}
+		\label{fig:inv_hiperbol}
+	\end{figure}
+\end{enumerate}
+
+$$
+\implies y(x) = g(w^T \phi(x)) = g\left(\sum_{i=0}^M w_i \phi_i(x)\right) = g \left( \sum_{i=0}^M w_i \phi(v_i^T x + v_{i0}) \right)
+$$
+\begin{itemize}
+	\item $w_i$ són paràmetres lineals
+	\item $v_i$ i $v_{i0}$ són paràmetres no lineals
+\end{itemize}
+
+% FIGURA 1
+
+Si es dediquen esforços a optimitzar una funció que té molts mínims locals es pot arribar a un mínim que no sigui un mínim absolut. Això dificulta molt la feina d'optimització. Tot i així l'error al que s'acaba arribant al final resulta ser només un error amb les dades d'entrenament. 
+
+Per tant, amb les dades més genèriques l'error també serà menor. Si es minimitzessin al màxim les dades d'entrenament llavors amb les altres potser no s'aconsegueix un mínim.
+
+% FIGURA 2
+
+A cada $ \phi_i(x) $ se li diu \emph{neurona}.
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+	
+	\foreach \m/\l [count=\y] in {1,2,3,missing,4}
+	\node [every neuron/.try, neuron \m/.try] (input-\m) at (0,2.5-\y) {};
+	
+	\foreach \m [count=\y] in {1,missing,2}
+	\node [every neuron/.try, neuron \m/.try ] (hidden-\m) at (2,2-\y*1.25) {\ifthenelse{\equal{\m}{missing}}{}{$S(\Sigma)$}};
+	
+	\foreach \m [count=\y] in {1,missing,2}
+	\node [every neuron/.try, neuron \m/.try ] (output-\m) at (4,1.5-\y) {\ifthenelse{\equal{\m}{missing}}{}{$g(\Sigma)$}};
+	
+	\foreach \l [count=\i] in {1,2,3,d}
+	\draw [<-] (input-\i) -- ++(-1,0)
+	node [above, midway] {$I_\l$};
+	
+	\foreach \l [count=\i] in {1,M}
+	\node [above] at (hidden-\i.north) {$\phi_\l$};
+	
+	\foreach \l [count=\i] in {1,n}
+	\draw [->] (output-\i) -- ++(1,0)
+	node [above, midway] {$O_\l$};
+	
+	\foreach \i in {1,...,4}
+	\foreach \j in {1,...,2}
+	\draw [->] (input-\i) -- (hidden-\j);
+	
+	\foreach \i in {1,...,2}
+	\foreach \j in {1,...,2}
+	\draw [->] (hidden-\i) -- (output-\j) node [midway,above,sloped] {$w_{\i\j}$};
+	
+	\foreach \l [count=\x from 0] in {Input (abstract), Hidden, Ouput}
+	\node [align=center, above] at (\x*2,2) {\l \\ layer};
+	
+	\end{tikzpicture}
+\end{figure}
+
+\begin{itemize}
+	\item La xarxa treballa "endavant" quan ho fa en el sentit de les fletxes $\rightarrow$.
+	\item La capa de \emph{sortida} és la darrera capa endavant
+	\item Les capes \emph{ocultes} són totes excepte la de sortida (les seves \emph{neurones} també es diuen \emph{ocultes}).
+	\item No hi ha capa "d'entrada".
+\end{itemize}
+
+A vegades tenim múltiples capes ocultes
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[x=1.5cm, y=1.5cm, >=stealth]
+		\foreach \m [count=\y] in {1,2,missing,3} 
+		\node [every neuron/.try, neuron \m/.try](input-\m) at (0,2.5 - \y*1.25){};
+	
+		\foreach \m [count=\y] in {1,2,missing,3} 
+		\node [every neuron/.try, neuron \m/.try](hidden-1-\m) at (2,2.5 - \y*1.25){};
+		
+		\foreach \m [count=\y] in {1,2,missing,3} 
+		\node [every neuron/.try, neuron \m/.try](hidden-2-\m) at (4,2.5 - \y*1.25){};
+		
+		\node [every neuron/.try](output) at(6,0){};
+		
+		\foreach \i in {1,...,3}
+		\foreach \j in {1,...,3}
+		{ 	
+			\draw [<-] (input-\i) -- ++(-1,0) node [above, midway] {$I_\i$};
+			\draw[->](input-\i) -- (hidden-1-\j); 
+			\draw[->](hidden-1-\i) -- (hidden-2-\j);
+			\draw[->](hidden-2-\i) -- (output); 
+		}
+	
+		\foreach \l [count=\x from 0] in {Input (abstract), Hidden 1, Hidden 2, Ouput}
+		\node [align=center, above] at (\x*2,2) {\l \\ layer};
+	\end{tikzpicture}
+\end{figure}
+
+$$
+y(x) = g\left(\sum_i w_i\phi_i(x)\right) =
+g\left(\sum_i w_i \phi (v_i^T x) \right) =
+g\left( \sum_i w_i \phi \left(\sum_j v_{ij} x_j\right)  \right)
+$$
+En aquest cas $x_j \rightarrow \gamma_i (x) = \phi (z_j^T x + z_{j0})$. Per tant:
+$$
+y(x) = g\left( \sum_i w_i \phi \left( \sum_j w_{ij} \phi \left( z_{jn} x_n + x_{n0} \right) + v_{j0} \right) + w_0 \right)
+$$
+
+\section{La funció g}
+
+\begin{table}[H]
+	\centering
+	\setlength\extrarowheight{15pt}
+	\begin{tabular}{p{2.2cm}|p{2.3cm}p{3cm}p{2.8cm}}
+		& Regressió & \parbox{2cm}{Classificació \\ ($K=2$)} & \parbox{2cm}{Classificació \\ ($K > 2$)} \\
+		\hline
+		Funció g & g = Identitat & logística & softmax \\
+		Funció d'error & error quadràtic & entropia creuada & entropia creuada generalitzada \\
+		Interpretació de la sortida & el target K-èsim (m neurones de sortida) & \parbox{3cm}{$y(x) = P(w_1 |X)$ \\ $\implies$ \\ $P(w_2|X) = 1 - g(x)$} (una neurona de sortida) &  \parbox{2.8cm}{$y_k(x) = P(w_k|X)$ \\ (K neurones de sortida)}
+	\end{tabular}
+\end{table}
+
+\end{document}
