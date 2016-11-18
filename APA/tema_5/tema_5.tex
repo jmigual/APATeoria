@@ -46,13 +46,19 @@ Un classificador parteix $\mathbb{R}^d$ en $K$ subconjunts.
 
 \textbf{Regions de decisió:}
 
-% FIGURA 1
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/tema_5-1}
+\end{figure}
 
 Les regions de decisió estan generades per les zones que delimiten cada classe. Hi ha unes fronteres on les regions canvien. Les separacions es diuen \emph{fronteres de decisió}.
 
 Un classificador és \textbf{lineal} quan només genera fronteres de decisió (entre cada parell de classes) lineals. Per exemple:
 
-% FIGURA 2
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{images/tema_5-2}
+\end{figure}
 
 \subsection{La formula de'n Bayes}
 
@@ -155,7 +161,19 @@ $$
 \int_S \min(f_1(x), f_2(x)) dx \le \min\left( \int_S f_1(x) dx,\ \int_S f_2(x) dx \right)
 $$
 
-% FIGURA 3
+Per exemple si hi ha peres i taronges posades en dues caixes. Quina és la probabilitat de que vingués de la caixa 1 si se sap que és una taronja?
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/tema_5-3}
+\end{figure}
+
+També es pot agafar l'exemple de classificar àligues i falcons a partir de la llargada de les seves ales. Es pot fer un histograma de la llargada en cm i de quina espècies pertanyen.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/tema_5-4}
+\end{figure}
 
 \textbf{Teorema:} La $R_{Bays}$ és la millor regla de decisió (classificació) d'entre les que fan servir $P(C_1|X), P(C_2|X)$.
 
@@ -177,6 +195,11 @@ $$
 
 
 \subsection{Funció logística}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{images/tema_5-5}
+\end{figure}
 
 $$
 g:\mathbb{R} \rightarrow (0,1)
@@ -305,13 +328,12 @@ $$
 = ln P(C_k) + \sum_{j=1}^d \ln P(X_j=x_j|C_k)
 $$
 
-% FIGURA 6
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/tema_5-6}
+\end{figure}
 
 $X_1$ i $X_2$ semblen dependents a primera vista però si només ens centrem en un dels dos conjunts llavors deixen de ser-ho.
-
-
-
-
 
 
 
