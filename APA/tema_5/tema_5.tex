@@ -89,7 +89,17 @@ P(U_1|T) =  \frac{P(T|U_1) P(U_1)}{\underbrace{P(T|U_1)P(U_1) + P(T|U_2)P(U_2)}_
 \frac{36}{85} < \frac{1}{2}
 $$
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/tema_5-3}
+\end{figure}
+
 \textbf{Exemple introductori:} Imaginem que tenim un amic ornitòleg que pren mesures de dos tipus d'aus \emph{àligues} i \emph{falcons} i pren mesures de la envergadura (en cm). El nostre amic vol decidir si a partir de la envergadura una au és una àliga o un falcó. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.7\textwidth]{images/tema_5-4}
+\end{figure}
 
 Es tracta de donar una resposta que sigui la òptima. 
 $$
@@ -122,7 +132,7 @@ $$
 P_{R_2} (error) = \min(P(C_1), P(C_2))
 $$
 \begin{align*}
-	& P(C_1 | X) = \frac{P(x|C_1)P(C_1)}{P(X|C_1)P(C_1) + P(X|C_2)P(C_2)} \\
+	& P(C_1 | X) = \frac{P(X|C_1)P(C_1)}{P(X|C_1)P(C_1) + P(X|C_2)P(C_2)} \\
 	& P(C_2|X) = 1 - P(C_1|X)
 \end{align*}
 
@@ -160,20 +170,6 @@ $$
 $$
 \int_S \min(f_1(x), f_2(x)) dx \le \min\left( \int_S f_1(x) dx,\ \int_S f_2(x) dx \right)
 $$
-
-Per exemple si hi ha peres i taronges posades en dues caixes. Quina és la probabilitat de que vingués de la caixa 1 si se sap que és una taronja?
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{images/tema_5-3}
-\end{figure}
-
-També es pot agafar l'exemple de classificar àligues i falcons a partir de la llargada de les seves ales. Es pot fer un histograma de la llargada en cm i de quina espècies pertanyen.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.7\textwidth]{images/tema_5-4}
-\end{figure}
 
 \textbf{Teorema:} La $R_{Bays}$ és la millor regla de decisió (classificació) d'entre les que fan servir $P(C_1|X), P(C_2|X)$.
 
