@@ -1,0 +1,206 @@
+\documentclass[a4paper]{article}
+%\usepackage[margin=2cm]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[catalan]{babel} % Language 
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage[makeroom]{cancel}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{pgfplots}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+
+\pgfplotsset{compat=1.13}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2cm}
+
+\title{Tema 6: Classificadors probabilístics discriminatoris}
+\author{Joan Marcè Igual}
+
+\begin{document}
+\maketitle
+\section{Introducció}
+Ja s'havia vist anteriorment que \textbf{LDA}:
+
+$$
+P(C_k|X) = \frac{P(X|C_k)P(C_k)}{\sum_{j=1}^K P(X|C_j)P(C_j)}\quad k=1,...,K
+$$
+$$
+g(z) = \frac{1}{1 + e^{-z}}
+$$
+
+\textbf{Nº de paràmetres:}
+
+$$
+\Sigma_{d\times d} =
+\begin{pmatrix}
+d & & TS \\
+& \ddots & \\
+TI & & d
+\end{pmatrix} \quad TS = TI \qquad 
+\boxed{n = \frac{d(d+1)}{2} + Kd \sim O(d^2)}
+$$
+
+El nombre de paràmetres creixen quadràticament. De manera que aquests tipus de mètodes només serveixen per conjunts amb moltes dades.
+
+En els classificadors discriminatius no es modelarà la forma de les classes. Es parteix del model $P(C_1|X) = g(w^T X + w_0)$. La idea és optimitzar els $w \in \mathbb{R}^d,w_0 \in \mathbb{R}$ directament (sense assumir cap distribució de les dades condicionades a la classe). Quants paràmetres s'han d'estimar? Doncs $d + 1 \in O(d)$ 
+
+Per simplificar,
+$$
+w = \begin{pmatrix}
+w_0 \\
+w_1 \\
+\vdots\\
+w_d
+\end{pmatrix}
+\qquad
+x = 
+\begin{pmatrix}
+x_0 = 1\\
+x_1\\
+\vdots\\
+x_d
+\end{pmatrix}
+$$
+
+Construïm la \textbf{menys log-versemblança de la mostra}:
+$$
+\mathcal{D} = \{ (x_1,t_1), ..., (x_N,t_N) \} 
+\quad x_n \in \mathbb{R}^d
+\quad t_n \in \{0, 1\}
+\quad
+\begin{cases}
+0 \text{ vol dir } C_2 \\
+1 \text{ vol dir } C_1
+\end{cases}
+$$
+$$
+P(t|x,w) =
+\begin{rcases}\begin{cases}
+g(w^T x) &\text{ si } t = 1 (x \in C_1)\\
+1 - g(w^T x) &\text{ si } t = 0 (x \in C_2)
+\end{cases}
+\end{rcases}
+= g(w^T x)^t · [1 - g(w^T x)]^{1 - t}
+$$
+\begin{flalign*}
+	& -l(w) = -\ln \mathcal{L}(w) = -\ln P(\mathcal{D}|w) = 
+	-\ln \prod_{n=1}^N P(t_n| x_n, w) \underbrace{=}_{\text{modelem}} \\
+	& 5-\ln \prod_{n=1}^N g(w^T x_n)^{t_n} · [1 - g(w^T x_n)]^{1 - t_n} = \\
+	& \sum_{n=1}^N \{ t_n \ln g(w^T x_n) + (1 - t_n) \ln(1 - g(w^T x_n)) \} \underbrace{=}_{\text{Defineixo } y_n := g(w^T x_n)} \\
+	& -\sum_{n=1}^N \{ t_n \ln y_n + (1 - t_n) \ln (1 - y_n) \}
+\end{flalign*}
+$$
+g'(z) = g(z)[1 - g(z)] \implies \\
+g'(w^T x_n) = g(w^T x_n)·[1 - g(w^T x_n)] = y_n (1 - y_n)
+$$
+\begin{flalign*}
+&\textbullet -\sum_{n=1}^N \left\{ \frac{t_n}{y_n}·g'(w^T x_n)·x_n - \frac{1 - t_n}{1 - y_n}·g'(w^T x_n) \right\} =\\
+& -\sum_{n=1}^N t_n(1 - y_n)x_n - (1 - t_n)y_n x_n = \\
+&- \sum_{n=1}^N \{ t_nx_n - \cancel{t_n y_n x_n} - y_n x_n + \cancel{t_n y_n x_n} \} = \\
+& - \sum_{n=1}^N (t_n x_n - y_n x_n) = -\sum_{n=1}^{N} (t_n - y_n) x_n =
+\boxed{\sum_{n=1}^N (y_n - t_n)x_n }
+\end{flalign*}
+
+\section{El mètode de Newton-Raphsum (NR)}
+Va molt bé quan la funció a optimitzar és convexa. Per minimitzar $E(w)$ convexa, es fa el pas següent:
+$$
+\boxed{w^{\text{(nou)}} := w^{\text{(vell)}} - H^{-1} (w^{\text{(vell)}}) · \nabla E(w^{\text{(vell)}})}
+$$
+$$
+\nabla E(w) =
+\begin{pmatrix}
+\frac{\partial E}{\partial w_0} \\
+\frac{\partial E}{\partial w_1} \\
+\vdots\\
+\frac{\partial E}{\partial w_d}
+\end{pmatrix}
+\qquad
+H(w) = \left( \frac{\partial^2 E}{\partial w_i \partial w_j} \right)
+$$
+
+\begin{lstlisting}[escapeinside={(*}{*)},frame=single]
+inicialitzem w(0)
+	i := 0
+repetir
+	w(i + 1) := w(i) - (*$H^{-1}$*)(w(i))·(*$\nabla$*)E(w(i))
+	i = i + 1
+fins que convergeix
+\end{lstlisting}
+
+\subsection{Aplicació af = E(w)}
+
+$$
+\nabla E = \sum_{n=1}^N (y_n - t_n) x_n = X^T(y-t)
+$$
+$$
+X_{N\times (d+1)} =
+\begin{pmatrix}
+\longleftarrow x_1 \longrightarrow \\
+\longleftarrow x_2 \longrightarrow \\
+\vdots
+\longleftarrow x_N \longrightarrow
+\end{pmatrix}
+\qquad
+H = X^T R X
+$$
+$$
+R := diag(y_1(1 - y_1), ..., y_N(1 - y_N))
+$$
+
+
+\subsection{L'algoritme IRLS}
+\begin{lstlisting}[escapeinside={(*}{*)},frame=single]
+inicialitzar: 
+	w(0)(*$_0$*) := (*$\ln \frac{P(C_1)}{P(C_2)}$*)
+	w(0)(*$_{1...d}$*) := 0
+	i := 0
+repetir
+	(*$y_n := g(w^T(i)x_n),\ n=1,...,N$*)
+	R := diag((*$y_1(1 - y_1),...,y_N(1 - y_N)$*))
+	z := (*Xw(i) - $R^{-1}$*)(y - t)
+	w(i + 1) := (*$(X^T R X)^{-1} X^T R z$*)
+	i := i + 1
+fins que convergeix
+	(*$R^{-1} = \left( \frac{1}{y_1(1 - y_1)},..., \frac{1}{y_N(1 - y_N)} \right)$*)
+
+Deviance
+	D := -2*E(w)
+	
+Null deviance
+	ND := -2*E(w(0))
+\end{lstlisting}
+
+\textbf{AIC} D + 2d
+Regressió Logística $\rightarrow$ \texttt{RegLog}
+
+\section{Interpretació de \texttt{RegLog}(I)}
+$$
+y(x, w) = g(w^T x) = P(C_1|x)
+$$
+$$
+g(z) = \frac{1}{1 + e^{-z}} \qquad g^{-1}(z) =  \ln\left(\frac{z}{1 - z}\right)
+$$
+$$
+w^T x = g^{-1} (P|C_1|x) = \ln\left( \frac{P(C_1|x)}{1 - P(C_1|x)} \right)
+$$
+
+\section{Interpretació de \texttt{RegLog}(III)}
+Fixem un punt $x^* \in \mathbb{R}^d$ que volem predir (w és el vector solució).
+$$
+\frac{P(C_1|x^*)}{P(C_2|x^*)} = \exp(w^T x^*)
+\qquad 1_i := (\underbrace{0,0,...}_{i - 1},1,...,0)^T
+$$
+$$
+\frac{\frac{P(C_1|x^* + 1_i)}{P(C_2|x^* + 1_i)}}{\frac{P(C_1|x^*)}{P(C_2|x^*)}} =
+\exp(w^T(\cancel{x^*} + 1_i) - \cancel{w^T x^*}) = 
+\exp(w^T 1_i) = \exp(w_i)
+$$
+
+\end{document}

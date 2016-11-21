@@ -1,20 +1,22 @@
 \documentclass[a4paper]{article}
+%\usepackage[margin=2cm]{geometry}
 
+\usepackage[catalan]{babel} % Language 
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{amsfonts}
-\usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
-\usepackage[margin=2cm]{geometry}
 \usepackage{graphicx}
 \usepackage[makeroom]{cancel}
 \usepackage{float}
+\usepackage{enumerate}
+\usepackage{mathtools}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
 
 \title{Tema 4: Models lineals per regressió}
-\author{Joan Marcè Iguals}
+\author{Joan Marcè Igual}
 
 \begin{document}
 \maketitle
@@ -50,14 +52,14 @@ $$
 \phi_i: \mathbb{R}^d \rightarrow \mathbb{R}, \quad i = 1,...,M
 $$
 \begin{align*}
-y(x, \omega) &= \omega_0 + \sum_{i=1}^{M-1} \omega_i \phi_i (x) \\
-&=  \sum_{i=0}^{M-1} \omega_i \phi_i (x), \quad \phi_0 (x) = 1
+y(\vec{x}, \vec{\omega}) &= \omega_0 + \sum_{i=1}^{M-1} \omega_i \phi_i (\vec{x}) \\
+&=  \sum_{i=0}^{M-1} \omega_i \phi_i (\vec{x}), \quad \phi_0 (\vec{x}) = 1
 \end{align*}
 \textbf{Exemple:} $\phi_i (x) = x^i$
 
 Escrivim
 $$
-y(x, \omega) = \sum_{i=0}^{M-1} \omega_i \phi_i (x) = \vec{\omega}^T \vec{\phi} (x)
+y(\vec{x}, \vec{\omega}) = \sum_{i=0}^{M-1} \omega_i \phi_i (\vec{x}) = \vec{\omega}^T \vec{\phi} (\vec{x})
 $$
 
 $$
@@ -65,19 +67,19 @@ $$
 \begin{pmatrix}
 \omega_0 \\ \omega_1 \\ \vdots \\ \omega_{M-1}
 \end{pmatrix};\quad
-\vec{\phi}(x) = 
+\vec{\phi}(\vec{x}) = 
 \begin{pmatrix}
-\phi_0 (x) = 1 \\
-\phi_1 (x) \\
+\phi_0 (\vec{x}) = 1 \\
+\phi_1 (\vec{x}) \\
 \vdots \\
-\phi_{M-1}
+\phi_{M-1} (\vec{x})
 \end{pmatrix}
 $$
 
 \section{Regressió clàssica}
 
 $$
-\varepsilon ~ N(0, \sigma^2)
+\varepsilon \sim N(0, \sigma^2)
 $$
 
 Si tenim una distribució normal (veure figura 1) l'amplada del pic de la gaussiana depèn de $\sigma^2$.
@@ -85,7 +87,7 @@ Si tenim una distribució normal (veure figura 1) l'amplada del pic de la gaussi
 
 % FIGURA 1
 
-$ t = f(x) + N(0, \sigma^2) $ és equivalent a escriure $T ~ N(f(x), \sigma^2) $.
+$ t = f(x) + N(0, \sigma^2) $ és equivalent a escriure $T \sim N(f(x), \sigma^2) $.
 
 Així doncs si s'agafa la mitjana de $x$ i s'uneixen els punts, la funció resultant és la millor possible. Així doncs la funció de regressió $f^*(x) = \mathbb{E}(T|X)$.
 
@@ -94,33 +96,33 @@ L'únic que ens falta és posar les dades en una matriu:
 $$
 \vec{X}_{N \times d} =
 \begin{pmatrix}
-\leftarrow x_1 \rightarrow \\
-\leftarrow x_2 \rightarrow \\
+\longleftarrow x_1 \longrightarrow \\
+\longleftarrow x_2 \longrightarrow \\
 \vdots \\
-\leftarrow x_N \rightarrow
+\longleftarrow x_N \longrightarrow
 \end{pmatrix}
 $$
 
-Així doncs tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $\omega$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
+D'aquesta manera tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $\omega$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
 
 $$
 \theta = (\omega, \sigma^2)
 $$
 
-\begin{align*}
--\ell (\theta) &= -ln \mathcal{L} (\theta) = 
--ln \mathcal{\omega, \sigma^2} =
+\begin{gather*}
+-\ell (\theta) = -ln \mathcal{L} (\theta) = 
+-ln \mathcal{L}(\omega, \sigma^2) =
 -ln P(t | X, \omega, \sigma^2) \underbrace{=}_{m.a.s.} \\
--ln \prod_{n=1}^N P(t_n | x_n, \omega, \sigma^2) &\underbrace{=}_{modelat}
+-ln \prod_{n=1}^N P(t_n | x_n, \omega, \sigma^2) \underbrace{=}_{modelat}
 -ln \prod_{n=1}^N \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) =
 - \sum_{n=1}^N ln \ \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) = \\
-- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} &= 
+- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = 
 \sum_{n=1}^N \left\{ ln(\sqrt{2\pi}\sigma) + \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = \\
-N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,\omega))^2 & \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, \omega))^2 = E(\omega)
-\end{align*}
+N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,\omega))^2 \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, \omega))^2 = E(\omega)
+\end{gather*}
 
 $$
-\boxed{y(x, \omega) = \omega^T \phi(x)} \text{ és convinent }
+\boxed{y(x, \vec{\omega}) = \vec{\omega}^T \Phi(x)} \text{ és convinent }
 $$
 
 $$
@@ -148,7 +150,7 @@ $$
 $$
 $$
 \left( \Phi^T \Phi \right) \hat{\vec{\omega}} = \Phi^T \vec{t} \implies
-\boxed{\hat{\vec{\omega}} = (\Phi^T \Phi)^{-1} \Phi \vec{t}} = \Phi^+ \vec{t}
+\boxed{\hat{\vec{\omega}} = (\Phi^T \Phi)^{-1} \Phi^T \vec{t}} = \Phi^+ \vec{t}
 $$
 $$
 \frac{\partial E}{\partial \sigma^2} = \frac{1}{N} \sum_{n=1}^N (t_n - \vec{\omega}^T \phi(x_n))^2 = \frac{2}{N} E(\omega)
@@ -166,4 +168,161 @@ Sigui $\Phi_{N\times M}, \quad N > M$. Si els vectors columna de $\Phi$ són lin
 
 La matriu $ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T $ és pseudo-inversa (inversa de Moore-Penrose) $ \Phi^+ \Phi = I $
 
+\section{La Descomposició en Valors Singulars (SVD)}
+
+La solució de la regressió lineal requereix el càlcul de la matriu pseudo-inversa de la matriu de disseny ($\Phi$):
+
+$$ \Phi^+ := ( \Phi^T \Phi)^{-1} \Phi^T \qquad \Phi_{N \times M \ (N > M)} $$
+
+El càlcul directe té dos problemes:
+\begin{enumerate}[i)]
+	\item $\Phi^T \Phi$ és $M \times M$; la inversió d'aquesta matriu és un procés numèric subjecte a errors de precisió. Si $M$ és gran, el cost computacional es dispara $\rightarrow O(M^3)$.
+	\item Tot i tenir inversa si la matriu $\Phi^T \Phi$ està a prop de ser singular (està a prop de no tenir inversa) el procés d'inversió és delicat numèricament.
+\end{enumerate}
+
+Així doncs prenem una matriu $\Phi_{N \times M, \ N > M}$. Qualsevol tal matriu es pot expressar com:
+
+$$
+\Phi = U \Delta V^T
+$$
+
+\begin{itemize}
+	\item $U_{N \times M}$ i conté els \textbf{vectors propis} de la matriu $\Phi \Phi^T$, per columnes ($U$ és \textbf{ortogonal}: $U U^T = U^T U = I$)
+	\item $V_{M \times M}$ i conté els \textbf{vectors propis} de la matriu $\Phi^T \Phi$, per columnes ($V$ és \textbf{ortogonal})
+	\item $\Delta$ és una matriu quasi-diagonal:
+	$$
+	\begin{pmatrix}
+	\lambda_1 & 0 & \cdots &  0 \\
+	0 & \lambda_2 & \ddots &  \vdots \\
+	\vdots & \ddots & \ddots & 0 & \\
+	0 & \cdots & 0 &\lambda_r \\
+	0 & \cdots & \cdots & 0 \\
+	\vdots & & & \vdots \\
+	0 & \cdots & \cdots & 0
+	\end{pmatrix}
+	$$
+	
+	\item  $r = rang(\Phi) \le min(N,M) = M$ $\lambda_i$ són les arrels quadrades dels valors propis de la matriu $\Phi^T \Phi$ (tots ells són $\ge 0$) $\implies \lambda_1, ...,\lambda_r > 0$.
+\end{itemize}
+
+\textbf{Teorema:} Donat un problema de mínims quadrats $ \Phi \vec{\omega} = t $, on cal minimitzar $ ||t - \Phi \vec{\omega} ||^2 $ respecte $\vec{\omega}$, la solució es pot trobar fent:
+
+$$
+\hat{\vec{\omega}} = V · diag \underbrace{\left( \frac{1}{\lambda_i}\right)_+}_{
+	\mathclap{
+		\begin{cases}
+			\frac{1}{\lambda_i} &\text{ si } \lambda_i > 0 \\
+			0 & \text{ si } \lambda_i = 0
+		\end{cases}}} · U^T · t
+$$
+
+\textbf{Demostració:}
+
+\begin{align*}
+\hat{\vec{\omega}} &= \left( \Phi^T \Phi \right)^{-1} \Phi^T t =
+\left[ \left( U \Delta V^T \right)^T \left( U\Delta V^T \right) \right]^{-1}
+\left(U\Delta V^T\right)^T t \\
+& = \left[ V\Delta \cancel{\left( U^T U \right)} \Delta V^T \right] 
+\left( V \Delta U^T \right) t = 
+\left( V \Delta^2 V^T \right)^{-1} \left( V \Delta U^T \right) t \\ 
+&=
+\left( V \Delta^{-2} \cancel{V^T} \right) \left( \cancel{V} \Delta U^T \right) t = V \Delta^{-1} U^T t = 
+\boxed{V diag\left(\frac{1}{\lambda_i}\right)_+ U^T t}
+\end{align*}
+
+\subsection{Regressió lineal regularitzada}
+
+\textbf{Objectiu:} tenir un control explícit de l'ajust.
+
+$$
+E_{\lambda} (\vec{\omega}) := E(\vec{\omega}) + \underbrace{\frac{\lambda}{2}}_{\mathclap{\text{ct. regularització}}}·||\vec{\omega}||^2, \ \lambda > 0
+$$
+$$
+E_{\lambda}(\vec{\omega}) = \frac{1}{2} || t - \Phi \omega ||^2 + \frac{\lambda}{2} || \vec{\omega} ||^2
+$$
+$$
+\frac{\partial E}{\partial \vec{\omega}} = 
+\Phi^T \Phi \vec{\omega} - \Phi^T t \implies
+\frac{\partial E}{\partial \vec{\omega}} = 
+\Phi^T \Phi \vec{\omega} - \Phi^T t + \lambda \vec{\omega} = 0 \implies
+\Phi^T \Phi \vec{\omega} + \lambda \vec{\omega} = \Phi^T t
+$$
+$$
+\left( \Phi^T \Phi + \lambda I \right) \vec{\omega} = \Phi^T t \rightarrow
+\text{ si } \left( \Phi^T \Phi + \lambda \vec{\omega} \right)^{-1} 
+\text{ existeix, llavors: } \hat{\vec{\omega}} = 
+\left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T t
+$$
+
+\textbf{Avantatges:}
+
+\begin{enumerate}[i)]
+	\item La regularització permet expressar models més complexes del necessari i penalitzar l'excés de complexitat.
+	$$
+	\begin{cases}
+		\lambda \rightarrow 0 &\text{sobreajusta} \\
+		\lambda \rightarrow \infty &\text{infra ajust}
+	\end{cases}
+	$$
+	
+	\item $\left( \Phi^T \Phi + \lambda I \right)^{-1}$ sempre existeix, $\forall \lambda > 0$.
+\end{enumerate}
+
+\subsubsection{\textsc{Cross-Validation}}
+
+% FIGURA 2
+
+Si es pinten totes les dades en un vector, cada punt és una fila de dades. S'escull un enter $K, \ 2 \le K \le N$. Si per exemple agafem $K=5$ dividim les dades en 5 parts. 
+
+\verb|5-cross-validation| consistiria en fer 5 experiments. Les 4 primeres parts s'utilitzen per entrenar i la 5a part s'utilitza per validar les dades. Així es van fent experiments movent el conjunt de validació de lloc.
+
+D'aquesta manera s'obtenen diferents errors de validació (5 errors diferents) que permeten obtenir l'error de validació creuada:
+$$
+error = \frac{1}{K} \sum_{i=1}^K va_i
+$$
+
+\textbf{Observacions:}
+\begin{itemize}
+	\item Totes les dades passen $K - 1$ vegades per entrenament i 1 vegada per validació.
+	\item Els entrenaments que es fan no utilitzen totes les dades per entrenar degut a que s'utilitza un conjunt per validar.
+	\item Si no hi ha \emph{cross-validation} només s'ha de fer un entrenament però utilitzant aquest mètode s'hauran de fer $K$ entrenaments.
+\end{itemize}
+
+Cas extrem: $\boldsymbol{K=N}$. A aquest mètode se li diu \textsc{Leave-One-Out-Cross-Validation} (LOOCV). En aquest mètode el biaix és petit i la variància és gran. Usat quan hi ha poques dades.
+
+$\boldsymbol{K=2}$. Usant aquest valor de $K$ el biaix és gran i la variància és petita. Usat quan hi ha moltes dades.
+
+$\boldsymbol{K=\{5,10\}}$. Aquest valor s'usa quan hi ha un valor mig de dades (ni moltes ni molt poques).
+
+Tot i així és impossible trobar un valor òptim de $K$ ja que és molt difícil i realment no té molt sentit.
+
+\verb|K-CV| s'utilitza per se\lgem eccionar els millors hiper-paràmetres (paràmetres que el propi algoritme no pot optimitzar) d'una vàries tècniques $\rightarrow$ model selectiu.
+
+Per exemple: proposar una seqüència de valors de $\lambda$ i provar-les totes calculant l'error de \verb|K-CV| per cadascuna.
+
+Per \textbf{models lineals}, existeix una formula que calcula exactament l'error de LOOCV:
+$$
+error(LOOCV) = \frac{1}{N} \sum_{n=1}^N \frac{\left(t_n - y(x_n)\right)^2}{(1 - h_{nn})^2} \underset{\text{versió simplificada}}{\longrightarrow}
+\frac{1}{N} \sum_{n=1}^N \frac{(t_n - y(x_n))^2}{\left(1 - \frac{Tr(H)}{N}\right)^2} = GCV
+$$
+$$
+y(x_n) = \hat{\vec{\omega}}^T \phi (x_n) \text{ (model lineal)}
+$$
+$$
+H = (h_{ij}), \quad H = \Phi \Phi^+ \text{ si no hi ha regularització}
+$$
+$$
+H = \Phi \left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T \text{ si hi ha regularització}
+$$
+
+\begin{itemize}
+	\item Regressió regularitzada amb $||·||_2$:
+	\begin{itemize}
+		\item \textbf{matemàtic}: regularització de Tikhonov
+		\item \textbf{APA}: regularització $L_2$
+		\item \textbf{estadístic}: ridge regression
+	\end{itemize}
+	\item $||\omega||_1 = \sum_{i=1}^n |\omega_i|$
+	
+\end{itemize}
 \end{document}
