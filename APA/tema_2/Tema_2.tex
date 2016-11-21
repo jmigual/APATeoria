@@ -26,6 +26,7 @@ Antigament les dades eren molt fàcils, l'estadístic mateix podia anar a qualse
 \emph{Fischer} (estadístic famós) fa un temps va recollir una sèrie de dades sobre peixos, va obtenir 4 tipus de dades diferents cosa que feia difícil la visualització simultània d'aquestes dades.
 
 \section{Anàlisi de Components Principals (PCA)}
+\textit{Bishop 12.1}
 
 \textbf{Objectiu}: reduir la dimensió preservant la major part de la informació \emph{rellevant} (variància). 
 
@@ -48,11 +49,11 @@ Quina de les dues representacions és millor? Què volem?
 
 També es poden representar les dades sobre l'eix de revolució del llapis. O sobre un eix perpendicular a aquest. El que busquem és que les dades tinguin la màxima variabilitat possible.
 
-\textbf{Formalització}: Tenim una mostra de dades $\{x_1, ..., x_n\}$ tal que $x_i \in \mathbb{R}^d$; provenen d'un vector aleatori $X = (X_1, ..., X_d)^T$ que té mitjana $\mu \in \mathbb{R}^d$ i una matriu de covariàncies $\Sigma = \left\{ \sigma_{ij}^2 \right\}$.
+\textbf{Formalització}: Tenim una mostra de dades $\{x_1, ..., x_n\}$ tal que $\vec{x}_i \in \mathbb{R}^d$; provenen d'un vector aleatori $\vec{X} = (X_1, ..., X_d)^T$ que té mitjana $\vec{\mu} \in \mathbb{R}^d$ i una matriu de covariàncies $\Sigma = \left\{ \sigma_{ij}^2 \right\}$.
 
 \begin{itemize}
-	\item $\mu = \mathbb{E}(X) = \mathbb{E}(X_1, ..., X_d)$
-	\item $\Sigma = \mathbb{E}\left((X - \mu)(X-\mu)^T\right)$
+	\item $\vec{\mu} = \mathbb{E}(X) = \mathbb{E}(\vec{X_1}, ..., \vec{X_d})$
+	\item $\Sigma = \frac{1}{N} \sum_{n=1}^N \left((\vec{X}_n - \vec{\mu})(\vec{X}_n - \vec{\mu})^T\right)$
 	
 	\begin{flalign*}
 	\text{En particular } & CoVar(X_i, X_j) = \sigma_{ij}^2  &\\
@@ -135,7 +136,9 @@ Triem $a_2$ com el vector associat al segon VAP més gran de $\Sigma \rightarrow
 
 \textbf{Idea}: quedar-se amb els $k$ primers components principals $a_1, ..., a_k\ (k<d)$ (Per visualitzar $k=\{2,3\})$. Si decidim quedar-nos amb les $k$ primeres:
 
-$$ \%\text{de variància retinguda } = \frac{\sum_{i=1}^k \lambda(i)}{\sum_{i=1}^d \lambda(i)}·100 $$
+$$ 
+\%\text{de variància retinguda } = \frac{\sum_{i=1}^k \lambda_i}{\sum_{i=1}^d \lambda_i}·100 
+$$
 
 % Formula 1 aquí
 
