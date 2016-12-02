@@ -379,4 +379,49 @@ m_i: &\text{centre de la neurona } i
 		\end{axis}
 	\end{tikzpicture}
 \end{figure}
+\subsection{Entrenament d'una xarxa RBF}
+\subsubsection{Posicionar les neurones a l'espai d'entrada}
+Usant un algorisme de \emph{clustering} (per exemple \texttt{k-means}), amb un nombre de clusters (M). Uaser el resultat del clustering per determinar:
+\begin{itemize}
+	\item Centre des les M neurones: centroides del clustering ($m_i$)
+	\item Paràmetres de suavització ($h_i$).
+	\begin{align*}
+		& h_i \propto \frac{d_{\max}}{\sqrt{2M}} \qquad d_{\max}\ \text{entre centres (ct.)} \\
+		& h_i \propto d_{mitjana} \ \text{entre centres (ct.)} \\
+		& h_i \propto d_{mitjana} \ \text{entre el $m_i$ i les dades $x_n$ (diferent per cada i)}
+	\end{align*}
+\end{itemize}
+
+\subsubsection{Tenim les funcions $\phi_i (x) = \phi\left( \frac{||x - m_i||}{h_i} \right)$}
+\begin{itemize}
+	\item Calculem la matriu de disseny $\Phi_{ij} = \phi_j(x_i)$.
+\end{itemize}
+\subsubsection{Regressió en $\Phi$}
+\begin{itemize}
+	\item regressió: regressió lineal regularitzada (ridge regression)
+	\item classificació ($k=$ 2 classes): regressió logística
+	\item classificació ($k>$ 2 classes): regressió multilineal
+\end{itemize}
+
+$$
+y_{RBF}(x) = \sum_{i=1}^{M} w_i \phi_i(x) + w_0 \quad \text{(regressió lineal)}
+$$
+
+\subsection{Influència de $M$ i $\{h_i\}$}
+\begin{itemize}
+	\item $M$ neurones $\rightarrow$ sobreajust (a menys que hi hagi regularització)
+	\item $h_i$?
+\end{itemize}
+
+$$
+\phi_i(x) = \exp\left( - \frac{||x - m_i||^2}{h_i^2} \right)
+$$
+
+% FIGURA 1
+Imaginem que tenim una funció i una sèrie de dades i es fa un clustering d'aquestes dades. Es posen unes quantes neurones i cadascuna d'aquestes té una resposta Gaussiana. 
+
+El paràmetre de suavització fa que les Gaussianes siguin més estretes o més amples. Si es tria una $h_i = h$ per totes les neurones i llavors es fa que $h \rightarrow \infty$ llavors la resposta de totes les neurones serà molt plana i la resposta de la xarxa serà l'infra-ajust.
+
+Per contra si la $h \rightarrow 0$ la resposta de les neurones serà molt local i la xarxa tendirà al sobre-ajust.
+
 \end{document}

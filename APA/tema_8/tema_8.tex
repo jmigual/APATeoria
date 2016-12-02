@@ -1,0 +1,194 @@
+\documentclass[a4paper]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage[catalan]{babel} % Language 
+\usepackage{fontspec}
+\usepackage[makeroom]{cancel}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.2cm}
+
+\title{Tema 8: Màquines de vectors suport (Introducció als mètodes kernel)}
+\author{Joan Marcè i Igual}
+
+\begin{document}
+\section{Introducció}
+
+Estem treballant amb models de la forma:
+$$
+y(x) = g(w^T\phi(x) + w_0),\ x \in \mathbb{R}^d, w \in \mathbb{R}^M, w_0 \in \mathbb{R}^d
+$$
+$$
+\phi(x) =
+\begin{pmatrix}
+\phi_1(x) \\
+\phi_2(x) \\
+\vdots \\
+\phi_M(x)
+\end{pmatrix}
+$$
+
+En xarxes neuronals es va dir que $\phi_i(x) = \phi(\varphi(x, v_i))$. 
+
+Ara calculem un model lineal en l'espai de representació generat per les $\phi_i(x)$ (\textbf{feature space} = espai de característiques). El que fan els mètodes no lineals és buscar l'espai d'estadístiques adequat per a un problema en concret.
+
+Una manera diferent de treballar és estudiar l'expressió:
+\begin{align*}
+	\phi(x)^T\phi(y) \quad x,y \in \mathbb{R}^d \\
+	\phi: \text{feature map} 
+\end{align*}
+
+\textbf{Definim:} una funció de kernel $k: \mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$ com:
+$$
+k(x,y) := \phi(x)^T\phi(y)
+$$
+
+\begin{itemize}
+	\item Es poden estudiar les propietats de $k$ sense calcular (ni tan sols conèixer) $\phi$ de manera explícita.
+	\item Es pot obtenir un algorisme d'aprenentatge \textbf{no lineal} partir d'un de lineal mitjançant l'ús de funcions de kernel (\emph{kernelitzar}).
+	$$
+	x^Ty \rightarrow \underbrace{\phi(x)^T\phi(y)}_{\mathclap{\text{$\phi$ no lineal, el resultat és un algorisme no lineal}}} = k(x,y)
+	$$
+\end{itemize}
+
+\section{Com construir funcions de kernel}
+Si tenim un 
+$$
+\phi(x) = 
+\begin{pmatrix}
+\phi_1(x)\\
+\phi_2(x) \\
+\vdots \\
+\phi_n(x)
+\end{pmatrix}
+$$
+$$
+\implies k(x,y) = \phi^T(x)\phi(x) = \sum_{i=1}^M \phi_i(x)\phi_i(y)
+$$
+
+\textbf{Exemple} $(x^Ty)^3 \ ,x,y \in \mathbb{R}^3$
+$$
+x = \begin{pmatrix}
+x_1 \\
+x_2 \\
+x_3
+\end{pmatrix};
+\quad 
+y = \begin{pmatrix}
+y_1 \\
+y_2 \\
+y_3
+\end{pmatrix}
+$$
+\begin{align*}
+	& (x^Ty)^3 = (x_1y_y + x_2y_2 + x_3y_3) = \\
+	& (x_1y_1)^3 + 3(x_1y_1 + x_2y_2)^2 x_3y_3 + 3(x_1y_1 +
+	 x_2y_2)(x_3y_3)^2 + (x_3y_3)^3 = ... \\
+	& = 
+	\begin{pmatrix}
+	x_1^3 \\
+	x_2^3 \\
+	x_3^3 \\
+	\sqrt{6} x_1x_2x_3 \\
+	\sqrt{3} x_1^2x_2 \\
+	\sqrt{3} x_1^2x_3 \\
+	\sqrt{3} x_2^2x_1 \\
+	\sqrt{3} x_2^2x_3 \\
+	\sqrt{3} x_3^3x_1 \\
+	\sqrt{3} x_3^3x_2 \\
+	\end{pmatrix}^T 
+	\begin{pmatrix}
+	y_1^3 \\
+	y_2^3 \\
+	y_3^3 \\
+	\sqrt{6} y_1y_2y_3 \\
+	\sqrt{3} y_1^2y_2 \\
+	\sqrt{3} y_1^2y_3 \\
+	\sqrt{3} y_2^2y_1 \\
+	\sqrt{3} y_2^2y_3 \\
+	\sqrt{3} y_3^2y_1 \\
+	\sqrt{3} y_3^2y_2
+	\end{pmatrix}
+	= \phi(x)^T\phi(y) \qquad \phi:\mathbb{R}^3 \rightarrow \mathbb{R}^{10}
+\end{align*}
+
+% FIGURA 2
+
+$$
+(x^Ty + 1)^3 \implies
+$$
+$\phi$ calcula tots els monomis de les variables (1,...,d) fins a grau 3. (0, 1, 2, 3).
+
+$x^Ty$ \textbf{kernel lineal}
+
+$\phi(x) = x$
+
+$(x^Ty + 1)^2$ kernel quadràtic
+
+$(x^Ty + 1)^3$ kernel cúbic
+
+$(x^Ty + c)^q \quad ,c \ge 0, q \in \mathbb{N}$ kernel polinòmic
+
+\textbf{Teorema} Una funció $k:\mathbb{R}^d \times \mathbb{R}^d \rightarrow \mathbb{R}$ és una \textbf{funció lineal} ($\exists \phi: \mathbb{R}^d \rightarrow \mathbb{R}^D, t.q. \ k(x,y) = \phi^T(x)\phi(y)$) si i només si:
+\begin{itemize}
+	\item $k$ és simètrica
+	$$
+		k(x,y) = k(y,x) \quad ,\forall x,y \in \mathbb{R}^d
+	$$
+	\item $\forall N \in \mathbb{N}$, per tota tria $x_1,...,x_N \ \mathbb{R}^d$, la matriu $K_{i,j} := k(x_i, x_j)$ és semi-definida positiva (PSD)
+\end{itemize}
+
+\textbf{Definició:} diem que una matriu $K_{N \times N}$ és PSD si és simètrica i $\forall c \in \mathbb{R}^N, c^T K c \ge 0$. És a dir $\sum_{i=1}^N\sum_{j=1}^N c_i K_{ij} c_j \ge 0$.
+
+\textbf{Demostració:} Si la funció $k$ és un kernel $\implies K$ és PSD.
+\begin{align*}
+	& \sum_i \sum_j c_i K_{ij} c_j = 
+	\sum_i \sum_j c_i \phi^T(x_i) \phi(x_j)c_j = \\
+	& \left( \sum_i c_i \phi(x_i) \right)^T
+	\left( \sum_j c_j \phi(x_j) \right) = 
+	\left|\left| \sum_i c_i \phi(x_i) \right|\right|^2 \ge 0
+\end{align*}
+
+\textbf{Propietats}
+Si $k$, kernels, $a \in \mathbb{R} \quad a \ge 0$:
+\begin{itemize}
+	\item $a·k$ kernel
+	\item $k_1 + k_2$ kernel
+	\item $k_1·k_2$ kernel
+	\item p(k) kernel, si p és un polinomi de coeficients no negatius
+\end{itemize}
+
+\textbf{Proposició}
+$$
+k(x,y) = (x^Ty + c)^q \quad \forall c \ge 0, \forall q \in \mathbb{N}
+$$
+
+Podem definir funcions de kernel en qualsevol conjunt d'objectes o espai.
+$$
+k: \mathbb{R}^d \rightarrow \mathbb{R}^d 
+\rightarrow \mathbb{R} \implies 
+k: X \times X \rightarrow \mathbb{R}
+$$
+$X$ conjunt d'objectes finit (persones).
+
+Una manera de comparar dos conjunts és comparar quants elements tenen en comú
+$$
+k(x,y) = | x \cap y|
+$$
+$$
+x,y \subset X
+$$
+$$
+I_X (M) = \begin{cases}
+1 & \text{ si } M \in X \\
+0 & \text{ si } M \cancel{\in} X
+\end{cases}
+$$
+$$
+|x \cap y| = \sum_{u \in X} I_X(u)·I_y(u) = k(x,y)
+$$
+
+\end{document}
