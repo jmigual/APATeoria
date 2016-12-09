@@ -198,6 +198,18 @@ $$
 \section{La dimensió VC per classificadors}
 Es mesura la complexitat d'un model, per a un model lineal aquesta depèn del nombre de paràmetres. 
 
+Sigui $\mathcal{F} = \{ y : \mathbb{R}^d \to \{ -1, +1 \} : y_0 \text{ està parametritzat per } \theta \in H \}$. Es fixen unes dades $\mathcal{D} = \{ (x_1, t_1),..., (x_N, t_N) \}$. Es diu que un classificador $y_0 \in \mathcal{F}$ trenca/esmicola (scatter) $\mathcal{D}$ si, per tota tria de les $t_n \ (1 \le n \le N)$ (hi ha $2^n$ tries diferents) $y_0$  classifica correctament les $x_n$.
+
+\textbf{Definició} 
+
+La dimensió VC de $\mathcal{F}$ és la $N$ més gran per la qual existeixen $x_1, ..., x_N \in \mathbb{R}$  tals que $\exists y_0 \in \mathcal{F}$ que les trenca (per a qualsevol configuració). 
+
+\textbf{Exemple}
+
+$$
+
+$$
+
 \textbf{Teorema}
 
 Sigui $\mathcal{F} = \{ y(x) = signe(w^T x + w_0), \ w \in \mathbb{R}^d, \ w_0 \in \mathbb{R} \}$, considerem la subclasse $\mathcal{F}_n \subset \mathcal{F}$ que té marge $m \implies \dim VC(\mathcal{F}_m) \le \min \left( \left\lceil \frac{R^2}{m^2} \right\rceil, d \right) + 1$. On $R$ és el radi de l'esfera més petita que conté les dades. 
