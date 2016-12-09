@@ -7,6 +7,10 @@
 \usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
 \usepackage[makeroom]{cancel}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\usepackage{float}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -190,5 +194,81 @@ $$
 $$
 |x \cap y| = \sum_{u \in X} I_X(u)·I_y(u) = k(x,y)
 $$
+
+\section{La dimensió VC per classificadors}
+Es mesura la complexitat d'un model, per a un model lineal aquesta depèn del nombre de paràmetres. 
+
+\textbf{Teorema}
+
+Sigui $\mathcal{F} = \{ y(x) = signe(w^T x + w_0), \ w \in \mathbb{R}^d, \ w_0 \in \mathbb{R} \}$, considerem la subclasse $\mathcal{F}_n \subset \mathcal{F}$ que té marge $m \implies \dim VC(\mathcal{F}_m) \le \min \left( \left\lceil \frac{R^2}{m^2} \right\rceil, d \right) + 1$. On $R$ és el radi de l'esfera més petita que conté les dades. 
+
+\subsection{Violacions del marge}
+
+% Copiar d'Arnau, full 8-4
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				xmin=-0.1, xmax=1.1,
+				ymin=-0.1, ymax=1.1,
+				width=0.9\textwidth,
+				height=0.9\textwidth
+			]
+			\addplot[blue, only marks] table [x=x, y=y]{data/data1.csv};
+			\addplot[red, only marks] table [x=x, y=y]{data/data2.csv};
+			\addplot[green, mark=none, very thick] {0.5};
+			\addplot[green, mark=none] {0.55};
+			\addplot[green, mark=none] {0.45};
+			\addplot[purple, mark=none, very thick]{-x + 1};
+			\addplot[purple, mark=none]{-x + 1.2};
+			\addplot[purple, mark=none]{-x + 0.8};
+			\draw[->] (axis cs:0.5,0.5) -- (axis cs:0.6,0.6) node[midway, above] {$m_2$};
+			\draw[->] (axis cs:0.5,0.5) -- (axis cs:0.4,0.4) node[midway, above] {$m_2$};
+			\draw[->] (axis cs:0, 0.5) -- (axis cs: 0, 0.55) node[midway, right] {$m_1$};
+			\draw[->] (axis cs:0, 0.5) -- (axis cs: 0, 0.45) node[midway, right] {$m_1$};
+			\draw[->] (axis cs:1, 0.5) -- (axis cs: 1, 0.55) node[midway, left] {$m_1$};
+			\draw[->] (axis cs:1, 0.5) -- (axis cs: 1, 0.45) node[midway, left] {$m_1$};
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+
+Si en lloc de separar les dades perfectament es tria un altre separador que cometi un cert error es pot aconseguir disminuir la dimensió VC del classificador. D'aquesta manera es pot violar el marge de separació per tal de disminuir la dimensió VC del classificador. \emph{Com s'escull aquesta violació? Quin nou marge s'escull? Com es quantifica la violació de marge?} El control del marge permet controlar el sobre-ajust també. 
+
+\begin{itemize}
+	\item Un cop es permeten aquestes violacions hi ha un compromís entre \emph{l'ajust de les dades} (separar tots els punts tant com sigui possible) i reduir \emph{la complexitat} (maximitzar el marge).
+	
+	\item S'introdueix un paràmetre de ponderació (\emph{cost parameter}): $C > 0$.
+	
+	$$
+	\frac{min}{w_1 w_0 \textcolor{red}{,\varepsilon}} \frac{1}{2} ||w||^2 \textcolor{red}{+ C \cdot \sum_{n=1}^N \varepsilon_n}
+	$$
+	
+	Subjecte a $t_n (w^T x_n + w_0) \ge 1; \quad (1 \le n \le N); \quad \textcolor{red}{\varepsilon_n \ge 0}$
+	
+	\begin{align*}
+		& C \rightarrow \infty & ------------ \text{(sobreajust)} \\
+		& C \rightarrow 0 & \textcolor{red}{------------ \text{(infrajust)}} 
+	\end{align*}
+\end{itemize}
+
+\begin{align*}
+	\mathcal{L} = \frac{1}{2} ||w||^2  + C \cdot \sum_{n=1}^N \varepsilon - \sum_{n=1}^N \mu_n \varepsilon_n - \sum_{n=1}^N \alpha_n \{ t_n (w^T x_n + w_0) - 1 + \varepsilon_n \}, \\
+	\alpha_n \ge 0, \quad \mu_n \ge 0
+\end{align*}
+
+\begin{align*}
+	& \textbullet \frac{\partial \mathcal{L}}{\partial w_0} = - \sum_{n=1}^N \alpha_n t_n = 0 \implies \boxed{\sum_{n=1}^N \alpha_n t_n = 0} \\
+	& \textbullet \frac{\partial \mathcal{L}}{\partial w} = w - \sum_{n=1}^N \alpha_n t_n x_n = 0 \implies \boxed{w = \sum_{n=1}^N \alpha_n t_n x_n} \\
+	& \textbullet \frac{\partial \mathcal{L}}{\partial \epsilon_n} = C - \alpha_n - \mu_n = 0  \implies \boxed{C= \alpha_n + \mu_n}
+\end{align*}
+	
+Substituim en $\mathcal{L}$:
+
+\begin{align*}
+	\mathcal{L}_{dual} = \sum_{n=1}^N \alpha_n - \frac{1}{2} \sum_{n=1}^N \sum_{m=1}^N \alpha_n \alpha_m t_n t_m x_n^T x_m \\
+	\text{Subjecte a } 0 \le \alpha_n \le C
+\end{align*}
 
 \end{document}
