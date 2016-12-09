@@ -11,6 +11,8 @@
 \usepackage{float}
 \usepackage{enumerate}
 \usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{pgfplots}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -84,8 +86,16 @@ $$
 
 Si tenim una distribució normal (veure figura 1) l'amplada del pic de la gaussiana depèn de $\sigma^2$.
 
-
-% FIGURA 1
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[samples=200]
+            \addplot+[mark=none] {1/(sqrt(2*pi)) * exp(-(x^2)/2)};
+            \addplot+[mark=none] {1/(2*sqrt(2*pi)) * exp(-(x^2)/8)};
+            \legend{$\sigma = 1$, $\sigma = 2$};
+        \end{axis}
+    \end{tikzpicture}
+\end{figure}
 
 $ t = f(x) + N(0, \sigma^2) $ és equivalent a escriure $T \sim N(f(x), \sigma^2) $.
 
@@ -269,7 +279,11 @@ V \Delta^{-1} U^T \boldsymbol{t} =
 
 \subsubsection{\textsc{Cross-Validation}}
 
-% FIGURA 2
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/K-fold_cross_validation}
+    \caption{Representació de \textsc{Cross-Validation} amb $k=4$}
+\end{figure}
 
 Si es pinten totes les dades en un vector, cada punt és una fila de dades. S'escull un enter $K, \ 2 \le K \le N$. Si per exemple agafem $K=5$ dividim les dades en 5 parts. 
 
@@ -295,7 +309,7 @@ $\boldsymbol{K=\{5,10\}}$. Aquest valor s'usa quan hi ha un valor mig de dades (
 
 Tot i així és impossible trobar un valor òptim de $K$ ja que és molt difícil i realment no té molt sentit.
 
-\verb|K-CV| s'utilitza per se\lgem eccionar els millors hiper-paràmetres (paràmetres que el propi algoritme no pot optimitzar) d'una vàries tècniques $\rightarrow$ model selectiu.
+\verb|K-CV| s'utilitza per se\l.leccionar els millors hiper-paràmetres (paràmetres que el propi algoritme no pot optimitzar) d'una vàries tècniques $\rightarrow$ model selectiu.
 
 Per exemple: proposar una seqüència de valors de $\lambda$ i provar-les totes calculant l'error de \verb|K-CV| per cadascuna.
 
