@@ -9,6 +9,8 @@
 \usepackage{graphicx}
 \usepackage[makeroom]{cancel}
 \usepackage{float}
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -130,16 +132,14 @@ $$ \mathcal{P} = \{ \mu_1, ..., \mu_K \}, \mu \in \mathbb{R}^d $$
 
 \subsection{Algorisme}
 
-Inicialitzar $\mathcal{P}$
-
-\textbf{Repetir}:
-\begin{itemize}
-	\item Re-calcular els $r_{nk}$ usant $\mathcal{P}$
-	\item Re-calcular $\mathcal{P}$ usant els $r_{nk}$
-\end{itemize}
-\textbf{fins que} convergeixi
-
-\textbf{retornar} $\mathcal{P},r_{nk}$
+\begin{algorithmic}
+    \State Inicialitzar $\mathcal{P}$
+    \While{no convergeixi}
+        \State Recalcular els $r_{nk}$ usant $\mathcal{P}$
+        \State Recalcular $\mathcal{P}$ usant els $r_{nk}$
+    \EndWhile
+    \State \Return $\mathcal{P},r_{nk}$
+\end{algorithmic}
 
 
 \subsection{Comentaris}

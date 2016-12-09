@@ -40,7 +40,7 @@ $$
 \textbf{Exemple:} ajust polinòmic
 
 $$
-y(x, c) = co + \sum_{i=1}^M c_i x^i \quad x \in \mathbb{R}
+y(\boldsymbol{x}, \boldsymbol{c}) = c_0 + \sum_{i=1}^M c_i x^i \quad x \in \mathbb{R}
 $$
 $$
 x \in \mathbb{R}^d\ ? \text{ els polinomis \textbf{no escalen} a més d'una variable}
@@ -52,27 +52,27 @@ $$
 \phi_i: \mathbb{R}^d \rightarrow \mathbb{R}, \quad i = 1,...,M
 $$
 \begin{align*}
-y(\vec{x}, \vec{\omega}) &= \omega_0 + \sum_{i=1}^{M-1} \omega_i \phi_i (\vec{x}) \\
-&=  \sum_{i=0}^{M-1} \omega_i \phi_i (\vec{x}), \quad \phi_0 (\vec{x}) = 1
+y(\textbf{x}, \boldsymbol{w}) &= w_0 + \sum_{i=1}^{M-1} w_i \phi_i (\textbf{x}) \\
+&=  \sum_{i=0}^{M-1} w_i \phi_i (\boldsymbol{x}), \quad \phi_0 (\boldsymbol{x}) = 1
 \end{align*}
 \textbf{Exemple:} $\phi_i (x) = x^i$
 
 Escrivim
 $$
-y(\vec{x}, \vec{\omega}) = \sum_{i=0}^{M-1} \omega_i \phi_i (\vec{x}) = \vec{\omega}^T \vec{\phi} (\vec{x})
+y(\boldsymbol{x}, \boldsymbol{w}) = \sum_{i=0}^{M-1} w_i \phi_i (\boldsymbol{x}) = \boldsymbol{w}^T \boldsymbol{\phi} (\boldsymbol{x})
 $$
 
 $$
-\vec{\omega} = 
+\boldsymbol{w} = 
 \begin{pmatrix}
-\omega_0 \\ \omega_1 \\ \vdots \\ \omega_{M-1}
+w_0 \\ w_1 \\ \vdots \\ w_{M-1}
 \end{pmatrix};\quad
-\vec{\phi}(\vec{x}) = 
+\boldsymbol{\phi}(\boldsymbol{x}) = 
 \begin{pmatrix}
-\phi_0 (\vec{x}) = 1 \\
-\phi_1 (\vec{x}) \\
+\phi_0 (\boldsymbol{x}) = 1 \\
+\phi_1 (\boldsymbol{x}) \\
 \vdots \\
-\phi_{M-1} (\vec{x})
+\phi_{M-1} (\boldsymbol{x})
 \end{pmatrix}
 $$
 
@@ -94,7 +94,7 @@ Així doncs si s'agafa la mitjana de $x$ i s'uneixen els punts, la funció resul
 L'únic que ens falta és posar les dades en una matriu:
 
 $$
-\vec{X}_{N \times d} =
+X_{N \times d} =
 \begin{pmatrix}
 \longleftarrow x_1 \longrightarrow \\
 \longleftarrow x_2 \longrightarrow \\
@@ -103,26 +103,26 @@ $$
 \end{pmatrix}
 $$
 
-D'aquesta manera tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $\omega$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
+D'aquesta manera tenim $\mathcal{D}$ conegudes $(x_n, t_n)$, $w$ i $\sigma^2$ desconeguts, per tant apliquem \textbf{Màxima Versemblança}.
 
 $$
-\theta = (\omega, \sigma^2)
+\theta = (w, \sigma^2)
 $$
 
 \begin{gather*}
 -\ell (\theta) = -ln \mathcal{L} (\theta) = 
--ln \mathcal{L}(\omega, \sigma^2) =
--ln P(t | X, \omega, \sigma^2) \underbrace{=}_{m.a.s.} \\
--ln \prod_{n=1}^N P(t_n | x_n, \omega, \sigma^2) \underbrace{=}_{modelat}
--ln \prod_{n=1}^N \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) =
-- \sum_{n=1}^N ln \ \mathcal{N} (t_n, y(x_n, \omega), \sigma^2) = \\
-- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = 
-\sum_{n=1}^N \left\{ ln(\sqrt{2\pi}\sigma) + \frac{(t_n - y(x_n, \omega))^2}{2\sigma^2} \right\} = \\
-N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,\omega))^2 \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, \omega))^2 = E(\omega)
+-ln \mathcal{L}(w, \sigma^2) =
+-ln P(t | X, w, \sigma^2) \underbrace{=}_{m.a.s.} \\
+-ln \prod_{n=1}^N P(t_n | x_n, w, \sigma^2) \underbrace{=}_{modelat}
+-ln \prod_{n=1}^N \mathcal{N} (t_n, y(x_n, w), \sigma^2) =
+- \sum_{n=1}^N ln \ \mathcal{N} (t_n, y(x_n, w), \sigma^2) = \\
+- \sum_{n=1}^N \left\{ ln \left( \frac{1}{\sqrt{2\pi}\sigma} \right) - \frac{(t_n - y(x_n, w))^2}{2\sigma^2} \right\} = 
+\sum_{n=1}^N \left\{ ln(\sqrt{2\pi}\sigma) + \frac{(t_n - y(x_n, w))^2}{2\sigma^2} \right\} = \\
+N ln (\sqrt{2\pi}) + \frac{1}{2\sigma^2} \sum_{n=1}^N (t_n - y(x_n,w))^2 \text{ és equivalent a } \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n, w))^2 = E(w)
 \end{gather*}
 
 $$
-\boxed{y(x, \vec{\omega}) = \vec{\omega}^T \Phi(x)} \text{ és convinent }
+\boxed{y(x, \boldsymbol{w}) = \boldsymbol{w}^T \Phi(x)} \text{ és convinent }
 $$
 
 $$
@@ -142,18 +142,19 @@ $$
 
 Expressem \textbf{l'error quadràtic}
 $$
-E(\omega) = \frac{1}{2} || \vec{t} - \Phi \vec{\omega} ||^2 = \frac{1}{2} \left\{ ||\vec{t}||^2 + ||\Phi \vec{\omega}||^2 - 2t^T(\Phi \vec{\omega}) \right\}
+E(w) = \frac{1}{2} || \boldsymbol{t} - \Phi \boldsymbol{w} ||^2 = \frac{1}{2} \left\{ ||\boldsymbol{t}||^2 + ||\Phi \boldsymbol{w}||^2 - 2t^T(\Phi \boldsymbol{w}) \right\}
 $$
 
 $$
-\frac{\partial E}{\partial \vec{\omega}} = \frac{1}{2} \left\{ 0 + 2 \Phi^T \Phi \hat{\vec{\omega}} - 2 \Phi^T \vec{t} \right\} = \Phi^T \Phi \hat{\vec{\omega}} - \Phi^T \vec{t} = \vec{0} \implies
+\frac{\partial E}{\partial \boldsymbol{w}} = \frac{1}{2} \left\{ 0 + 2 \Phi^T \Phi \hat{\boldsymbol{w}} - 2 \Phi^T \boldsymbol{t} \right\} = \Phi^T \Phi \hat{\boldsymbol{w}} - \Phi^T \boldsymbol{t} = \boldsymbol{0} \implies
 $$
 $$
-\left( \Phi^T \Phi \right) \hat{\vec{\omega}} = \Phi^T \vec{t} \implies
-\boxed{\hat{\vec{\omega}} = (\Phi^T \Phi)^{-1} \Phi^T \vec{t}} = \Phi^+ \vec{t}
+\left( \Phi^T \Phi \right) \hat{\boldsymbol{w}} = \Phi^T \boldsymbol{t} \implies
+\boxed{\hat{\boldsymbol{w}} = (\Phi^T \Phi)^{-1} \Phi^T \boldsymbol{t}} =
+\Phi^{\dag} \boldsymbol{t}
 $$
 $$
-\frac{\partial E}{\partial \sigma^2} = \frac{1}{N} \sum_{n=1}^N (t_n - \vec{\omega}^T \phi(x_n))^2 = \frac{2}{N} E(\omega)
+\frac{\partial E}{\partial \sigma^2} = \frac{1}{N} \sum_{n=1}^N (t_n - \boldsymbol{w}^T \phi(x_n))^2 = \frac{2}{N} E(w)
 $$
 
 \textbf{Teorema} ("mínims quadrats")
@@ -162,17 +163,17 @@ Sigui $\Phi_{N\times M}, \quad N > M$. Si els vectors columna de $\Phi$ són lin
 \begin{enumerate}
 	\item La matriu $\Phi^T\Phi$ és simètrica i semi-definida positiva
 	\item El problema de mínims quadrats: 
-	$\underset{\vec{\omega}}{min} ||\vec{t} - \Phi \vec{\omega}||^2$ té solució única.
-	\item Per trobar-la, cal resoldre el sistema d'equacions: $\Phi^T\Phi \vec{\omega} = \Phi^T \vec{t}$ (equacions normals de'n Gauss)
+	$\underset{\boldsymbol{w}}{min} ||\boldsymbol{t} - \Phi \boldsymbol{w}||^2$ té solució única.
+	\item Per trobar-la, cal resoldre el sistema d'equacions: $\Phi^T\Phi \boldsymbol{w} = \Phi^T \boldsymbol{t}$ (equacions normals de'n Gauss)
 \end{enumerate}
 
-La matriu $ \Phi^+ := \left( \Phi^T \Phi \right)^{-1} \Phi^T $ és pseudo-inversa (inversa de Moore-Penrose) $ \Phi^+ \Phi = I $
+La matriu $ \Phi^{\dag} := \left( \Phi^T \Phi \right)^{-1} \Phi^T $ és pseudo-inversa (inversa de Moore-Penrose) $ \Phi^{\dag} \Phi = I $
 
 \section{La Descomposició en Valors Singulars (SVD)}
 
 La solució de la regressió lineal requereix el càlcul de la matriu pseudo-inversa de la matriu de disseny ($\Phi$):
 
-$$ \Phi^+ := ( \Phi^T \Phi)^{-1} \Phi^T \qquad \Phi_{N \times M \ (N > M)} $$
+$$ \Phi^{\dag} := ( \Phi^T \Phi)^{-1} \Phi^T \qquad \Phi_{N \times M \ (N > M)} $$
 
 El càlcul directe té dos problemes:
 \begin{enumerate}[i)]
@@ -205,54 +206,52 @@ $$
 	\item  $r = rang(\Phi) \le min(N,M) = M$ $\lambda_i$ són les arrels quadrades dels valors propis de la matriu $\Phi^T \Phi$ (tots ells són $\ge 0$) $\implies \lambda_1, ...,\lambda_r > 0$.
 \end{itemize}
 
-\textbf{Teorema:} Donat un problema de mínims quadrats $ \Phi \vec{\omega} = t $, on cal minimitzar $ ||t - \Phi \vec{\omega} ||^2 $ respecte $\vec{\omega}$, la solució es pot trobar fent:
+\textbf{Teorema:} Donat un problema de mínims quadrats $ \Phi \boldsymbol{w} = \boldsymbol{t} $, on cal minimitzar $ ||\boldsymbol{t} - \Phi \boldsymbol{w} ||^2 $ respecte $\boldsymbol{w}$, la solució es pot trobar fent:
 
 $$
-\hat{\vec{\omega}} = V · diag \underbrace{\left( \frac{1}{\lambda_i}\right)_+}_{
+\hat{\boldsymbol{w}} = V · diag \underbrace{\left( \frac{1}{\lambda_i}\right)_+}_{
 	\mathclap{
 		\begin{cases}
 			\frac{1}{\lambda_i} &\text{ si } \lambda_i > 0 \\
 			0 & \text{ si } \lambda_i = 0
-		\end{cases}}} · U^T · t
+		\end{cases}}} · U^T · \boldsymbol{t}
 $$
 
 \textbf{Demostració:}
 
 \begin{align*}
-\hat{\vec{\omega}} &= \left( \Phi^T \Phi \right)^{-1} \Phi^T t =
+\hat{\boldsymbol{w}} &= \left( \Phi^T \Phi \right)^{-1} \Phi^T \boldsymbol{t} =
 \left[ \left( U \Delta V^T \right)^T \left( U\Delta V^T \right) \right]^{-1}
-\left(U\Delta V^T\right)^T t \\
+\left(U\Delta V^T\right)^T \boldsymbol{t} \\
 & = \left[ V\Delta \cancel{\left( U^T U \right)} \Delta V^T \right] 
-\left( V \Delta U^T \right) t = 
-\left( V \Delta^2 V^T \right)^{-1} \left( V \Delta U^T \right) t \\ 
+\left( V \Delta U^T \right) \boldsymbol{t} = 
+\left( V \Delta^2 V^T \right)^{-1} \left( V \Delta U^T \right) \boldsymbol{t} \\ 
 &=
-\left( V \Delta^{-2} \cancel{V^T} \right) \left( \cancel{V} \Delta U^T \right) t = V \Delta^{-1} U^T t = 
-\boxed{V diag\left(\frac{1}{\lambda_i}\right)_+ U^T t}
+\left( V \Delta^{\cancel{-2}} \cancel{V^T} \right) \left( \cancel{V} \cancel{\Delta} U^T \right) \boldsymbol{t} =
+V \Delta^{-1} U^T \boldsymbol{t} = 
+\boxed{V diag\left(\frac{1}{\lambda_i}\right)_+ U^T \boldsymbol{t}}
 \end{align*}
 
 \subsection{Regressió lineal regularitzada}
 
 \textbf{Objectiu:} tenir un control explícit de l'ajust.
 
-$$
-E_{\lambda} (\vec{\omega}) := E(\vec{\omega}) + \underbrace{\frac{\lambda}{2}}_{\mathclap{\text{ct. regularització}}}·||\vec{\omega}||^2, \ \lambda > 0
-$$
-$$
-E_{\lambda}(\vec{\omega}) = \frac{1}{2} || t - \Phi \omega ||^2 + \frac{\lambda}{2} || \vec{\omega} ||^2
-$$
-$$
-\frac{\partial E}{\partial \vec{\omega}} = 
-\Phi^T \Phi \vec{\omega} - \Phi^T t \implies
-\frac{\partial E}{\partial \vec{\omega}} = 
-\Phi^T \Phi \vec{\omega} - \Phi^T t + \lambda \vec{\omega} = 0 \implies
-\Phi^T \Phi \vec{\omega} + \lambda \vec{\omega} = \Phi^T t
-$$
-$$
-\left( \Phi^T \Phi + \lambda I \right) \vec{\omega} = \Phi^T t \rightarrow
-\text{ si } \left( \Phi^T \Phi + \lambda \vec{\omega} \right)^{-1} 
-\text{ existeix, llavors: } \hat{\vec{\omega}} = 
-\left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T t
-$$
+\begin{align*}
+    & E_{\lambda} (\boldsymbol{w}) := E(\boldsymbol{w}) + \underbrace{\frac{\lambda}{2}}_{\mathclap{\text{ct. regularització}}}·||\boldsymbol{w}||^2, \ \lambda > 0 \\
+    & E_{\lambda}(\boldsymbol{w}) = \frac{1}{2} || t - \Phi w ||^2 + \frac{\lambda}{2} || \boldsymbol{w} ||^2
+\end{align*}
+\begin{align*}
+    & \frac{\partial E}{\partial \boldsymbol{w}} = 
+    \Phi^T \Phi \boldsymbol{w} - \Phi^T \boldsymbol{t} \implies
+    \frac{\partial E}{\partial \boldsymbol{w}} = 
+    \Phi^T \Phi \boldsymbol{w} - \Phi^T \boldsymbol{t} + \lambda \boldsymbol{w} = 0 \implies \\
+    & \implies \Phi^T \Phi \boldsymbol{w} + \lambda \boldsymbol{w} = \Phi^T \boldsymbol{t} \implies
+    \left( \Phi^T \Phi + \lambda I \right) \boldsymbol{w} = \Phi^T \boldsymbol{t} \implies \\
+    & \implies \text{ si } \left( \Phi^T \Phi + \lambda \boldsymbol{w} \right)^{-1} 
+    \text{ existeix, llavors: } \hat{\boldsymbol{w}} = 
+    \left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T \boldsymbol{t}
+\end{align*}
+
 
 \textbf{Avantatges:}
 
@@ -306,10 +305,10 @@ error(LOOCV) = \frac{1}{N} \sum_{n=1}^N \frac{\left(t_n - y(x_n)\right)^2}{(1 - 
 \frac{1}{N} \sum_{n=1}^N \frac{(t_n - y(x_n))^2}{\left(1 - \frac{Tr(H)}{N}\right)^2} = GCV
 $$
 $$
-y(x_n) = \hat{\vec{\omega}}^T \phi (x_n) \text{ (model lineal)}
+y(x_n) = \hat{\boldsymbol{w}}^T \boldsymbol{\phi} (x_n) \text{ (model lineal)}
 $$
 $$
-H = (h_{ij}), \quad H = \Phi \Phi^+ \text{ si no hi ha regularització}
+H = (h_{ij}), \quad H = \Phi \Phi^{\dag} \text{ si no hi ha regularització}
 $$
 $$
 H = \Phi \left( \Phi^T \Phi + \lambda I \right)^{-1} \Phi^T \text{ si hi ha regularització}
@@ -322,7 +321,7 @@ $$
 		\item \textbf{APA}: regularització $L_2$
 		\item \textbf{estadístic}: ridge regression
 	\end{itemize}
-	\item $||\omega||_1 = \sum_{i=1}^n |\omega_i|$
+	\item $||w||_1 = \sum_{i=1}^n |w_i|$
 	
 \end{itemize}
 \end{document}
