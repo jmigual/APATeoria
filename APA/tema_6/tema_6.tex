@@ -1,30 +1,4 @@
-\documentclass[a4paper]{article}
-%\usepackage[margin=2cm]{geometry}
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{mathtools}
-\usepackage[catalan]{babel} % Language 
-\usepackage{fontspec}
-\usepackage{graphicx}
-\usepackage[makeroom]{cancel}
-\usepackage{float}
-\usepackage{enumerate}
-\usepackage{pgfplots}
-\usepackage[hidelinks]{hyperref}
-\usepackage{listings}
-
-\pgfplotsset{compat=1.13}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.2cm}
-
-\title{Tema 6: Classificadors probabilístics discriminatoris}
-\author{Joan Marcè Igual}
-
-\begin{document}
-\maketitle
+\chapter{Classificadors probabilístics discriminatoris}
 \section{Introducció}
 Ja s'havia vist anteriorment que \textbf{LDA}:
 
@@ -177,6 +151,13 @@ Null deviance
 	ND := -2*E(w(0))
 \end{lstlisting}
 
+% M'he quedat aqui
+\begin{algorithmic}[1]
+	\State inicialitzar
+	\State $w(0)_0 := \ln \frac{P(C_1)}{P(C_2)}$
+	\State $w(0)_{1...d} := 0$
+\end{algorithmic}
+
 \textbf{AIC} D + 2d
 Regressió Logística $\rightarrow$ \texttt{RegLog}
 
@@ -202,5 +183,3 @@ $$
 \exp(w^T(\cancel{x^*} + 1_i) - \cancel{w^T x^*}) = 
 \exp(w^T 1_i) = \exp(w_i)
 $$
-
-\end{document}
