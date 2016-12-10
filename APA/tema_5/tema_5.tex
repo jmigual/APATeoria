@@ -1,31 +1,4 @@
-\documentclass[a4paper]{article}
-%\usepackage[margin=2cm]{geometry}
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{mathtools}
-\usepackage[catalan]{babel} % Language 
-\usepackage{fontspec}
-\usepackage{graphicx}
-\usepackage[makeroom]{cancel}
-\usepackage{float}
-\usepackage{enumerate}
-\usepackage{pgfplots}
-\usepackage[hidelinks]{hyperref}
-
-\pgfplotsset{compat=1.13}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.2cm}
-
-\title{Tema 5: Classificadors generatius}
-\author{Joan Marcè Igual}
-
-\begin{document}
-	
-\maketitle
-
+\chapter{Classificadors generatius}
 \section{Introducció}
 
 Un \textbf{classificador} és una funció:
@@ -48,7 +21,7 @@ Un classificador parteix $\mathbb{R}^d$ en $K$ subconjunts.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth]{images/tema_5-1}
+	\includegraphics[width=0.5\textwidth]{tema_5/images/tema_5-1}
 \end{figure}
 
 Les regions de decisió estan generades per les zones que delimiten cada classe. Hi ha unes fronteres on les regions canvien. Les separacions es diuen \emph{fronteres de decisió}.
@@ -57,7 +30,7 @@ Un classificador és \textbf{lineal} quan només genera fronteres de decisió (e
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.5\textwidth]{images/tema_5-2}
+	\includegraphics[width=0.5\textwidth]{tema_5/images/tema_5-2}
 \end{figure}
 
 \subsection{La formula de'n Bayes}
@@ -91,14 +64,14 @@ $$
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/tema_5-3}
+	\includegraphics[width=0.7\textwidth]{tema_5/images/tema_5-3}
 \end{figure}
 
 \textbf{Exemple introductori:} Imaginem que tenim un amic ornitòleg que pren mesures de dos tipus d'aus \emph{àligues} i \emph{falcons} i pren mesures de la envergadura (en cm). El nostre amic vol decidir si a partir de la envergadura una au és una àliga o un falcó. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/tema_5-4}
+	\includegraphics[width=0.7\textwidth]{tema_5/images/tema_5-4}
 \end{figure}
 
 Es tracta de donar una resposta que sigui la òptima. 
@@ -173,6 +146,60 @@ $$
 
 \textbf{Teorema:} La $R_{Bays}$ és la millor regla de decisió (classificació) d'entre les que fan servir $P(C_1|X), P(C_2|X)$.
 
+
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\pgfdeclarepatternformonly{flexible hatch}%
+		{\pgfqpoint{-1pt}{-1pt}}%
+		{\pgfqpoint{10pt}{10pt}}%
+		{\pgfqpoint{6pt}{6pt}}%
+		{
+			\pgfsetlinewidth{1pt}
+			\pgfpathmoveto{\pgfqpoint{6.1pt}{0pt}}
+			\pgfpathlineto{\pgfqpoint{0pt}{6.1pt}}
+			\pgfusepath{stroke}
+		}
+		\pgfdeclarepatternformonly{flexible inverted}%
+		{\pgfqpoint{-1pt}{-1pt}}%
+		{\pgfqpoint{10pt}{10pt}}%
+		{\pgfqpoint{6pt}{6pt}}%
+		{
+			\pgfsetlinewidth{1pt}
+			\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+			\pgfpathlineto{\pgfqpoint{6.1pt}{6.1pt}}
+			\pgfusepath{stroke}
+		}
+		\begin{axis}[
+				width=0.7\textwidth,height=0.7\textwidth,
+				xmin=0,xmax=2.1,ymin=0,ymax=1.1,
+				domain=0:2,
+				axis x line=center,
+				axis y line=center,
+				axis on top,
+				samples = 200,
+				legend cell align = left,
+				legend style={at={(0.9,0.5)},anchor=east},
+			]
+			\addplot+[black, mark=none, dashed, very thick]{max((2*x)/(x + 2),(2 - x)/(x + 2))};
+			\addplot[mark=none, forget plot, black, dashed] coordinates {(2/3,0)(2/3,2)};
+			\addplot[white, mark = none, area legend, pattern = flexible hatch, 
+				pattern color = black!20!green!40] {1/3} \closedcycle;
+			\addplot[white, mark=none, area legend, pattern = flexible inverted, 
+				pattern color = orange!40] {min((2*x)/(x + 2),(2 - x)/(x + 2))} \closedcycle;
+			\addplot[mark=none, orange]{1/3};
+			\addplot[mark=none, purple]{2/3};
+			\addplot[mark=none, red] {(2 - x)/(x + 2)};
+			\addplot[mark=none, blue] {(2*x)/(x + 2)};
+			\legend{$R_{bayes}$, $ \mathbb{E}(P_{error}(R_1))$,  $\mathbb{E}(P_{error}(R_{bayes}))$, 
+				$P(C_1)$,$P(C_2)$, $P(C_1|X)$, $P(C_2|X)$};
+		\end{axis}
+	\end{tikzpicture}
+	\caption{Gràfic amb la regla per classificar en funció del color i la probabilitat d'error}
+	\label{fig:regla}
+\end{figure}
+
 \section{Classificadors generatius}
 
 $$
@@ -191,11 +218,6 @@ $$
 
 
 \subsection{Funció logística}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\textwidth]{images/tema_5-5}
-\end{figure}
 
 $$
 g:\mathbb{R} \rightarrow (0,1)
@@ -326,11 +348,25 @@ $$
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.7\textwidth]{images/tema_5-6}
+	%\includegraphics[width=0.7\textwidth]{tema_5/images/tema_5-6}
+	\begin{tikzpicture}
+		\begin{axis}[
+				width=0.8\textwidth, height=0.7\textwidth,
+				xmin = 0, xmax = 1.1,
+				ymin = 0, ymax = 1.1,
+				legend pos = north west,
+				xlabel = $X_1$, ylabel = $X_2$,
+				axis y line = left,
+				axis x line = bottom,
+				yticklabels = {,,},
+				xticklabels = {,,},
+			]
+			\addplot+[only marks] table[x=x, y=y] {tema_5/data/bayes-1.csv};
+			\addplot+[only marks] table[x=x, y=y] {tema_5/data/bayes-2.csv};
+			\addplot+[mark=none]{x};
+			\legend{$C_1$, $C_2$};
+		\end{axis}
+	\end{tikzpicture}
 \end{figure}
 
 $X_1$ i $X_2$ semblen dependents a primera vista però si només ens centrem en un dels dos conjunts llavors deixen de ser-ho.
-
-
-
-\end{document}
