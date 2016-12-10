@@ -7,10 +7,13 @@
 \usepackage[catalan]{babel} % Language 
 \usepackage{fontspec}
 \usepackage[makeroom]{cancel}
-\usepackage{xcolor}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{float}
+
+\newcommand*{\op}[1]{\operatorname{#1}}
+\newcommand*{\bmath}[1]{\boldsymbol{#1}}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.2cm}
@@ -23,10 +26,10 @@
 
 Estem treballant amb models de la forma:
 $$
-y(x) = g(w^T\phi(x) + w_0),\ x \in \mathbb{R}^d, w \in \mathbb{R}^M, w_0 \in \mathbb{R}^d
+y(x) = g(\boldsymbol{w}^T\boldsymbol{\phi}(x) + w_0),\ x \in \mathbb{R}^d, w \in \mathbb{R}^M, w_0 \in \mathbb{R}^d
 $$
 $$
-\phi(x) =
+\boldsymbol{\phi}(x) =
 \begin{pmatrix}
 \phi_1(x) \\
 \phi_2(x) \\
@@ -207,12 +210,108 @@ La dimensió VC de $\mathcal{F}$ és la $N$ més gran per la qual existeixen $x_
 \textbf{Exemple}
 
 $$
+\mathcal{F}_{lin}^d = \{ y(\boldsymbol{x}, \boldsymbol{w}) = signe(\boldsymbol{w}^T \boldsymbol{x} + w_0), 
+\ \boldsymbol{x} \in \mathbb{R}^d, \ \boldsymbol{w} \in \mathbb{R}^d, \ w \in \mathbb{R}  \}
+$$
+
+\textbf{Proposició}: $\dim (\mathcal{F}_{lin}^d) = d + 1$.
+
+\section{Màquines de Vectors Suport}
+
+\begin{figure}[H]
+	\centering
+		
+	\begin{tikzpicture}[scale=8]
+		\draw [step=0.1, dotted, gray] (-0.5,0) grid (0.5,0.6);
+	
+		\foreach \Point [count=\x] in {(0.09, 0.25), (0.25, 0.05), (0.4, 0.3), (0.25, 0.5), (0.11, 0.55), (0.2, 0.3), (0.25, 0.4)}{
+			\node (right-\x) at \Point {\textbullet};
+		}
+		\foreach \Point [count=\x] in {(-0.15, 0.1), (-0.3, 0.09), (-0.4, 0.35), (-0.25, 0.59), (-0.12, 0.45), (-0.2, 0.27), (-0.25, 0.33)} {
+			\node (left-\x) at \Point {$\circ$};
+		}
+	
+		\foreach \x [remember=\x as \lastx (initially 1)] in{2,...,5,1}{
+			\draw (right-\x) -- (right-\lastx);
+			\draw (left-\x) -- (left-\lastx);
+		}
+	
+		\draw[very thick, Green] (0,0) -- (0, 0.6) node[at start, right] {\textcolor{Green}{$m = $ marge}};
+		
+		\node[text width = 4cm] at (0.6, 0.6) {Polígon convex de superfície interior mínima que abarca tots els punts de la classe};
+	\end{tikzpicture}
+\end{figure}
+
+Si es suposa que les dades són separables linealment. Es busca la recta que les separa deixant un marge $m$ màxim.
+
+\begin{align*}
+	\mathcal{D} &= \{ (x_1, t_1), ..., (x_N, t_N) \} \quad \text{S'assumeix $\mathcal{D}$ és separable linealment} \\
+	& \phantom{{}={}}  
+	\begin{aligned}
+		\text{\textbf{def }} & y(x) = \op{sgn}(\boldsymbol{w}^T \boldsymbol{x} + w_0) \\
+		& \text{on } \op{sgn}(z) = 
+		\begin{cases}
+			1 & \text{ si } z > 0 \\
+			-1 & \text{ si } z < 0
+		\end{cases}
+	\end{aligned}
+\end{align*}
+
+\begin{align*}
+	& \left[ \forall n : 1 \le n \le N : 
+	\begin{rcases}
+	\begin{cases}
+		\bmath{w}^T x_n + w_0 > 0 & \text{ si } t_n = +1 \\
+		\bmath{w}^T x_n + w_0 < 0 & \text{ si } t_n = -1
+	\end{cases}
+	\end{rcases} 
+	\right] \\
+	& \hspace{2em} \Updownarrow \\
+	& \left[ \forall n : 1 \le n \le N : (\bmath{w}^T x_n + w_0) t_n > 0 \right]
+\end{align*}
+
+\textbf{Definició}: El \textbf{marge} d'un pla $\pi := $ distància de $\pi$ al punt més proper.
+
+\textbf{Definició}: El \textbf{pla separador òptim} (PSO) $:=$ pla $\pi$ de màxim marge.
 
 $$
+\pi \left| \max_{\bmath{w}, w_0} \left( \min_{1 \le n \le N} d(x_n, \pi) \right)\right.
+$$
+
+Es normalitza $\bmath{w} \scalebox{1.8}{|} |\bmath{w}^T \bmath{x} + w_0| \ge 1$:
+
+\textbf{Definició}: Els punts $x_n \scalebox{1.8}{|} |\bmath{w}^T \bmath{x} + w_0| = 1$ es diuen \textbf{vectors suport} (VS). 
+
+\begin{itemize}
+	\item El marge del PSO $\pi$ és: $d(x_{vs}, \pi) = 2 \frac{|\bmath{w}^T \bmath{x}_{vs} + w_0}{||w||} = \frac{2}{||w||}$
+\end{itemize}
+
+Així doncs el problema a resoldre s'escriu:
+
+$$
+\boxed{
+\begin{aligned}
+& \min_{\bmath{w},w_0} \frac{||w||^2}{2} \quad \text{Maximitzar el marge} \\
+& \text{\textbf{subjecte a }} t_n (\bmath{w}^T x_n + w_0) \ge 1, \quad \forall n : 1 \ge n \ge N
+\end{aligned}
+}
+$$
+
+\textbf{Teorema} (Vapnik)
+
+Es considera una classe de models $\mathcal{F}$ amb $\op{dimVC}(\mathcal{F}) = h$, amb probabilitat de com a mínim $1 - \eta$ on:
+
+\begin{itemize}
+	\item $E(y_D) \le E_D (y_D) + H(h, \eta, N)$ 
+	\item $E(y_D)$ és l'error de generalització de $y_D$
+	\item $E_D(y_D)$ és l'error de training de $y_D$ en les dades $\mathcal{D}$
+	\item $y_D$ és un model de $\mathcal{F}$ obtingut amb les dades $\mathbb{D}$
+	\item $H(h, \eta, N) = \left( \frac{h(\ln \frac{2N}{\eta} + 1) - \ln \frac{y}{4}}{N} \right)^{\frac{1}{2}}$ complexitat
+\end{itemize}
 
 \textbf{Teorema}
 
-Sigui $\mathcal{F} = \{ y(x) = signe(w^T x + w_0), \ w \in \mathbb{R}^d, \ w_0 \in \mathbb{R} \}$, considerem la subclasse $\mathcal{F}_n \subset \mathcal{F}$ que té marge $m \implies \dim VC(\mathcal{F}_m) \le \min \left( \left\lceil \frac{R^2}{m^2} \right\rceil, d \right) + 1$. On $R$ és el radi de l'esfera més petita que conté les dades. 
+Sigui $\mathcal{F} = \{ y(x) = \op{sgn}(w^T x + w_0), \ w \in \mathbb{R}^d, \ w_0 \in \mathbb{R} \}$, considerem la subclasse $\mathcal{F}_n \subset \mathcal{F}$ que té marge $m \implies \dim VC(\mathcal{F}_m) \le \min \left( \left\lceil \frac{R^2}{m^2} \right\rceil, d \right) + 1$. On $R$ és el radi de l'esfera més petita que conté les dades. 
 
 \subsection{Violacions del marge}
 
@@ -254,20 +353,33 @@ Si en lloc de separar les dades perfectament es tria un altre separador que come
 	\item S'introdueix un paràmetre de ponderació (\emph{cost parameter}): $C > 0$.
 	
 	$$
-	\frac{min}{w_1 w_0 \textcolor{red}{,\varepsilon}} \frac{1}{2} ||w||^2 \textcolor{red}{+ C \cdot \sum_{n=1}^N \varepsilon_n}
+	\frac{min}{w_1 w_0 \textcolor{red}{,\varepsilon}} \frac{1}{2} ||w||^2 \textcolor{red}{+} \textcolor{Green}{C} \textcolor{red}{\cdot \sum_{n=1}^N \varepsilon_n}
 	$$
 	
 	Subjecte a $t_n (w^T x_n + w_0) \ge 1; \quad (1 \le n \le N); \quad \textcolor{red}{\varepsilon_n \ge 0}$
 	
 	\begin{align*}
-		& C \rightarrow \infty & ------------ \text{(sobreajust)} \\
-		& C \rightarrow 0 & \textcolor{red}{------------ \text{(infrajust)}} 
+		& \textcolor{Green}{C \to \infty} & \textcolor{Green}{m \downarrow} & 
+		\textcolor{Green}{\text{ sobreajust}} & \textcolor{Green}{\text{(separador 1)}} &
+		\textcolor{Green}{\text{ errors de training } \downarrow} \\
+		& \textcolor{red}{C \to 0} & \textcolor{red}{m \uparrow} & 
+		\textcolor{red}{\text{ infrajust}} & \textcolor{red}{\text{(separador 2)}} &
+		\textcolor{red}{\text{ errors de training } \uparrow}
 	\end{align*}
 \end{itemize}
 
 \begin{align*}
-	\mathcal{L} = \frac{1}{2} ||w||^2  + C \cdot \sum_{n=1}^N \varepsilon - \sum_{n=1}^N \mu_n \varepsilon_n - \sum_{n=1}^N \alpha_n \{ t_n (w^T x_n + w_0) - 1 + \varepsilon_n \}, \\
-	\alpha_n \ge 0, \quad \mu_n \ge 0
+	\mathcal{L} =& \frac{1}{2} ||w||^2  + C \cdot \sum_{n=1}^N \varepsilon - 
+	\underbrace{\sum_{n=1}^N \mu_n \varepsilon_n}_{
+		\mathclap{\text{\parbox{2cm}{restriccions \\ $\varepsilon_n \ge 0$}}}} 
+	-\underbrace{\sum_{n=1}^N \alpha_n \{ t_n (w^T x_n + w_0) - 1 + \varepsilon_n \}}_{\mathclap{
+		\text{\parbox{4cm}{restriccions \\ 
+				$t_n (\bmath{w}^T \bmath{x_n} + w_0) + \varepsilon_n + 1 \implies$ \\
+				$-t_n (\bmath{w}^T \bmath{x_n} + w_0) - \varepsilon_n + 1 \le 0 $ }}
+	}} 
+	\\
+	& \alpha_n \ge 0 \\
+	& \mu_n \ge 0
 \end{align*}
 
 \begin{align*}
@@ -276,11 +388,18 @@ Si en lloc de separar les dades perfectament es tria un altre separador que come
 	& \textbullet \frac{\partial \mathcal{L}}{\partial \epsilon_n} = C - \alpha_n - \mu_n = 0  \implies \boxed{C= \alpha_n + \mu_n}
 \end{align*}
 	
-Substituim en $\mathcal{L}$:
+Substituim en $\mathcal{L}$ i obtenim el lagrangià dual $\mathcal{L}_{dual}$:
 
-\begin{align*}
-	\mathcal{L}_{dual} = \sum_{n=1}^N \alpha_n - \frac{1}{2} \sum_{n=1}^N \sum_{m=1}^N \alpha_n \alpha_m t_n t_m x_n^T x_m \\
-	\text{Subjecte a } 0 \le \alpha_n \le C
-\end{align*}
+$$
+\boxed{
+\begin{aligned}
+	&\mathcal{L}_{dual} = \sum_{n=1}^N \alpha_n - 
+	\frac{1}{2} \sum_{n=1}^N \sum_{m=1}^N \alpha_n \alpha_m t_n t_m \textcolor{red}{x_n^T x_m} \\
+	&\text{Subjecte a } 0 \le \alpha_n \le C
+\end{aligned}
+}
+$$
+
+\textcolor{red}{Kernelització! Substituïm $x_n$ per $\phi (x_n) \implies \phi(x_n)^T \phi(x_m) = K(x_n, x_m)$.}
 
 \end{document}
