@@ -1,53 +1,4 @@
-\documentclass[a4paper]{article}
-%\usepackage[margin=2cm]{geometry}
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{mathtools}
-\usepackage[catalan]{babel} % Language 
-\usepackage{fontspec}
-\usepackage{graphicx}
-\usepackage[makeroom]{cancel}
-\usepackage{float}
-\usepackage{enumerate}
-\usepackage{pgfplots}
-\usepackage[hidelinks]{hyperref}
-\usepackage{listings}
-\usepackage{tikz}
-\usepackage{ifthen}
-\usepackage{array}
-\usepackage{algpseudocode}
-\usepackage{algorithmicx}
-
-\usetikzlibrary{positioning}
-
-\pgfplotsset{compat=1.13}
-
-\tikzset{%
-	every neuron/.style={
-		circle,
-		draw,
-		minimum size=1cm
-	},
-	neuron missing/.style={
-		draw=none, 
-		scale=4,
-		text height=0.333cm,
-		execute at begin node=\color{black}$\vdots$
-	},
-}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.2cm}
-
-\title{Tema 7: Xarxes neuronals (artificials)}
-\author{Joan Marcè Igual}
-
-
-\begin{document}
-\maketitle
-
+\chapter{Xarxes neuronals (artificials)}
 \section{Introducció}
 Models $y(x) = g(w^T \phi (x)),\ x \in \mathbb{R}^d, w \in \mathbb{R}^{d + 1}$.
 $$
@@ -423,5 +374,3 @@ Imaginem que tenim una funció i una sèrie de dades i es fa un clustering d'aqu
 El paràmetre de suavització fa que les Gaussianes siguin més estretes o més amples. Si es tria una $h_i = h$ per totes les neurones i llavors es fa que $h \rightarrow \infty$ llavors la resposta de totes les neurones serà molt plana i la resposta de la xarxa serà l'infra-ajust.
 
 Per contra si la $h \rightarrow 0$ la resposta de les neurones serà molt local i la xarxa tendirà al sobre-ajust.
-
-\end{document}

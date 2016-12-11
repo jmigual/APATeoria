@@ -18,12 +18,28 @@
 \usepackage{algorithmicx}
 \usepackage{enumerate}
 \usepackage{listings}
+\usepackage{ifthen}
+\usepackage{array}
 
-\usetikzlibrary{patterns}
 \pgfplotsset{compat=1.13}
 
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{1em}
+\usetikzlibrary{patterns}
+\usetikzlibrary{positioning}
+
+\tikzset{%
+	every neuron/.style={
+		circle,
+		draw,
+		minimum size=1cm
+	},
+	neuron missing/.style={
+		draw=none, 
+		scale=4,
+		text height=0.333cm,
+		execute at begin node=\color{black}$\vdots$
+	},
+}
+
 \setcounter{secnumdepth}{5}
 
 % New commands definitions
@@ -38,8 +54,12 @@
 
 \maketitle
 
+\setlength{\parskip}{0.6em}
 \tableofcontents
 \pagebreak
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
 
 \input{tema_1/tema_1.tex}
 \input{tema_2/tema_2.tex}
@@ -47,5 +67,7 @@
 \input{tema_4/tema_4.tex}
 \input{tema_5/tema_5.tex}
 \input{tema_6/tema_6.tex}
+\input{tema_7/tema_7.tex}
+\input{tema_8/tema_8.tex}
 
 \end{document}

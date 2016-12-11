@@ -1,27 +1,4 @@
-\documentclass[a4paper]{article}
-
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage{amsfonts}
-\usepackage{mathtools}
-\usepackage[catalan]{babel} % Language 
-\usepackage{fontspec}
-\usepackage[makeroom]{cancel}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{tikz}
-\usepackage{pgfplots}
-\usepackage{float}
-
-\newcommand*{\op}[1]{\operatorname{#1}}
-\newcommand*{\bmath}[1]{\boldsymbol{#1}}
-
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.2cm}
-
-\title{Tema 8: Màquines de vectors suport (Introducció als mètodes kernel)}
-\author{Joan Marcè i Igual}
-
-\begin{document}
+\chapter{Màquines de vectors suport (Introducció als mètodes kernel)}
 \section{Introducció}
 
 Estem treballant amb models de la forma:
@@ -326,8 +303,8 @@ Sigui $\mathcal{F} = \{ y(x) = \op{sgn}(w^T x + w_0), \ w \in \mathbb{R}^d, \ w_
 				width=0.9\textwidth,
 				height=0.9\textwidth
 			]
-			\addplot[blue, only marks] table [x=x, y=y]{data/data1.csv};
-			\addplot[red, only marks] table [x=x, y=y]{data/data2.csv};
+			\addplot[blue, only marks] table [x=x, y=y]{tema_8/data/data1.csv};
+			\addplot[red, only marks] table [x=x, y=y]{tema_8/data/data2.csv};
 			\addplot[green, mark=none, very thick] {0.5};
 			\addplot[green, mark=none] {0.55};
 			\addplot[green, mark=none] {0.45};
@@ -402,4 +379,3 @@ $$
 
 \textcolor{red}{Kernelització! Substituïm $x_n$ per $\phi (x_n) \implies \phi(x_n)^T \phi(x_m) = K(x_n, x_m)$.}
 
-\end{document}
