@@ -379,3 +379,102 @@ $$
 
 \textcolor{red}{Kernelització! Substituïm $x_n$ per $\phi (x_n) \implies \phi(x_n)^T \phi(x_m) = K(x_n, x_m)$.}
 
+
+\section{Kernelització de la SVM}
+
+\begin{align*}
+	& \min_{w, w_0, \varepsilon} \frac{1}{2} ||w||^2 + C \sum_{n=1}^N \varepsilon_n \\
+	& \text{Subjecte a }
+	\begin{rcases}
+		& t_n (w^T \phi (x_n) + w_0) \ge 1 - \varepsilon_n \\
+		& \phi: \mathbb{R}^d \to F \varepsilon_n \ge 0
+	\end{rcases}
+	1 \le n \le N
+\end{align*}
+
+\textbf{Lagrangià}
+\begin{align*}
+	& \mathcal{L} = \frac{1}{2} ||w||^2 + C \sum_{n=1}^N \varepsilon_n - 
+	\sum_{n=1}^N \alpha_n \{ t_n (w^T \phi(x_n) + w_0) + \varepsilon_n - 1 \} -
+	\sum_{n=1}^N \mu_n \varepsilon_n \\
+	& \text{Subjecte a } \sum_{n=1}^N \alpha_n t_n = 0
+\end{align*}
+
+$\bmath{\mathcal{L}_{\text{DUAL}}}$
+\begin{align*}
+	&\max_{\alpha} \mathcal{L}_D = \sum_{n=1}^N \alpha_n - \frac{1}{2}
+	\sum_{n=1}^N \sum_{m=1}^N \alpha_n \alpha_m t_n t_m \phi(x_n)^T \phi(x_m)\\
+	& \text{Subjecte a } 0 \le \alpha_n \le C,\ 1 \le n \le C
+\end{align*}
+
+\begin{align*}
+	y_{sum}(x) &= \op{sgn}(w^T \phi(x) + w_0) = 
+	\op{sgn}\left( \left( \sum_{n=1}^N \alpha_n t_n \phi(x_n) \right)^T 
+	\phi(x) + w_0 \right) = \\
+	& \op{sgn} \left( \sum_{n=1}^N \alpha_n t_n \phi^T(x_n) \phi (x) + w_0 \right) = 
+	\op{sgn} \left( \sum_{n=1}^N \alpha_n t_n \kappa(x_n, x) + w_0 \right) = \\
+	& \op{sgn} \left( \sum_{n \in VS} \alpha_n t_n \kappa(x_n, x) + w_0 \right)
+\end{align*}
+
+\section{SVMs per regressió}
+
+En regressió lineal clàssica regularitzada:
+
+$$
+\min_w \frac{1}{2} \sum_{n=1}^N (t_n - y(x_n))^2 + \frac{\lambda}{2}||w||^2
+$$
+$$
+y(x_n) = w^T \phi(x_n)
+$$
+
+En SVMs, s'usa una funció que promou l'esparsitat:
+
+\textbf{$\bmath{\varepsilon}$-insensibilitat:}
+
+\begin{align*}
+	\mathbb{E}_\varepsilon (y(x), t) = 
+	\begin{cases}
+		0 & \text{ si } | y(x) - t| < \varepsilon \\
+		|y(x) - t| - \varepsilon & \text{ si } |y(x) - t| \ge \varepsilon
+	\end{cases}
+\end{align*}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+		\begin{axis}[
+				xmin = -5, xmax = 5,
+				ymin = -0.5, ymax = 20,
+				width = 0.8\linewidth,
+				height = 0.7\linewidth
+			]
+			\addplot+[mark=none] {x^2};
+			\addplot+[mark=none, purple, domain=1.5:6] {7*x - 10.5};
+			\addplot+[mark=none, purple, domain=-6:-1.5] {-7*x - 10.5};
+			\addplot+[mark=none, purple, domain=-1.5:1.5]{0};
+			\legend{Error quadràtic, funció d'esparsitat}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+S'introdueix dos jocs de variables: $\varepsilon_n$ i $\hat{\varepsilon}_n, \ 1 \le n \le N$.
+
+\begin{itemize}
+	\item $\varepsilon_n > 0 \ (\hat{\varepsilon}_n = 0)$, correspon a $t_n > y(x_n) + \varepsilon$. 
+	\item $\hat{\varepsilon}_n > 0 (\varepsilon_n = 0)$, correspon a $t_n < y(x_n) - \varepsilon$.
+	\item $t_n \in [ y(x_n) - \varepsilon, y(x_n) + \varepsilon]$. Es troba dins del marge.
+	\begin{align*}
+		& \implies \min_w \frac{1}{2}||w||^2 + C \sum_{n=1}^N (\varepsilon_n + \hat{\varepsilon}_n) \\
+		& \text{Subjecte a } 
+		\begin{rcases}
+			& t_n \le y (x_n) + \varepsilon + \varepsilon_n \\
+			& t_n \ge y(x_n) - \varepsilon - \hat{\varepsilon}_n \\
+			& \varepsilon_n \ge 0 \\
+			& \hat{\varepsilon}_n \ge 0
+		\end{rcases} \\
+		& \implies y_{SVM}(x) = \sum_{n \in VS} (\alpha_n - \hat{\alpha_n})\kappa(x_n, x) + w_0 \\
+		& VS = \{ n | \varepsilon_n > 0 \text{ o } \hat{\varepsilon}_n > 0 \} \\
+		& \varepsilon \to 0 \ \text{(SOBREAJUSTAT)} \\
+		& \varepsilon \to \infty \ \text{(INFRAJUST)}
+	\end{align*}
+\end{itemize}
