@@ -16,7 +16,7 @@ Hi ha dos grans grups de mètodes per resoldre aquests problemes:
 	\item \textbf{Boosting}: Per reduir el biaix
 \end{itemize}
 
-\section{Bagging}
+\section{Bagging (Bootstrap Aggregating)}
 Si es té tot un conjunt de models i es volen integrar en un de sol, els models individuals han de presentar poc biaix i molta variància. 
 
 \begin{itemize}
@@ -24,4 +24,23 @@ Si es té tot un conjunt de models i es volen integrar en un de sol, els models 
 	\item Xarxes neuronals (cost computacional gran)
 \end{itemize}
 
+\begin{itemize}
+	\item Es vol generar diversitat entre els models individuals
+	\item Idealment, es necessitaria una mostra de dades \textbf{diferent} per cada model individual.
+	\item No es disposa d'aquesta quantitat de mostres per tant es re-mostreja la única mostra que es té.
+\end{itemize}
 
+
+Imaginem que es té un conjunt de dades $\mathcal{D}$
+
+\begin{align*}
+	&\mathcal{D} = \{ (x_1, t_1),..., (x_N, t_N) \} \\
+	& \hat{\theta} = \theta(\mathcal{D}) \text{ del veritable (poblacional) }, \theta \\
+	& Z_1^* \{ 1, ..., N \} \ \text{(amb re-emplaç)}\ \hat{\theta}_1^* = \theta(Z_1^*) \\
+	& Z_2^* \{ 1, ..., N \} \ \text{(amb re-emplaç)}\ \hat{\theta}_2^* = \theta(Z_2^*) \\
+	& \vdots \\
+	& Z_B^* \{ 1, ..., N \} \ \text{(amb re-emplaç)}\ \hat{\theta}_B^* = \theta(Z_B^*) \\
+\end{align*}
+$$
+\hat{\theta}^* = \frac{1}{B} \sum_{i=1}^B \hat{\theta}_i^*
+$$
