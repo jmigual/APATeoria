@@ -44,3 +44,34 @@ Imaginem que es té un conjunt de dades $\mathcal{D}$
 $$
 \hat{\theta}^* = \frac{1}{B} \sum_{i=1}^B \hat{\theta}_i^*
 $$
+
+
+\subsection{Bagging (D,B)}
+\begin{algorithmic}
+	\State $\varepsilon := \phi$
+	\For{$i := 1$ \textbf{to} $B$}
+		\State generar $Z_i^*$ de $\mathcal{D}$
+		\State ajustar un model a $Z_i^* \to M_i$
+		\State $\varepsilon := \varepsilon \cup \{ M_i \}$
+	\EndFor
+\end{algorithmic}
+
+% FIGURES 1 i 2
+
+\section{Random Forest}
+Un \texttt{Random Forest} és Baggings on els models individuals són arbres de decisió i a més, s'afegeix aleatorietat en el procés de construcció dels arbres individuals.
+
+Si es tenen unes dades que tenen $d$ variables, per cada node de cada arbre es seleccionen $m << d$ variables a l'atzar i es selecciona la millor per expansió.
+
+\begin{itemize}
+	\item $m = \sqrt{d} \quad$ (Classificació)
+	\item $m = \frac{d}{3} \quad$ (regressió)
+\end{itemize}
+
+\subsection{Predicció (RF, x)}
+\begin{algorithmic}
+	\ForAll{element $e$ \textbf{in} $\mathcal{D}$}
+		\State Escollir tots els model que no utilitzen $e$
+		\State Calcular l'error dels models seleccionats
+	\EndFor
+\end{algorithmic}
