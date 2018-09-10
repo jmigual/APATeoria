@@ -1,0 +1,83 @@
+% !TEX root = ../main.tex
+
+We have multiple interfaces with
+
+An automaton for a simple light:
+\begin{itemize}
+  \item Input:
+  \begin{itemize}
+    \item Switch on
+    \item Switch off
+  \end{itemize}
+  \item Output:
+  \begin{itemize}
+    \item Light on
+    \item Light off
+  \end{itemize}
+\end{itemize}
+
+There are two states:
+\begin{itemize}
+  \item On
+  \item Off
+\end{itemize}
+
+The inputs switch from one state to the other, label transition system, 
+\autoref{fig:deterministic_on}
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \tikzstyle{every state}=[draw]
+
+      \node[state] (on) {On};
+      \node[state, below = of on] (off) {Off};
+
+      \path (on)    edge[bend left] node {\emph{switch\_on}}  (off)
+            (off)   edge[bend left] node {\emph{switch\_off}} (on);
+      
+    \end{tikzpicture}
+
+    \caption{Simple automata \label{fig:deterministic_on}}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \tikzstyle{every state}=[draw]
+      
+      \node[state] (on) {On};
+      \node[state, below = of on] (off) {Off};
+      
+      \path (on)    edge[bend left]   node {\emph{switch\_on}}  (off)
+      (off)   edge[bend left]   node {\emph{switch\_off}} (on)
+      edge[loop below]  node {\emph{switch\_off}} (off);
+      
+    \end{tikzpicture}
+    
+    \caption{Non-deterministic automata \label{fig:non-deterministic_on}}
+  \end{subfigure}
+\end{figure}
+Sometimes we have a non-deterministic behaviour \autoref{fig:non-deterministic_on}
+
+\subsection{Definition of a labelled transition system}
+
+Definition
+\textbf{This is a test}
+
+
+\subsection{Transition system with an infinite state space}
+
+Example: the natural numbers
+
+\begin{align*}
+  S &= \{ 0, 1, 2, 3, ... \} \\
+  Act &= \{ Up, Down \}  \\
+  \rightarrow &= \{ <i, Up, i+1>, <i, Down, i-1> \}
+\end{align*}
+
+If we were to remove the transition from 2 and 3 we would have unreachable states
+
+
