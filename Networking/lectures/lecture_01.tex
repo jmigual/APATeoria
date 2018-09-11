@@ -4,7 +4,115 @@
 
 \begin{itemize}
   \item All information is on Brightspace
-\end{itemiz}
+  \item Study material $\rightarrow$ slides
+  \item Bonus point
+  \begin{itemize}
+    \item Nice, working examples that can be used in networking
+    \item Solution to open problems, solutions that may not be yet solved
+  \end{itemize}
+  \item Books, you are not obliged to buy the books (they are expensive)
+  \begin{itemize}
+    \item Performance Analysis of Complex Networks and Systems
+  \end{itemize}
+  \item Additional books
+  \begin{itemize}
+    \item Network Science
+    \item Networks: An introduction
+  \end{itemize}
+\end{itemize}
+
+\subsection{Everything on the graph}
+
+Example: The brain network is amazing
+\begin{itemize}
+  \item $N=10^{10}$ neurons
+  \item $L=10^{14}$ connections
+  \item 500.000 km of wiring
+  \item Each neuron has an average connection to 10.000 neurons
+\end{itemize}
+
+We see networks everywhere
+
+\subsection{Understanding Network Function \& Graph}
+
+Designing robust infrastructures: Internet, electricity grid...
+
+\begin{itemize}
+  \item Are there properties common to all complex networks?
+  \item if so, why?
+  \item Can we formulate a general theory of the structure, evolution and dynamics of complex networks?
+  \item How do complex networks give rise to adaptive, living, intelligent behaviour?
+  \item How can we learn from nature to design robust, efficient, self-adaptive man-made networks?
+\end{itemize}
+
+\subsubsection{A new discipline}
+
+\begin{itemize}
+  \item Networks are not new, why is NS only one decade old?
+  \item Networks where a given constant
+  \item Mid 90s, the internet and www raised questions about their topology
+  \item We were building network infrastructures without knowing how these truly worked
+  \item Network design was more pushed by physicists than by engineers
+\end{itemize}
+
+\subsubsection{Characteristics}
+
+\begin{itemize}
+  \item Interdisciplinary nature
+  \item Empirical, data-driven
+  \item Mathematical nature
+  \item Computational nature. Algorithms
+\end{itemize}
+
+\subsection{Representation of networks}
+
+A network always consists in two separate layers:
+\begin{itemize}
+  \item Service (function)
+  \item Topology (graph)
+\end{itemize}
+
+Example Microsoft vs Apple:
+\begin{itemize}
+  \item Microsoft decided to center in functionality so they decided to write they operating
+  system for all the different devices
+  \item Apple decided to build their own hardware, it's less flexible but more reliable and secure
+\end{itemize}
+
+Making services is way more complex than the graph itself. Problems in graph theory can be 
+explained in very low detail, while on the service problems are more complex ``I would like
+that my service is more robust''. 
+
+\subsection{What is a graph?}
+
+A graph $\mathcal{G}$ consists on a set of $N$ nodes (vertices) that are connected by a set of 
+$L$ links (edges).
+
+\subsubsection{Birth of graph theory: the Königsberg bridge problem (Euler, 1736)}
+
+Can one walk across the seven bridges and never traverse the same bridge twice?
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \node[state] (A) {A};
+    \node[state, above right = of A] (C) {C};
+    \node[state, below right = of A] (B) {B};
+    \node[state, right = 2 of A] (D) {D};
+
+    \draw[-]   (A)   edge    (D)
+                  edge[bend right]    (B)
+                  edge[bend left]    (B)
+                  edge[bend right]    (C)
+                  edge[bend left]    (C)
+            (B)   edge[bend right]    (D)
+            (C)   edge[bend right]    (D);
+  \end{tikzpicture}
+\end{figure}
+
+An Eulerian walk exists if all nodes have even degree, only zero or two nodes with odd degree
+
+
 
 
 
