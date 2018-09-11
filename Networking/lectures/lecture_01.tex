@@ -112,6 +112,129 @@ Can one walk across the seven bridges and never traverse the same bridge twice?
 
 An Eulerian walk exists if all nodes have even degree, only zero or two nodes with odd degree
 
+\subsection{Three equivalent representations of a graph}
+
+\begin{itemize}
+  \item Topology domain
+  \item Spectral domain
+  \item Geometric domain: You can represent each graph in geometric space and talk about
+  them like having volumes, this way you can find a geometric view of the graph in a 
+  $(N-1)$-dimensional space.
+  
+\end{itemize}
+
+\subsubsection{Topology domain}
+
+\begin{itemize}
+  \item List of neighbors: for each node, the set of direct neighbors listed
+  \item List of links
+  \item Adjacency matrix
+  \begin{itemize}
+    \item If there is a link between node $i$ and $j$, then $a_{ij} = 1$, else $a_{ij} = 0$.
+    \item Number of neighbors of node $i$ i s the degree: $d_i = \sum_{k = 1}^{N} a_{ik}$
+    \item
+    $
+    d = A \cdot u =
+    \begin{bmatrix}
+      1 \\ 1 \\ \vdots \\ 1
+    \end{bmatrix}_{N \times 1}
+    $
+  \end{itemize}
+  \item matrix $B_{N \times L}$
+  \item Laplacian matrix $Q_{N \times N} = B_{N \times L} \cdot (B^T)_{L \times N} = \Delta - A$
+  \begin{itemize}
+    \item Basic property: $Q \cdot u = 0$
+    \item $Q \cdot u = B \cdot B^T \cdot u = 0$ because $0 = u^T \cdot B = B^T u$
+    \item $Q \cdot z = \mu \cdot z$
+    \item $u$ is an eigenvector of $Q$ belonging to eigenvalue $\mu = 0$
+    \item Since $BB^T$ is symmetric, so are $A$ and $Q$. Although $B$ specifies directions,
+    $A$ and $Q$ lost this info here.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Link weights}
+\begin{itemize}
+  \item \textbf{Unweighted graph}
+  \item \textbf{Weighted graph}
+  \begin{itemize}
+    \item This nodal heterogeneity can be specified by a node weight vector $v \ne u$.
+    \item A weighted adjacency matrix $W$ specifies the link weights
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Classes of networks}
+\begin{itemize}
+  \item Trees, $L- 1$. Only connected graph with less links than nodes
+  \item Ring $C_N$, $L=N$
+  \item Complete graph $K_N$. $L=\frac{N(N-1)}{2}$. Degree of every node is $N-1$.
+\end{itemize}
+
+\subsubsection{Classes of grpahs}
+\begin{itemize}
+  \item Regular graph
+  \item Lattice, very used in physics
+  \item Special type of trees:
+  \begin{itemize}
+    \item Star, one central node and all the other ones connected to the central one
+    \item Path graph, every node connects to the next one creating a path
+  \end{itemize}
+  \item A zoo of special graphs (Caley, Petersen, Krautz, Ramanuyan...)
+  \item Classes of random graphs
+  \item Null graph, defined by $A = 0$, is a set of $N$ nodes without any link
+  \item Complement $G^C$ of a grpah $G$
+  \begin{itemize}
+    \item If there is a link between two nodes in $G$, there is none in $G^C$
+    \item $A^C = J - I - A$ (where $J$ is the all one matrix)
+  \end{itemize}
+  \item Line graph $I(G)$ of a graph $G$:
+  \begin{itemize}
+    \item Each link in $G$ is a node in $I(G)$ and two nodes in $I(G)$ are connected by a link
+    if the corresponding two links in $G$ have a node in common.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Subgraph of a graph \label{sec:subgraph}}
+
+You can divide the graph by extracting a subgraph and swapping some columns in the adjacency matrix
+then the submatrices are related to the subgraph and the complementary one. The other two 
+submatrices show the relations between the two subgraphs
+
+$$
+\begin{pmatrix}
+  A_S & B \\
+  C & A_{G \backslash S}
+\end{pmatrix}
+$$
+
+The interconnection matrix $C = B^T$ is not a square matrix.
+
+\subsubsection{Interdependent Networks}
+\begin{itemize}
+  \item Single network
+  \begin{itemize}
+    \item Transport over links of one type
+    \item Electricity network, the Internet, water supply network, Telephony network...
+  \end{itemize}
+  \item Interdependent network
+  \begin{itemize}
+    \item Most networks do not operate in isolation
+    \item A telecommunication network can only function when there is electricity
+  \end{itemize}
+\end{itemize}
+
+You can represent it as a layer of multiple networks and show the dependence links of one network
+with another, this is related to \autoref{sec:subgraph}. The major difficulty is how to determine
+the interconnection pattern.
+
+\subsubsection{Some fascinations}
+\begin{itemize}
+  \item Szemeredi's regularity lemma: every graph can be partitioned in about equal parts,
+  with most links connecting different parts and the number of links between any two parts is about
+  uniformly distributed.
+  \item If every pair in a population has exactly one friend in common, then there must be
+\end{itemize}
+
+
 
 
 
