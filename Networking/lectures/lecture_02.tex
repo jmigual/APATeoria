@@ -1,0 +1,237 @@
+% !TEX root = ../main.tex
+
+\section{Behavioural equivalences}
+
+\subsection{When transition systems are equal?}
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[state] (0) {};
+      \node[state, below = of 0] (1) {};
+      \node[state, below left = of 1] (2) {};
+      \node[state, below right = of 1] (3) {};
+
+      \draw (0)   edge    node {a}  (1)
+            (1)   edge    node {b}  (2)
+                  edge    node {c}  (3);
+    \end{tikzpicture}
+    \caption{System a \label{fig:02_system_a}}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[state] (0) {};
+      \node[state, below right = of 0] (1) {};
+      \node[state, below left = of 0] (2) {};
+      \node[state, below = of 1] (3) {};
+      \node[state, below = of 2] (4) {};
+
+      \draw (0)   edge    node {a}  (1)
+                  edge    node {a}  (2)
+            (1)   edge    node {b}  (3)
+            (2)   edge    node {c}  (4);
+    \end{tikzpicture}
+    \caption{System a \label{fig:02_system_b}}
+  \end{subfigure}
+  \caption{Are these two systems equivalent?}
+\end{figure}
+
+
+
+Usually it depends in the interaction on when two systems are equal. 
+Not \emph{bisimulation equivalent}.
+
+
+\subsection{Bisimulation equivalence}
+
+We say that a relation \( \pmb{R} \subseteq S \times S \) is a bisimulation relation iff for all states
+\( s,t \in S \) it holds that if \( sRt \).
+
+\begin{itemize}
+  \item if \( s \xrightarrow{a} s' \) for some \( s'\in S\), then there is some \( t' \in S \)
+  such that \( t \xrightarrow{a} t' \) and \( s'\pmb{R}t' \).
+  \item if \( t \xrightarrow{a} t' \) for some \( t'\in S\), then there is some \( s' \in S \)
+  such that \( s \xrightarrow{a} t' \) and \( s'\pmb{R}t' \).
+  \item \( s \in T \) iff \( t \in T \)
+\end{itemize}
+
+Two states \( s,t \in S \) are called bisimilar 
+
+
+\textbf{Theorem} Every transition system has a \emph{unique} minimal transition system that is
+bisimulation equivalent to it.
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[b]{.45\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[state] (0) {};
+      \node[state, below left = of 0] (1) {};
+      \node[state, below right = of 0] (2) {};
+      \node[state, below = of 1] (3) {};
+      \node[state, below = of 2] (4) {};
+
+      \draw (0)   edge    node {a}    (1)
+            (1)   edge    node {a}    (3)
+            (3)   edge    node {a}    (4)
+            (4)   edge    node {a}    (2)
+            (2)   edge    node {a}    (0);
+    \end{tikzpicture}
+    \caption{System a}
+  \end{subfigure}
+  \centering
+  \begin{subfigure}[b]{.45\textwidth}
+    \begin{tikzpicture}
+      \node[state] (0) {};
+      
+      \draw (0) edge[loop below] node {a} (0);
+    \end{tikzpicture}
+    \caption{System b}
+  \end{subfigure}
+  \caption{These two systems have a bisimulation relation}
+\end{figure}
+
+\subsection{Trace equivalence}
+
+
+\begin{figure}[H]
+  \begin{subfigure}[b]{.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[state] (0) {};
+      \node[state, below = of 0] (1) {};
+      \node[state, below left = of 1] (2) {};
+      \node[state, below right = of 1] (3) {};
+
+      \draw (0)   edge    node {a}  (1)
+            (1)   edge    node {b}  (2)
+                  edge    node {c}  (3);
+    \end{tikzpicture}
+    \caption{System a, trace is \( \{ \epsilon, a, a \cdot b, a \cdot c \} \)}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[b]{.4\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \node[state] (0) {};
+      \node[state, below right = of 0] (1) {};
+      \node[state, below left = of 0] (2) {};
+      \node[state, below = of 1] (3) {};
+      \node[state, below = of 2] (4) {};
+
+      \draw (0)   edge    node {a}  (1)
+                  edge    node {a}  (2)
+            (1)   edge    node {b}  (3)
+            (2)   edge    node {c}  (4);
+    \end{tikzpicture}
+    \caption{System b, trace is \( \{ \epsilon, a, a \cdot b, a \cdot c \} \)}
+  \end{subfigure}
+
+  \caption{These two systems are not bisimilar but have a trace equivalence}
+\end{figure}
+
+For the trace equivalence all the partial traces are included. Trace equivalence does not 
+preserve deadlocks. To verify a system, never use trace equivalence because it does not counts 
+the deadlocks.
+
+Calculating bisimulation on a finite transition system with \( n \) states and \( m \) transitions
+requires \emph{insert formula here}
+
+\begin{displayquote}
+For deterministic transition systems bisimulation and trace equivalence coincide
+\end{displayquote}
+
+\subsection{Useful facts}
+
+If you show that two transitions systems are not trace equivalent you could find one trace in 
+one but not in the other.
+
+Exercise from 20: Are these two trace equivalent? 
+
+Yes these two are trace equivalent because we always have 3a followed by another letter. 
+
+Exercise from 21: Are these two bisimilar?
+
+No, they are not bisimilar because you can end in a transition where a b transition must be mimicked
+by another b transition but this is not possible.
+
+
+\subsection{Branching bisimulation}
+
+A relation \(\pmb{R}\) is a \emph{branching bisimulation} relation iff, some branches can be 
+skipped 
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \node[state] (a0) {};
+    \node[state, below = of a0] (a1) {};
+    \node[state, below = of a1] (a2) {};
+    \node[state, right = of a0] (b0) {};
+    \node[state, below = of b0] (b1) {};
+    \node[state, below = of b1] (b2) {};
+    \node[state, below = of b2] (b3) {};
+
+    \draw (a0)    edge    node {a}    (a1)
+          (a1)    edge    node {b}    (a2)
+          (b0)    edge    node {a}    (b1)
+          (b1)    edge    node {\(\tau\)}    (b2)
+          (b2)    edge    node {b}    (b3);
+  \end{tikzpicture}
+
+  \caption{These two systems are branching bisimilar}
+\end{figure}
+
+\subsection{Combining behaviour}
+
+If we combine branching bisimilar systems we do not obtain branching bisimilar systems.
+
+\subsection{Rooted branching bisimulation}
+
+A rooted branching bisimulation relation \( \pmb{R}\) is a branching bisimulation that also
+satisfies that the first transition is the same, without skips.
+
+Strong bisimulation implies rooted branching bisimulation implies branching bisimulation.
+
+\subsection{When to use which behavioural equivalence?}
+
+\begin{itemize}
+  \item Strong bisimulation, always safe
+  \item Trace equivalence, 
+  \item Divergence preserving branching bisimulation. Used to remove internal steps. Always safe choice.
+  \item Branching bisimulation. Safe choice when eventualities are not important, as it removes
+  \(\tau\)-loops.
+  \item Weak bisimulation. For practical purposes generally equivalent to branching bisimulation.
+  \item Weak trace equivalence. Removes all \(\tau\)s. Does not preserve branching behaviour.
+  Use with care.
+\end{itemize}
+
+Exercice I (pag. 43): We have a complex system where we hide many actions. We want to see whether
+the behaviour is free from deadlocks. What should we use?
+
+1) Strong bisimulation. It is always safe but we hide many actions, although correct it is not 
+the best scenario
+2) Divergence preserve branching bisimulation. Is is always safe, seems like the best choice
+3) Branching bisimulation. In this case it is the safe choice, any deadlock that exists is going
+to be preserved after branching bisimulation reduction.
+4) Trace equivalence. No, it does not preserve deadlocks
+5) It does not preserve deadlocks neither.
+
+\subsection{Summary}
+
+We defined the following behavioural equivalences:
+\begin{itemize}
+  \item (Weak) trace equivalence
+  \item Strong bisimulation
+  \item (Rooted) (Divergence preserving) branching bisimulation
+\end{itemize}
+
+We saw some guidelines on when to use which behavioural equivalence
+
+
+
