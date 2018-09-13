@@ -150,6 +150,108 @@ consecutive} links
   $H_{i \rightarrow j} = \min_{P_{i \rightarrow j}} h(P_{i \Rightarrow j}) 
   = h(P_{i \rightarrow j}^{*})$ where $P_{i \rightarrow j}^*$ is the shortest hop path from
   $i$ to $j$
+  \item Number of $k$-hop walks between node $i$ and $j$: $(A^k)_{ij}$
 \end{itemize}
 
+Algebraic algorithm to find the shortest path
+$$
+\begin{pmatrix}
+  (A)_{ij} = 0 \\
+  (A^2)_{ij} = 0 \\
+  \vdots \\
+  (A^{k -1})_{ij} = 0 \\
+  (A^k)_{ij} = m > 0
+\end{pmatrix}
+$$
+
+The sequence tells us that there are no walks between $i$ and $j$ with less than $k$ hops.
+
+Hence: the shortest walk between $i$ and $j$ is also a shortest path, with hopcount $H_{ij} = k$
+
+There are $m$ different shortest paths with $k$ hops
+
+\subsubsection{Hopcount \& Distance matrix}
+A distance matrix $H$ satisfies vector norm or distance relations:
+\begin{enumerate}
+  \item $h_{ij} \ge 0$
+  \item zero diagonal elements: $h_{ij} = 0$
+  \item triangle inequality: $h_{ik} + h_{kj} \ge h_{ij}$
+\end{enumerate}
+
+\textbf{Diameter} $\rho$: 
+\begin{itemize}
+  \item Sequence with most zeros (or maximum $k$)
+  \item All elements in $\sum_{k =0}^{\rho} f_k A^k$ with all $f_k > 0$ are positive
+\end{itemize}
+
+Choose $f_k = \begin{pmatrix}
+  \rho \\ k
+\end{pmatrix} > 0$
+then $\sum_{k = 0}^{\rho} \begin{pmatrix}
+  \rho \\ k
+\end{pmatrix} A^k = (I + A)^{\rho}$.
+
+The \textbf{small world problem}:
+\begin{itemize}
+  \item 160 letters: 1 target (name, address, occupation, personal info)
+  \item 160 random starters
+  \item Each starter forwards a letter to a single acquaintance
+  \item Outcome experiment: Average hops of path = 6: everybody is connected by (on average) 6 hops.
+\end{itemize}
+
+\subsubsection{Betweenness}
+
+The betweenness $B_l(B_n)$ of a link $l$ (node $n$) equals the number of shortest paths traversink
+link $l$ (node $n$) in $G$).
+
+The average betweenness is related to the average hopcount:
+$$
+H_G = \sum_{i = 1}^N \sum_{j = i + 1}^N H_{ij} = \sum_{l = 1}^L B_l
+\implies
+E[B_l] = \frac{1}{L} \sum_{l = 1}^L B_l = \frac{1}{L}
+\begin{pmatrix}
+  N \\ 2
+\end{pmatrix}
+E[H_G] \ge E[H_G]
+$$
+
+If there are many shortest paths we need to adjust the definition. If there are $k$ shortest
+paths you count each one of them as $\frac{1}{k}$ 
+
+\subsubsection{Linear correlation coefficient}
+Consider $n$ realizations $\{(x_i, y_i)\}_{1 \le i\le m}$ of two random variables $X$ and $Y$.
+
+Goodness of the fit can be expressed by the linear correlation coefficient
+$$
+\rho(X, Y) = \frac{E[XY] - E[X]E[Y]}{\sqrt{Var[X]}\sqrt{Var[Y]}}
+$$
+
+\begin{itemize}
+  \item $\rho(X,Y) = 0$: No linear correlation
+  \item $\rho(X, Y) = 1$: Perfect fit
+\end{itemize}
+
+\subsubsection{Degree assortativity}
+
+Correlation between the left part of the link and the right part. How are the degrees $D_i$ 
+and $D_j$ at both sides of a link $l$ correlated?
+
+\begin{itemize}
+  \item A network is assortative if $\rho_D > 0$
+  \item A network is disassortative if $\rho_D < 0$
+\end{itemize}
+
+$$
+\rho_D = \frac{N_1 N_3 - N_2^2}{N_1 \sum_{j=1}^N d_j^3 - N_2^2}
+$$
+
+Where $N_k = u^T A^k u$ is the total number of walks with $k$ hops
+
+\subsubsection{Degree preserving rewiring}
+Between two pairs of nodes you keep the degree, however you rewire the network, and, by doing
+that you change the shape of the network and the connectivity. How many rewiring do you have to 
+make in order to change the network from assortative to disassortative?
+
+\subsubsection{Connectivity of the complement $G^C$}
+If the graph G is disconnected, then ist complement $G^C$ is connected
 
