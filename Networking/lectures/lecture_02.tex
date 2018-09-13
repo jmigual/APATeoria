@@ -1,237 +1,155 @@
 % !TEX root = ../main.tex
 
-\section{Behavioural equivalences}
+\section{Graph metrics}
 
-\subsection{When transition systems are equal?}
+What is essential on the graph?
 
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}[b]{.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \node[state] (0) {};
-      \node[state, below = of 0] (1) {};
-      \node[state, below left = of 1] (2) {};
-      \node[state, below right = of 1] (3) {};
+Types of properties:
+\begin{enumerate}
+  \item Local: property of the surrounding node
+  \item Global: characteristic of the entire graph
+\end{enumerate}
 
-      \draw (0)   edge    node {a}  (1)
-            (1)   edge    node {b}  (2)
-                  edge    node {c}  (3);
-    \end{tikzpicture}
-    \caption{System a \label{fig:02_system_a}}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \node[state] (0) {};
-      \node[state, below right = of 0] (1) {};
-      \node[state, below left = of 0] (2) {};
-      \node[state, below = of 1] (3) {};
-      \node[state, below = of 2] (4) {};
+\subsection{Graph metrics}
+\subsubsection{Degree}
 
-      \draw (0)   edge    node {a}  (1)
-                  edge    node {a}  (2)
-            (1)   edge    node {b}  (3)
-            (2)   edge    node {c}  (4);
-    \end{tikzpicture}
-    \caption{System a \label{fig:02_system_b}}
-  \end{subfigure}
-  \caption{Are these two systems equivalent?}
-\end{figure}
+Degree $d_j$ of node $j$: number of neighbours of $j$
 
-
-
-Usually it depends in the interaction on when two systems are equal. 
-Not \emph{bisimulation equivalent}.
-
-
-\subsection{Bisimulation equivalence}
-
-We say that a relation \( \pmb{R} \subseteq S \times S \) is a bisimulation relation iff for all states
-\( s,t \in S \) it holds that if \( sRt \).
-
-\begin{itemize}
-  \item if \( s \xrightarrow{a} s' \) for some \( s'\in S\), then there is some \( t' \in S \)
-  such that \( t \xrightarrow{a} t' \) and \( s'\pmb{R}t' \).
-  \item if \( t \xrightarrow{a} t' \) for some \( t'\in S\), then there is some \( s' \in S \)
-  such that \( s \xrightarrow{a} t' \) and \( s'\pmb{R}t' \).
-  \item \( s \in T \) iff \( t \in T \)
-\end{itemize}
-
-Two states \( s,t \in S \) are called bisimilar 
-
-
-\textbf{Theorem} Every transition system has a \emph{unique} minimal transition system that is
-bisimulation equivalent to it.
-
-\begin{figure}[H]
-  \centering
-  \begin{subfigure}[b]{.45\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \node[state] (0) {};
-      \node[state, below left = of 0] (1) {};
-      \node[state, below right = of 0] (2) {};
-      \node[state, below = of 1] (3) {};
-      \node[state, below = of 2] (4) {};
-
-      \draw (0)   edge    node {a}    (1)
-            (1)   edge    node {a}    (3)
-            (3)   edge    node {a}    (4)
-            (4)   edge    node {a}    (2)
-            (2)   edge    node {a}    (0);
-    \end{tikzpicture}
-    \caption{System a}
-  \end{subfigure}
-  \centering
-  \begin{subfigure}[b]{.45\textwidth}
-    \begin{tikzpicture}
-      \node[state] (0) {};
-      
-      \draw (0) edge[loop below] node {a} (0);
-    \end{tikzpicture}
-    \caption{System b}
-  \end{subfigure}
-  \caption{These two systems have a bisimulation relation}
-\end{figure}
-
-\subsection{Trace equivalence}
-
-
-\begin{figure}[H]
-  \begin{subfigure}[b]{.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \node[state] (0) {};
-      \node[state, below = of 0] (1) {};
-      \node[state, below left = of 1] (2) {};
-      \node[state, below right = of 1] (3) {};
-
-      \draw (0)   edge    node {a}  (1)
-            (1)   edge    node {b}  (2)
-                  edge    node {c}  (3);
-    \end{tikzpicture}
-    \caption{System a, trace is \( \{ \epsilon, a, a \cdot b, a \cdot c \} \)}
-  \end{subfigure}
-  ~
-  \begin{subfigure}[b]{.4\textwidth}
-    \centering
-    \begin{tikzpicture}
-      \node[state] (0) {};
-      \node[state, below right = of 0] (1) {};
-      \node[state, below left = of 0] (2) {};
-      \node[state, below = of 1] (3) {};
-      \node[state, below = of 2] (4) {};
-
-      \draw (0)   edge    node {a}  (1)
-                  edge    node {a}  (2)
-            (1)   edge    node {b}  (3)
-            (2)   edge    node {c}  (4);
-    \end{tikzpicture}
-    \caption{System b, trace is \( \{ \epsilon, a, a \cdot b, a \cdot c \} \)}
-  \end{subfigure}
-
-  \caption{These two systems are not bisimilar but have a trace equivalence}
-\end{figure}
-
-For the trace equivalence all the partial traces are included. Trace equivalence does not 
-preserve deadlocks. To verify a system, never use trace equivalence because it does not counts 
-the deadlocks.
-
-Calculating bisimulation on a finite transition system with \( n \) states and \( m \) transitions
-requires \emph{insert formula here}
-
-\begin{displayquote}
-For deterministic transition systems bisimulation and trace equivalence coincide
-\end{displayquote}
-
-\subsection{Useful facts}
-
-If you show that two transitions systems are not trace equivalent you could find one trace in 
-one but not in the other.
-
-Exercise from 20: Are these two trace equivalent? 
-
-Yes these two are trace equivalent because we always have 3a followed by another letter. 
-
-Exercise from 21: Are these two bisimilar?
-
-No, they are not bisimilar because you can end in a transition where a b transition must be mimicked
-by another b transition but this is not possible.
-
-
-\subsection{Branching bisimulation}
-
-A relation \(\pmb{R}\) is a \emph{branching bisimulation} relation iff, some branches can be 
-skipped 
-
-\begin{figure}[H]
+\begin{figure}
   \centering
   \begin{tikzpicture}
-    \node[state] (a0) {};
-    \node[state, below = of a0] (a1) {};
-    \node[state, below = of a1] (a2) {};
-    \node[state, right = of a0] (b0) {};
-    \node[state, below = of b0] (b1) {};
-    \node[state, below = of b1] (b2) {};
-    \node[state, below = of b2] (b3) {};
+    \node[state] (1) {1};
+    \node[state, right = 2 of 1] (3) {3};
+    \node[state, below right = of 1] (2) {2};
+    \node[state, below right = of 3] (4) {4};
+    \node[state, below = 2 of 1] (6) {6};
+    \node[state, below = 2 of 3] (5) {5};
 
-    \draw (a0)    edge    node {a}    (a1)
-          (a1)    edge    node {b}    (a2)
-          (b0)    edge    node {a}    (b1)
-          (b1)    edge    node {\(\tau\)}    (b2)
-          (b2)    edge    node {b}    (b3);
+    \draw[-]    (1)   edge    (3)
+                      edge[bend right]    (2)
+                      edge    (6)
+                (2)   edge[bend left]     (6)
+                      edge[bend left]     (5)
+                      edge    (3)
+                (5)   edge    (4)
+                      edge[bend left]     (6)
+                (4)   edge    (3);
+                    
   \end{tikzpicture}
-
-  \caption{These two systems are branching bisimilar}
 \end{figure}
 
-\subsection{Combining behaviour}
+$$
+\sum_{j=1}^N d_j = 2L
+$$
 
-If we combine branching bisimilar systems we do not obtain branching bisimilar systems.
+Average degree in $\mathcal{G}$ equals:
+$$
+E[D] = \frac{1}{N} \sum_{j=1}^N d_j = \frac{2L}{N}
+$$
 
-\subsection{Rooted branching bisimulation}
+Bounds (connected graph):
+$$
+2 - \frac{2}{N} \le E[D] \le N-1
+$$
 
-A rooted branching bisimulation relation \( \pmb{R}\) is a branching bisimulation that also
-satisfies that the first transition is the same, without skips.
+$$
+L(K_N) = 
+\begin{pmatrix}
+  N \\ 2
+\end{pmatrix} = \frac{N (N-1)}{2}
+$$
 
-Strong bisimulation implies rooted branching bisimulation implies branching bisimulation.
-
-\subsection{When to use which behavioural equivalence?}
-
+Degree vector (row sum A): $d = Au$
 \begin{itemize}
-  \item Strong bisimulation, always safe
-  \item Trace equivalence, 
-  \item Divergence preserving branching bisimulation. Used to remove internal steps. Always safe choice.
-  \item Branching bisimulation. Safe choice when eventualities are not important, as it removes
-  \(\tau\)-loops.
-  \item Weak bisimulation. For practical purposes generally equivalent to branching bisimulation.
-  \item Weak trace equivalence. Removes all \(\tau\)s. Does not preserve branching behaviour.
-  Use with care.
+  \item Coordinate representation of the vector: $u = (1, 1, ..., 1)$
+  \item Matrix representation of the vector $u^T = [1 1 ... 1]$. A vector in $m$ dimensions is
+  a $m \times 1$ matrix (elements in a column)
 \end{itemize}
 
-Exercice I (pag. 43): We have a complex system where we hide many actions. We want to see whether
-the behaviour is free from deadlocks. What should we use?
+\emph{Basic law of the degree}:
+$$
+u^T d = 2L \xRightarrow{thus} u^Td = u^T Au = 2L
+$$
 
-1) Strong bisimulation. It is always safe but we hide many actions, although correct it is not 
-the best scenario
-2) Divergence preserve branching bisimulation. Is is always safe, seems like the best choice
-3) Branching bisimulation. In this case it is the safe choice, any deadlock that exists is going
-to be preserved after branching bisimulation reduction.
-4) Trace equivalence. No, it does not preserve deadlocks
-5) It does not preserve deadlocks neither.
-
-\subsection{Summary}
-
-We defined the following behavioural equivalences:
 \begin{itemize}
-  \item (Weak) trace equivalence
-  \item Strong bisimulation
-  \item (Rooted) (Divergence preserving) branching bisimulation
+  \item At least two nodes in G have the same degree
+  \begin{itemize}
+    \item A degree $N-1$ node excludes the existence of a zero degree node
+  \end{itemize}
+  \item The number of nodes with \textbf{odd} degree is \textbf{even}
 \end{itemize}
 
-We saw some guidelines on when to use which behavioural equivalence
+You can also create a histogram plotting all the degrees. This allows you to have the average
+and the variance of the degrees (slide 6).
 
+Example: degree of an airport
+The probability is almost linear in a log scale. It has been found that many real life problems
+have an almost linear degree distribution.
+$$
+Pr[D_{\text{Air}} = k] \sim k^{-1.21}
+$$
+
+Internet:
+$$
+Pr[D_{\text{Internet}} = k] \sim k^{-\tau}, \quad \tau \in (2.2, 2.5)
+$$
+
+Many networks have a power law degree distribution (scale-free networks)
+
+\subsubsection{Clustering coefficient}
+The degree can be seen as a global metric. This one goes a bit step further.
+
+The clustering coefficient of node $v$ is 
+$$
+c_G(v) = \frac{2y}{d_v(d_v - 1)} = \frac{y}{y_{max}}
+$$
+
+where $y$ is the number of links between neighbors and 
+$
+y_{max} = \begin{pmatrix}
+  d_v \\ 2
+\end{pmatrix}
+$
+
+This number tells you how connected your environment is. The clustering coefficient of a graph G:
+$$
+c_G = \frac{1}{N} \sum_{v = 1}^N c_G(v)
+$$
+
+\subsubsection{Adjacency matrix A and walks}
+\begin{itemize}
+  \item Walk of length $k$ from node $i$ to $j$: succession of $k$ links (arcs)
+  $n_0 \rightarrow n_1)(n_1 \rightarrow n_2) ... (n_{k-1} \rightarrow n_k)$ where $n_0 = i$ and
+  $n_k = j$.
+  \item Path: a walk in which all nodes/vertices are different
+  \item Number of $k$-hop walks between node $i$ and $j$: $(A^k)_{ij}$
+  \item Total number of $k$-hop walks in G: $N_k = u^T A^k u = \sum_{i=1}^N \sum_{j=1}^N (A^k)_{ij}$
+  \item Total number of closed $k$-hop walks in G:
+  $$
+  W_k = \sum_{j=1}^N (A^k)_{jj} = \text{trace}(A^k)
+  $$
+\end{itemize}
+
+\subsubsection{Weight of a path P}
+Consider a weighted graph, where each link $l$ has a link weight $w_l$.
+
+The weight of a path P is defined as:
+$$
+w(P) = \sum_{l \in P} w_l
+$$
+
+where $l = n_i \rightarrow n_j$ is a link in $G$ from node $n_i$ to $n_j$ and part of the path
+$P = (n_0 \rightarrow n_1)(n_01 \rightarrow n_2)...(n_i \rightarrow n_j)...(n_{h-1} \rightarrow n_h)$
+The path $P = P_{n_0 \rightarrow n_h}$ from node $n_0$ to $n_h$ consists of $h$ \emph{different, 
+consecutive} links
+
+\subsubsection{Hopcount}
+\begin{itemize}
+  \item Hopcount of a path $P$ is $h(P) = \sum_{l \in P} 1$, this link weight $w_l = 1$. 
+  \item Hopcount from node $i$ to node $j$: 
+  $H_{i \rightarrow j} = \min_{P_{i \rightarrow j}} h(P_{i \Rightarrow j}) 
+  = h(P_{i \rightarrow j}^{*})$ where $P_{i \rightarrow j}^*$ is the shortest hop path from
+  $i$ to $j$
+\end{itemize}
 
 
