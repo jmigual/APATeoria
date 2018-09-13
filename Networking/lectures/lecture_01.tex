@@ -140,7 +140,10 @@ An Eulerian walk exists if all nodes have even degree, only zero or two nodes wi
     \end{bmatrix}_{N \times 1}
     $
   \end{itemize}
-  \item matrix $B_{N \times L}$
+  \item Incidence matrix $B_{N \times L}$
+  \begin{itemize}
+    \item Col sum B is zero: $u^T B = 0$
+  \end{itemize}
   \item Laplacian matrix $Q_{N \times N} = B_{N \times L} \cdot (B^T)_{L \times N} = \Delta - A$
   \begin{itemize}
     \item Basic property: $Q \cdot u = 0$
