@@ -2,6 +2,118 @@
 
 \section{Abstract data types}
 
+To model a model we need to be able to model the data too. Similar to functional programming.
+
+\subsection{Goal}
+\begin{itemize}
+  \item Describe abstract data types (ADTs)
+  \item Be able to use ADTs in mCRL2
+\end{itemize}
+
+\subsection{Declaration of data type}
+
+\textbf{sort} D;
+
+It represents a non-empty domain. $D$ can have infinite elements.
+
+The most basic data type are the booleans.
+
+\textbf{sort} $\mathbb{B}$;
+
+\textbf{cons} \emph{true}, \emph{false}: $\mathbb{B}$
+
+Special semantic rule: The elements representing \emph{true} and \emph{false} of sort $\mathbb{B}$
+(\emph{Bool}) must be different.
+
+\begin{align*}
+  \text{\textbf{sort} } & \mathbb{B}; \\
+  \text{\textbf{cons} } & true, false: \mathbb{B}; \\
+  \text{\textbf{map} } & not: \mathbb{B} \Rightarrow \mathbb{B}; \\
+  & and, or: \mathbb{B} \times \mathbb{B} \Rightarrow \mathbb{B}; \\
+  \text{\textbf{var} } & b: \mathbb{B} \\
+  \text{\textbf{eqn} } & not(true) = false; \\
+  & not(false) = true; \\
+  & not(not(true)) = true; \\
+  \text{\textbf{eqn} } & and(true, b) = b; \\
+  & and(false, b) = false; \\
+  & and(b, true) = b; \\
+  & and(b, false) = false; \\
+  \text{\textbf{eqn}} & or(true, b) = true; \\
+  & or(false, b) = b; \\
+  & or(b, true) = true; \\
+  & or(b, false) = b; \\
+\end{align*}
+
+\subsubsection{Induction/case distinction on Bool}
+Can we prove $and(b, b) = b$ ?
+
+As true and false are the constructors of $\mathbb{B}$ we only have to prove that 
+$and(true, true) = true$ and that $and(false, false) = false$.
+
+Prove that $and(b, c) = and(c, b)$:
+
+\begin{align*}
+  \text{case } & b = true \\
+  & and(true, c) = c \\
+  & \text{case } c = true \\
+  & & and(true, true) = and(true, true) \\
+  & \text{case } c = false \\
+  & & \underbrace{and(true, false)}_{false} = \underbrace{and(false, true)}_{false} \\
+\end{align*}
+
+\subsection{Specification numbers. Peano arithmetic}
+
+\begin{align*}
+  \text{\textbf{sort} } & Nat; \\
+  \text{\textbf{cons} } & zero: Nat; \\
+  & succ: Nat \rightarrow Nat; \\
+  \text{\textbf{map }} & add: Nat \times Nat \rightarrow; \\
+  \text{\textbf{var }} & n, m: Nat; \\
+  \text{\textbf{eqn }} & add(zero, zero) = zero; \\
+  & add(zero, succ(n)) = succ(n); \\
+  & add(succ(n), zero) = succ(n); \\
+  & add(succ(n), succ(m)) = succ(add(n, succ(m))); \\
+  \text{\textbf{map }} & <: Nat \times Nat \rightarrow \mathbb{B}; \\
+  \text{\textbf{eqn }} & n < zero = false; \\
+  & zero < succ(n) = true; \\
+  & succ(n) < succ(m) = n < m;
+\end{align*}
+
+\begin{align*}
+  & zero & 0 \\
+  & succ(zero) & 1 \\
+  & succ(succ(zero)) & 2 \\
+\end{align*}
+
+\subsubsection{Induction on Natural numbers}
+Prove a property of \emph{zero}
+
+Prove a property for $succ(n)$, assuming that it has been proven for $n$.
+
+Then the property has been prover for all natural numbers $n$.
+
+\subsection{Specification of efficient natural numbers}
+
+Peano arithmetic is too inefficient for system validation.
+
+\begin{align*}
+  \text{sort } & \mathbb{N}^+; \qquad \text{sort } Pos;
+\end{align*}
+
+No maximum number
+
+\subsection{Natural numbers}
+
+\begin{align*}
+  \text{sort } & \mathbb{N}; \qquad \text{sort} Nat; \\
+  \text{cons } & @c0: \mathbb{N}; \\
+  & @cNat: \mathbb{N}^+ \rightarrow \mathbb{N}; \\
+  \text{map } & \simeq: \mathbb{N} \times \mathbb{N} \rightarrow \mathbb{N}^+
+\end{align*}
+
+
+
+
 
 
 
