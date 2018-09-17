@@ -1,0 +1,64 @@
+% !TEX root = ../main.tex
+
+\section{Specifying LTSs and applying behavioural equivalences}
+
+\textbf{LTS}: Label Transition Systems
+
+How can we actually use some of the tools for the project?
+
+
+\textbf{Exercise}: Given the label transition system
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \node[state] (aa) {};
+    \node[state, below = of aa] (ba) {};
+    \node[state, below = of ba] (ca) {};
+    \node[state, right = of aa] (ab) {};
+    \node[state, below = of ab] (bb) {};
+    \node[state, below = of bb] (cb) {};
+    \node[state, right = of ab] (ac) {};
+    \node[state, below = of ac] (bc) {};
+    \node[state, below = of bc] (cc) {};
+
+    \draw
+      (aa)    edge node[above] {b}    (ab)
+              edge node[right] {a}    (ba)
+      (ba)    edge node[above] {b}    (bb)
+              edge node[right] {a}    (ca)
+      (ca)    edge node[above] {b}    (cb)
+              edge[bend left] node[left] {a} (aa)
+      (ab)    edge node[above] {b}    (ac)
+              edge node[right] {a}    (bb)
+      (bb)    edge node[above] {b}    (bc)
+              edge node[right] {a}    (cb)
+      (cb)    edge node[above] {b}    (cc)
+              edge[bend left] node[left, near end] {a} (ab)
+      (ac)    edge node[right] {a}    (bc)
+      (bc)    edge node[right] {a}    (cc)
+      (cc)    edge[bend right] node[right] {a} (ac);
+  \end{tikzpicture}
+\end{figure}
+
+\textbf{Exercise}: Slide 4, are these LTSs branching bisimilar?
+
+We can relate the $\tau$ transition by doing nothing int the left LTS
+
+\subsection{Goals}
+\begin{itemize}
+  \item Model small LTSs in mCRL2
+  \item Explain what specification means
+  \item Generate LTS from specification
+  \item Apply behavioural equivalences to small examples
+\end{itemize}
+
+\subsection{Structure of the mCRL2 toolset}
+The input is written as process algebra, something similar to a programming language to 
+describe processes. Then it's linearized and linear process algebra is created, similar to an
+assembly language. Finally a LTS is generated.
+
+When specifying a system in mCRL2 the starting point are the actions. An action is, in fact, a 
+LTS.
+
+
