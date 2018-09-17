@@ -61,4 +61,64 @@ assembly language. Finally a LTS is generated.
 When specifying a system in mCRL2 the starting point are the actions. An action is, in fact, a 
 LTS.
 
+\subsubsection{Multi-actions}
+
+Actions happening simultaneously
+
+\begin{align*}
+  & a | b \\
+  & a | b | c \\
+  & a | a \\
+  & a | a | a |a  \\
+  & \tau
+\end{align*}
+
+\subsubsection{Exercise II}
+
+Are the following pairs of processes strongly bisimilar?
+
+\begin{itemize}
+  \item $a \cdot (b + c)$ and $a \cdot b + a \cdot c$. 
+
+  No, these are not strongly bisimilar
+  \item $a \cdot b + a \cdot b$ and $a \cdot b$
+  \item $a \cdot b + a \cdot c$ and $(a + a) \cdot (b + c)$
+
+  No, this is the same as the first case
+
+\end{itemize}
+
+\subsection{Transition systems with data}
+
+Actions:
+\begin{itemize}
+  \item \emph{get(d)}
+  \item \emph{deliver(d)}
+\end{itemize}
+
+$$
+D = \{d_1, d_2\}
+$$
+
+\subsubsection{Alternating bit protocol}
+
+When you have an unreliable transfer channel (e.g. internet)
+
+You can get:
+\begin{itemize}
+  \item A successful transmission
+  \item An unsuccessful transmission
+\end{itemize}
+
+You send a bit and expect an acknowledgement bit.
+
+\subsection{Summary}
+\begin{itemize}
+  \item Modeled LTSs in mCRL2
+  \item We generate LTSs from a specification
+  \item We applied behavioural equivalences
+  \item We saw how we can use tools and techniques to analyses a real protocol
+  \item Tools used: mcrl2-gui, mcrl2ide, mcrl2xi, mcrl22lps, lps2lts, ltsconvert, ltscompare
+\end{itemize}
+
 
