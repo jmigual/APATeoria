@@ -1,0 +1,104 @@
+% !TEX root = ../main.tex
+
+\section{Spectrum}
+
+\subsection{Eigenvalues and eigenvectors}
+
+$$
+Ax = \lambda x
+$$
+
+\begin{itemize}
+  \item An eigenvector $x$ is a non-zero vector belonging to eigenvalue $\lambda$
+  \item An $n \times n$ matrix $A$ has $n$ eigenvalues (possibly not all distinct)
+  \item The eigenvalue problem for the transposed matrix leads us to talk about 
+  right-eigenvectors ($A$ and $A^T$ have the same eigenvalues, but not necessarily the same
+  eigenvectors) 
+  \item The eigenvectors are linearly independent
+  \item Mostly, we normalized eigenvectors such that $x^Tx = 1$
+  \item If $P^{-1}$ exists, then $PAP^{-1}$ has the same eigenvalues as $A$, but each 
+  eigenvector is $y = Px$, where $x$ is an eigenvector of $A$
+\end{itemize}
+
+\begin{align*}
+  A(rx) = \lambda (rx) \quad r \ne 1
+\end{align*}
+
+\begin{gather*}
+  A 
+  \begin{bmatrix}
+    x_1 & x_2 & \cdots & x_N
+  \end{bmatrix} =
+  \begin{bmatrix}
+    x_1 & x_2 & \cdots & x_N
+  \end{bmatrix}
+  \begin{bmatrix}
+    \lambda_1 & & & \\
+    & \lambda_2 & & \\
+    & & \ddots & \\
+    & & & \lambda_N
+  \end{bmatrix} \\
+  AX = X\Lambda \implies A = X\Lambda X^{-1} \\
+  (A - \lambda I)x = 0 \implies \det(A - \lambda I) = 0
+\end{gather*}
+
+\subsubsection{Basic theorem for symmetric matrices}
+\textbf{Any real symmetric matrix $S$} can be written as $S = X \Lambda X^T$,
+where $X$ is the orthogonal matrix with real eigenvectors in the columns and 
+$\Lambda = diag(\lambda_1, ..., \lambda_N)$, where $\lambda_j$ is the $j$-th real eigenvalue.
+
+The real eigenvalues can be ordered as
+
+\begin{gather*}
+  \lambda_N \le \lambda_{N-1} \le \cdots \lambda_2 \le \lambda_1
+\end{gather*}
+
+If symmetric: $A = A^T = X \Lambda X^T = \sum_{k=1}^{N} \lambda_k x_k x^T_k$
+
+\subsubsection{The orthogonal matrix X of a symmetric matrix A}
+
+$$
+A^T = \sum_{k=1}^N \lambda_k^m x_k x^T_k
+$$
+
+Orthogonality of eigenvectors: $x_k^T x_m = \delta_{km} \implies X^T X = I \implies X^{-1} = X^T$
+
+A matrix and its inverse commute: $X^{-1}X = X X^{-1} \implies X^TX = XX^T = I$ \textbf{Double
+orthogonality}. Both column vectors (=eigenvectors of A) and row vectors of $X$ are orthogonal.
+
+\subsubsection{Gerschgorin's theorem}
+
+It explains why we use spectral radious..
+
+\begin{quotation}
+  Each eigenvalue of an $n\times n$ matrix $A$ lies in at least one of the circular discs
+  with a center $a_{jj}$ and radii $R_j = \sum_{k=1;k \ne j}^n |a_{jk}|$
+\end{quotation}
+
+\textbf{Consequence for Adjacency matrix $A$: } $|\lambda| \le \sum_{k=1}^n a_{rk} = d_r$
+$$
+\lambda_1 \le d_{max}
+$$
+
+The largest eigenvalue is always smaller thant the maximum degree
+
+\textbf{Properties}:
+\begin{itemize}
+  \item Spectrum of $A$:
+  \begin{itemize}
+    \item All eigenvalues lie in the interval $(-d_{max}, d_{max}]$
+    \item $\sum_{j=1}^N \lambda_j = 0 \qquad \sum_{j=1}^N \lambda_j^2 = 2L \qquad
+    \sum_{j=1}^N \lambda_j^k = Trace(A^k)$
+    \item Perron-Frobenius Theorem: $\lambda_1$ non-negative and components eigenvector $x_1$ are
+    non-negative. (irreducible = connected: positive)
+  \end{itemize}
+  \item Spectrum of $Q = \Delta - A = BB^T$:
+  \begin{itemize}
+    \item Any eigenvalue $\mu_k$ is non-negative and the smallest $\mu_N = 0$
+    \item Complexity (number of spanning trees is) $\epsilon(G) = \frac{1}{N} \prod_{k=1}^{N-1} \mu_k$
+    \item The second smallest eigenvalue of the Laplacian $Q$, called \textbf{the algebraic 
+    connectivity} $a(G) = \mu_{N-1}$, quantifies how strongly a graph is 
+  \end{itemize}
+\end{itemize}
+
+
