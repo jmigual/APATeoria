@@ -101,4 +101,68 @@ The largest eigenvalue is always smaller thant the maximum degree
   \end{itemize}
 \end{itemize}
 
+\subsection{Largest eigenvalue of a symmetric matrix} 
+
+If $Ax = \lambda x$ then $A^k x = \lambda^k x$ for non-negative integers $k$.
+
+\textbf{Power method} (eigenvector): 
+$$
+A^k w = \alpha_1 \lambda_1^k x_1 \left(1 + \left(\left|\frac{\lambda_2}{\lambda_1}
+\right|^k\right)\right)
+$$
+
+\textbf{Gerschgorin's theorem}: $\lambda_1 \le d_{max}$
+
+\textbf{Rayleigh's principle}: $\lambda_1 \ge \frac{w^T Aw}{w^Tw}$ with equality only if $w = x_1$
+
+\subsubsection{Spectral radius adjacency matrix}
+Rayleigh principle: $\lambda_1 \ge \frac{w^T Aw}{w^TW}$ with equality only if $w = x_1$
+
+Choose $w = u$, then $u^Tu = N$ and $u^TAu = 2L$
+
+Hence:
+$$
+d_{max} \ge \lambda_1 (A) \ge \frac{2L}{N} = E[D]
+$$
+
+Equality holds if $u$ is an eigenvector of $A$. In general, $A u = d$ if $d = r u$, then 
+$u$ is an eigenvector. 
+
+The eigenvalue equation $A x = \lambda x$ implies that $A^m x = \lambda^m x$
+
+Rayleigh principle
+
+Choose $w = u$ and $m = 2$ then $u^Tu = N$ and 
+$u^T A^2 u= (Au)^T (Au) = d^Td = \sum_{j = 1}^N d^2_j$
+
+$$
+\lambda_1 \ge E[D]\sqrt{1 + \frac{Var[D]}{(E[D])^2}} \ge E[D]
+$$
+
+Tighter bound thant the previous one
+
+\subsubsection{Spectral radius and subgraph structure}
+Let's have a graph $G$ that has two subgraphs $G_1$ and $G_2$
+
+$$
+A = 
+\begin{bmatrix}
+  A_1 & C \\
+  C^T & A_2
+\end{bmatrix}
+\implies \lambda_1(G) \ge \lambda_1(G_1)
+$$
+
+\subsection{Graph metric: Eigenvector centrality}
+
+\begin{itemize}
+  \item The $i$-th component $(x_j)_i$ of the eigenvector $x_j$ belonging to the $j$-th 
+  largest eigenvalue $\lambda_j$ of the adjacency matrix $A$ reflects a property of node 
+  $i$ in the graph at ``eigenfrequency'' $\lambda_j$
+  \begin{itemize}
+    \item Hence $(x_j)_i^2$ is non-zero and can be interpreted as a centrality metrics for node $i$
+  \end{itemize}
+\end{itemize}
+
+
 
