@@ -1,0 +1,183 @@
+% !TEX root = ../main.tex
+
+\section{Network models}
+
+\subsection{Deterministic networks}
+
+\begin{itemize}
+  \item Complete graph $K_N$ on $N$
+  \item Lattices (in $D$-dimensions): each node has 2D neighbours
+\end{itemize}
+
+\subsection{Measurements of networks}
+
+\begin{itemize}
+  \item Choose 8 persons
+  \item Link = friendship
+  \item Properties of friendship graphs?
+\end{itemize}
+
+Why do we need this? Reality is just a measurement. You have a lot of friendship networks,
+it depends on the realization. 
+
+Motivation to study \emph{random graphs}
+e.g. realizations of $G_{0.4}(8)$
+
+\subsection{Complex network models}
+
+\begin{itemize}
+  \item Random Graph - Erdös-Rényi (1959-1960)
+  \item Small-World Graph - Watts-Strogatz (1998). Introduces the idea of rewiring
+  \item Scale-Free Graph - Barabási-Albert (1999)
+\end{itemize}
+
+\subsection{Erdös-Rényi random graph}
+The ER random graph $G_p(N)$ is a graph with $N$ nodes and each node pair is connected 
+independently with probability $p$
+
+Any so generated graph belongs to the class ER random graph $G_p(N)$ with same $N$ and $p$.
+
+There are two variants of ER random graph:
+\begin{itemize}
+  \item $G_p(N)$ link existence probability $p$
+  \item $G(N,L)$ precisely $L$ links?
+\end{itemize}
+
+How would you describe or deduce the adjacency matrix $A$ for $G_p(N)$?
+$a_{ij}$ (with $j \ne i$) is a Bernoulli random variable with mean $p$
+
+\begin{align*}
+  Pr[a_{ij} = 1] &= p \\
+  Pr[a_{ij} = 0] &= 1 - p \\
+  E[a_{ij}] &= p
+\end{align*}
+A is a $N \times N$ matrix
+
+The complement graph of $G_p(N)$ is $G_{1-p}(N)$
+
+\begin{itemize}
+  \item If $p=1$, then $G_1(N)$ is the complete graph $K_N$
+  \item If $p=0$, then $G_0(N)$ is the empty or null graph
+  \item The average number of links is
+  \begin{align*}
+    E[L] = \frac{N(N-1)}{2}p \implies p = \frac{L}{L_{\max}} = \text{link density}
+  \end{align*}
+  \item The average clustering coefficient is:
+  \begin{align*}
+    E[c_{G_p(N)}] = p
+  \end{align*}
+  \item Degree distribution: Binomial distribution
+  \begin{align*}
+    Pr[D_{rg} = k] &= 
+    \begin{pmatrix}
+      N - 1 \\ k
+    \end{pmatrix}
+    p^k ( 1- p)^{N-1-k} \simeq 
+    \frac{1}{\sigma \sqrt{2\pi}}e^{-\left( \frac{(k-\mu)^2}{2\sigma^2} \right)} \\
+    \mu &= E[D] = (N-1)p \\
+    \sigma^2 &= Var[D] = (N-1)p(1 - p)
+  \end{align*}
+\end{itemize}
+
+\subsubsection{Distribution of eigenvalues of adjacency matrix of $G_p(N)$}
+
+Consider set of eigenvalues as realizations of eigenvalue random variable $\lambda$
+
+Histogram approximates the probability density function $f_{\lambda}(x)$ of eigenvalues
+of the adjacency matrix $A$. The largest eigenvalue of a ER graph is really large compared to 
+the other ones, the distance is called spectral value.
+
+\subsubsection{Observations from the spectrum}
+
+\begin{itemize}
+  \item The probability density function $f_{\lambda}(x)$ of the eigenvalues of the adjacency
+  matrix
+  \begin{itemize}
+    \item Peaks refer to a specific structure or pattern in the graph
+    \item A broader, bell-shape form of $f_{\lambda}(x)$ around the origin ($x=0$) is
+    a fingerprint of randomness
+    \begin{itemize}
+      \item Broadening of peaks in spectra to bell-shape forms i mostly due to randomness
+    \end{itemize}
+  \end{itemize}
+  \item If $f_{\lambda}(-x) = f_{\lambda}(x)$ an even function of $x$, then the graph is a tree
+  (no triangles, thus skewness $s_{\lambda} = 0$)
+  \begin{itemize}
+    \item Any tree can be represented by a bipartite graph
+    \item A bipartite graph has a symmetric spectrum (for each eigenvalue $\lambda$, there
+    exists an eigenvalue $-\lambda$)
+  \end{itemize}
+\end{itemize}
+
+\subsection{Power law graphs}
+
+Usually, we prefer normalized random variables with mean 0 and variance 1.
+
+A power law degree distribution is also called scale-free:
+
+Any number $a$ just multiplies the probability density; there is no characteristic length. 
+The mean is not representative, because the variance is large.
+
+The simplest family of ``power law'' graphs have been proposed by Barbasi-Albert:
+
+\begin{itemize}
+  \item Start with $n << N$ nodes
+  \item Attach a new node with $m$ links; each link to an already existing node 
+  randomly and proportionally to its degree
+  \item Repeat 2) until size $N$ is reached
+\end{itemize}
+
+\subsubsection{Power law exponent $\tau$ in $Pr[D=k] \simeq ck^{-\tau}$}
+
+\begin{itemize}
+  \item Critical point 1
+  \begin{itemize}
+    \item $E[D]$ diverges
+    \item $E[D^2]$ diverges
+    \item $D_{max}$ grows faster than $N$
+    \item $E[H] \sim $ const
+  \end{itemize}
+  \item Critical point 2 (needs to be fixed)
+  \begin{itemize}
+    \item $E[D]$ finite
+    \item $E[D^2]$ diverges
+    \item $D_{max}$ grows faster than $N$
+    \item $E[H] \sim log(log N)$
+  \end{itemize}
+  \item Critical point 3 (needs to be fixed)
+  \begin{itemize}
+    \item $E[D]$ diverges
+    \item $E[D^2]$ diverges
+    \item $D_{max}$ grows faster than $N$
+    \item $E[H] \sim $ const
+  \end{itemize}
+\end{itemize}
+
+\subsection{Observed common properties of real-world complex networks}
+
+\begin{itemize}
+  \item small-world property
+  \begin{itemize}
+    \item Average length/hopcount of a path is short compared to the size $N$ of the network
+    ($E[H] = O(log N))$
+  \end{itemize}
+  \item scale-free degree distribution
+  \begin{itemize}
+    \item heavy tails (non-Gaussian behavior)
+  \end{itemize}
+  \item clustering and community structure
+  \begin{itemize}
+    \item network of networks
+  \end{itemize}
+  \item robustness to random node failure
+  \item vulnerability to targeted hub attacks and cascading failures
+\end{itemize}
+
+
+
+
+
+
+
+
+
