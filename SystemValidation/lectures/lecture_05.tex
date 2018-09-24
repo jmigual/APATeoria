@@ -1,0 +1,199 @@
+% !TEX root = ../main.tex
+
+\section{Sequential processes}
+
+\subsection{Remarks on Project}
+\begin{itemize}
+  \item Good requirements are SMART (Specific, Measurable, Attainable, Realistic, Time-bound)
+  \begin{itemize}
+    \item Read Measurable as verifiable
+    \item Separate design from requirements
+    \item Time bound means that you can implement it in for the time set. Not applicable for this
+    project
+  \end{itemize}
+  \item Abstract from timing
+  \item Formulate requirements about things you can control
+  \item Do not formulate requirements procedurally
+  \begin{itemize}
+    \item Don't: when $R_1$ picks up a wafer from the input stack, it is placed in the airlock,
+    and placed under $L$ by robot 2
+    \item Do: $R_i$ should not place a wafer onto position $P$ that already contains a wafer,
+    for all $P$ other than the output stacks.
+  \end{itemize}
+  \item Descriptions of sequences of actions are not needed
+  \item For this project, the user input is not clear. There's no need to model it
+\end{itemize}
+
+\subsection{Goal}
+
+\begin{itemize}
+  \item Describe sequential processes using process algebra
+  \item Reason about sequential processes
+  \item Prove processes are equivalent
+  \item Draw LTS for given processes
+\end{itemize}
+
+\subsection{Recap}
+
+\begin{itemize}
+  \item $\delta$ deadlock
+  \item $a \cdot b$ Where $a$ moves to a new state and $b$ to a new one
+  \item $a + b$ Where we can choose between two different states
+\end{itemize}
+
+This is basically all that you need to model sequential processes, although we need a bit more
+things like:
+\begin{itemize}
+  \item How can we repeat?
+  \item How can we add data to our model?
+\end{itemize}
+
+\subsection{Different process terms represent bisimilar processes}
+$a \cdot b + a \cdot b$ and $a \cdot b$
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+    \node[state](a) {};
+    \node[state, below left = of a] (aa) {};
+    \node[state, below right = of a] (ab) {};
+    \node[state, below = of aa] (aac) {};
+    \node[state, below = of ab] (abc) {};
+
+    \draw
+      (a) edge node[above left] {$a$} (aa)
+      (a) edge node[above right] {$a$} (ab)
+      (aa) edge node[left] {$b$} (aac)
+      (ab) edge node[right] {$b$} (abc)
+      ;
+  \end{tikzpicture}
+\end{figure}
+
+\subsection{Axioms}
+
+\begin{itemize}
+  \item A1 $x + y = y + x$ Commutativity
+  \item A2 $(x + y) + z = x + (y + z)$ Associativity of $+$
+  \item A3 $x + x = x$ Idempotence
+  \item A4 $(x + y) \cdot z = x \cdot z + y \cdot z$ Right distributivity
+  \item A5 $x \cdot (y \cdot z) = (x \cdot y) \cdot z$ Associativity of $\cdot$
+\end{itemize}
+
+\textbf{Theorem} These axioms characterise exactly strong bisimulation for processes expressible
+with actions, $+$ and $\cdot$.
+
+\subsection{A derivation}
+
+\begin{align*}
+  &(a + b) \cdot c \cdot (d + d) \overset{?}{=} (b \cdot + a \cdot c) \cdot d \\
+  &(a + b) \cdot c \cdot (d + d) \overset{A3}{=} \\
+  &(a + b) \cdot c \cdot d \overset{A5}{=} \\
+  &((a + b) \cdot c) \cdot d \overset{A4}{=} \\
+  &(a \cdot c + b \cdot c) \cdot d \overset{A1}{=} \\
+  &(b \cdot c + a \cdot c) \cdot d
+\end{align*}
+
+\subsection{Be aware: Left distribution}
+
+Left distribution: $x \cdot (y + z) = x \cdot y + x \cdot z$
+
+Invalid in strong bisimulation
+
+Valid for trace equivalence
+
+\textbf{Theorem} Axioms A1-A5 $+$ left distribution is sound and complete for trace equivalence
+
+\subsection{Axioms for $\delta$}
+
+\begin{itemize}
+  \item A6: $x + \delta = x$
+  \item A7: $\delta \cdot x = \delta$
+\end{itemize}
+
+\subsection{Exercise I}
+
+\begin{align*}
+  & (a \cdot b + a \cdot \delta) \cdot (\delta + a) \overset{?}{=} (a \cdot \delta + a)\cdot b \cdot a \\
+  (a \cdot b + a \cdot \delta) \cdot (\delta + a) \overset{A6}{=} \\
+  (a \cdot b + a \cdot \delta) \cdot a \overset{A7}{=} \\
+  (a \cdot b + a \cdot \delta \cdot b) \cdot a \overset{A4}{=} \\
+  (a + a \cdot \delta) \cdot b \cdot a \overset{A1}{=} \\
+  (a \cdot \delta + a) \cdot b \cdot a
+\end{align*}
+
+\subsection{Exercise II}
+Why is it not possible to prove $a \cdot (b + c) = a \cdot b + a \cdot c$ using the axioms for
+strong bisimulation.
+
+The identity is not valid in bisimulation and the axioms are sound
+
+\subsection{Exercise III}
+Assume that we know for arbitrary processes $x$ and $y$ that $x + y = \delta$. Prove that $x = \delta$.
+
+\subsection{Recursive behaviour cannot yet be expressed}
+We somehow need to express this behaviour.
+
+\subsection{Recursive process specification}
+
+$X$ = 'process expression'
+
+Process variable
+
+\begin{align*}
+  & X = a \cdot X \\
+  & Y = a \cdot b + c \cdot d \cdot Y \\
+  & U = a \cdot W, W = b \cdot U
+\end{align*}
+
+\subsection{Guarded recursive process equation}
+
+If process variables are preceded by an action, then process variable is called \emph{guarded}
+
+\begin{align*}
+  & a \cdot X \\
+  & (a + b) \cdot X + b \cdot Y \\
+  & X + a \cdot b \cdot Y \quad (X \text{ is \emph{not} guarded})
+\end{align*}
+
+If all process variables are guarded, the recursive specification is \emph{guarded}
+
+\begin{align*}
+  & X = a \cdot X \\
+  & X = a \cdot X + (b \cdot c + d) \cdot X \\
+  & Y = Y + a \cdot b \cdot Y \quad (\text{\emph{not} guarded})
+\end{align*}
+
+\subsection{Axioms for the conditional operator}
+
+\begin{align*}
+  & true \rightarrow x \lozenge y = x \\
+  & false \rightarrow x \lozenge y = y
+\end{align*}
+
+\subsection{Axioms for the sum operator}
+
+\begin{itemize}
+  \item SUM1 $\sum_{d_:D} x = x$
+  \item SUM3 $\sum_{d:D} X(d) = X(e) + \sum_{d:D} X(d)$
+  \item SUM4 $\sum_{d:D} (X(d) + Y(d)) = \sum_{d:D} X(d) + \sum_{d:DY} (d)$
+  \item SUM5 $(\sum_{d:D} X(d)) \cdot y \sum_{d:D} X(d) \cdot y$
+\end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
