@@ -54,3 +54,53 @@ Show the bigger modules and how they are connected with other bigger packages. S
 
 > "Things to think about include... system wide design constraints and 
 > system-wide integrity"
+
+### Fred Brooks: Conceptual integrity
+ - Adding manpower to a late project makes it later. The people doing useful things now has to train new people that do not know anything about the project.
+ - Conceptual integrity is the most important consideration in system design.
+ - "This is the underlying, defining idea that binds everything together."
+
+### Concerts
+ - Module organisation
+ - Common processing
+ - Standardization of design
+ - Standardization of testing
+ - Instrumentation
+ - "Codeline organization"
+
+### Conceptual versus Concrete
+Architecture "as it is" versus architecture as "how it was designed"
+
+ - Try to collect information on both
+ - Try to contrast the two
+
+## ISO Software Quality Characteristics
+ - Maintainability
+ - Usability
+ - Security
+ - Portability
+ - Reliability
+ - etc.
+
+### Realizing Quality Attributes
+- An architecture must realize the required quality attributes
+
+An architectural perspective is a collection of architectural activities, tactics and guidelines
+
+There are many characteristics. There's a table in the slides.
+
+### The Evolution Perspective
+
+The ability of the system to be flexible in the face of change balanced against the cost of providing such flexibility.
+
+# Required content
+- Stakeholder analysis and context view
+- Development view
+- Technical deb analysis
+- _Other_ thing
+
+
+
+
+
+
