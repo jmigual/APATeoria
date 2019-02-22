@@ -28,3 +28,36 @@ $$
 So, actually, if someone is tapped into your network this can be seen by a reflection going partially back.
 
 However, another tap can be done by detecting the magnetic field from the cable.
+
+## Just old stories?
+Even though there are many security stories in the past the problem is that the network flaws from the past done by state actors, now can be done by other people since the technology has advanced. 
+
+## Physical layer is a lot of things
+Physical layer is not only the cables that connect computers. It is also everything that you connect to your device.
+
+> 60% of all the compromises start with a compromised supply chain
+
+## Optical cables
+
+### Refractive index
+$$
+\text{Refractive index} = \frac{\text{Speed of light in vacuum}}{\text{Speed of light in medium}}
+$$
+
+This happens because in vacuum there's nothing stopping the light. But when there's some opposition the light speed is reduced.
+
+- Air: $n = 1.00027$
+- Water: $n = 1.33$
+
+When the light changes from to different refractive indices it changes direction and it's like is "bending"
+
+Snell's law:
+
+$$
+n_1 \sin \theta_1 = n_2 \sin \theta_2
+$$
+
+There's a maximum angle after which it does not refract anymore.
+
+The optical fiber cables have a cover because otherwise the light could escape if the cable is in contact with a surface with a higher refractive index. The cover has a different type of glass to protect the refractive index.
+
