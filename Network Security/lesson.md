@@ -1,4 +1,4 @@
-# Lesson 3 - Physical layer
+# Physical layer
 
 
 ## Types of connections
@@ -61,3 +61,34 @@ There's a maximum angle after which it does not refract anymore.
 
 The optical fiber cables have a cover because otherwise the light could escape if the cable is in contact with a surface with a higher refractive index. The cover has a different type of glass to protect the refractive index.
 
+### Security
+
+As there's always a bit of scattering optic cables can be compromised anyway. There are machines that scan the scattering generated light rays.
+
+## Avoiding compromised networks
+
+An easy way to avoid compromised physical networks can be to have all the cables layered inside a pressured pipe. It's a very cheap method an also if sensors are used to monitor the pressure then it can be detected if someone is actually accessing the cable
+
+## Wireless
+
+### Security through Range limitation?
+
+- UHF RFID
+- Bluetooth
+- WiFi 802.11b
+- GSM
+
+# Link layer
+
+How are we going to do addressing?
+
+This layer introduces addresses, MAC addresses. They are tied to hardware. It allows us to talk to individual devices.
+
+Ethernet:
+
+- 48 bits address
+- First 24 by manufacturer
+- Last 24 unique device identifier
+- $2^{48}$ possible mac addresses
+
+This layer also regulates medium access
