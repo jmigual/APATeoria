@@ -6,7 +6,7 @@
 - $C_i =$ worst-case execution time
 - $D_i =$ relative deadline
 - $\phi_i =$ offset
-- $U_i = \frac{c_i}{\tau_i} =$ utilization
+- $U_i = \frac{C_i}{\tau_i} =$ utilization
 
 ## Proportional share algorithm
 
@@ -45,5 +45,43 @@
 There are two choices:
 - Let the task continue: this creates a domino effect with the rest of the tasks
 - Abort the task: the system can be inconsistent with this method
+
+## Fixed-priority scheduling
+
+1. Assign priorities to each task on its timing constraints
+   1. Rate monotonic
+   2. Deadline monotonic
+2. Verify the feasibility of the schedule using analytical techniques
+3. Execute tasks on 
+
+### Rate monotonic
+Assign priorities monotonically with the activation frequency ($rate = ~\frac{1}{T}$) such that a task with a smaller period gets a higher priority
+
+#### Liu and Layland's test for RM
+
+$$
+U \le n \cdot (2^{\frac{1}{n}} - 1)
+$$
+
+$$
+\begin{aligned}
+    n \rightarrow \infty \\
+    U \rightarrow \ln 2
+\end{aligned}
+$$
+
+#### Hyperbolic bound
+
+$$
+\prod_{i=1}^n (U_i + 1) \le 2
+$$
+
+### Deadline monotonic
+Assing priorities monotonically with the relative deadline of the task ($~\frac{1}{D}$) such that a task with a smaller relative deadline gets a higher priority
+
+It is optimal. If $D_i \le T_i$ then the optimal priority assignment is given by **Deadline Monotonic (DM)**.
+
+
+
 
 
