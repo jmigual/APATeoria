@@ -99,7 +99,7 @@ The ability of the system to be flexible in the face of change balanced against 
 - Technical deb analysis
 - _Other_ thing
 
-# Lesson 4
+# Lesson 5
 
 ## How do you make software architecture?
 
@@ -139,6 +139,26 @@ Why should we know about Software Architecture?
 - Personality characteristics
 
     
+# Lesson 6
+
+Variability in an application
+
+> If you have a GCC with 33 options you can produce enough functionalities to have a different one for every different person in earth
+> 
+> If you have 320 there are enough options as starts in the universe
+>
+> The linux kernel has more than 3200 options
+
+## How to...
+- Define requirements?
+- Develop?
+- Test?
+- Maintain?
+
+How to make sure that your plugin with what exists?
+
+
+
 
 
 
