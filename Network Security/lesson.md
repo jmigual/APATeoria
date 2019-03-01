@@ -92,3 +92,34 @@ Ethernet:
 - $2^{48}$ possible mac addresses
 
 This layer also regulates medium access
+
+
+## Attacks on link layer
+**Problem**: A node can start saying that all the IP addresses are in its MAC address. It's an obvious **man in the middle** attack.
+
+**Solution**: Switches are smart and they usually can know some of the devices for sure. So, if a node tries to have all the IP addresses the switch can turn off the port.
+
+**Problem**: A switch memory usually is very small because they have a different memory style that works different in order to serve packets at high speed. An attacker can fill a switch memory really fast. _CAM Table Flood Attack_
+
+**Solution**: There are two possible options:
+- Shut down the switch when the memory fills: There's a loss in availability but not in confidentiality
+- Broadcast all the packets through all the ports: There's a loss in confidentiality but not in availability.
+
+### Port security
+- White listing addresses
+- Authentication
+
+### Virtual LAN
+It isolates different types of network but still the bandwidth could be saturated. However for compatibility purposes the default VLAN is 1 and sometimes if you tag a packet as for VLAN 1 the switch may remove the header and this could be exploited when the packet is forwarded.
+
+### WiFi 📶
+- Independent service set
+- Infrastructure basis service set (BSS)
+- Extended service set (ESS)
+
+If an attacker has access to an antenna then it has access to all the other members of the network.
+
+Another type of attack is just adding a fake access point. **Evil twin** attack. If the authentication is only at the user level then there's no way to prevent it.
+
+
+
