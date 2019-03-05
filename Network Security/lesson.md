@@ -112,7 +112,7 @@ This layer also regulates medium access
 ### Virtual LAN
 It isolates different types of network but still the bandwidth could be saturated. However for compatibility purposes the default VLAN is 1 and sometimes if you tag a packet as for VLAN 1 the switch may remove the header and this could be exploited when the packet is forwarded.
 
-### WiFi 📶
+## WiFi 📶
 - Independent service set
 - Infrastructure basis service set (BSS)
 - Extended service set (ESS)
@@ -120,6 +120,63 @@ It isolates different types of network but still the bandwidth could be saturate
 If an attacker has access to an antenna then it has access to all the other members of the network.
 
 Another type of attack is just adding a fake access point. **Evil twin** attack. If the authentication is only at the user level then there's no way to prevent it.
+
+
+
+### National Vulnerability Database
+
+Contains all of the known vulnerabilities of a certain software. There are more than 9000 known vulnerabilities.
+
+
+### Encryption
+
+### WEP Authentication
+
+You have the access point. 
+
+There's the Input Vector (IV) which is supposedly random but can be picked by the client.
+
+$$
+\begin{aligned}
+    P \oplus K &= C \\
+    C \oplus K &= P \\
+    C \oplus P &= K
+\end{aligned}
+$$
+
+#### Problem 2: IV Reuse
+$2^{24} = 16$ million
+
+$$
+\begin{aligned}
+    54 MBps \\
+    BC\ 1500\ bytes \rightarrow 4700 N/s \\
+    AC\ 400\ bytes 
+\end{aligned}
+$$
+
+In an hour there will be an IV collision for sure.
+
+#### Problem 3: Message bijection + tampering
+- CRC is easy to compute
+- CRC is entirely linear
+
+I can modify encrypted texts
+
+ARP messages are encrypted but not all the WiFi packets. So this means that we can predict what it is actually in the data.
+
+$$
+\begin{aligned}
+    C &= \left[M || CRC(M) \right] \oplus RC4(IV || K) \\
+    C' &= [(M \oplus T) || CRC(M \oplus T)] \oplus RC4(IV || K) \\
+    &= T || CRC(T) \oplus M || CRC(M) \oplus RC4(IV || K) \\
+    &= [T || CRC(T)] \oplus C \implies \text{I can send messages already}
+\end{aligned}
+$$
+
+RC4 was an algorithm designed in the 1980s, it was the industry standard. Somebody the source code of RC4 and multiple vulnerabilities that it was possible to obtain the original key.
+
+> Don't design crypto yourself!
 
 
 
