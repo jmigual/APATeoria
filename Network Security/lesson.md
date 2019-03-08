@@ -1,4 +1,4 @@
-# Physical layer
+# 1. Physical layer
 
 
 ## Types of connections
@@ -78,7 +78,7 @@ An easy way to avoid compromised physical networks can be to have all the cables
 - WiFi 802.11b
 - GSM
 
-# Link layer
+# 2. Link layer
 
 How are we going to do addressing?
 
@@ -128,9 +128,14 @@ Another type of attack is just adding a fake access point. **Evil twin** attack.
 Contains all of the known vulnerabilities of a certain software. There are more than 9000 known vulnerabilities.
 
 
-### Encryption
+## Encryption
 
-### WEP Authentication
+## WEP Authentication
+
+It was already catastrophically broken already in 1999. Even though it was broken many years prior it still continued in being adopted for many years. 
+
+
+### Problem 1: Authentication protocol
 
 You have the access point. 
 
@@ -144,7 +149,7 @@ $$
 \end{aligned}
 $$
 
-#### Problem 2: IV Reuse
+### Problem 2: IV space and IV Reuse
 $2^{24} = 16$ million
 
 $$
@@ -157,7 +162,7 @@ $$
 
 In an hour there will be an IV collision for sure.
 
-#### Problem 3: Message bijection + tampering
+### Problem 3: Message bijection + tampering
 - CRC is easy to compute
 - CRC is entirely linear
 
@@ -178,5 +183,51 @@ RC4 was an algorithm designed in the 1980s, it was the industry standard. Somebo
 
 > Don't design crypto yourself!
 
+### Problem 4: Retrieving the WEP key
 
 
+### WEP Conclusion
+
+We should design security protocols in a different way. WEP was partially hardware implemented. A better security protocol design is to have encapsulated protocols so if something is broken you can switch the protocol quite easily.
+
+10 later after WEP, WPA2 starts to rise
+
+WEP still matters because there are many wireless connections that still use this security protocol. 
+
+> The security design of today will still matter in probably  the next two or three decades
+
+When you have a VPN network you are moving the trust from your local network to another network. For example in an airport if you connect to a free-to-access network then your connection is not secured so the most secure thing is to use a VPN network.
+
+## WiFi Protected Access (WPA)
+
+There was a need to create a new wireless security protocol so they created WPA. But the problem was that there was a lot of hardware designed security that could not be changed.
+
+- WPA was just a hot-fix 
+- WPA2 solved many of the problems
+
+### Evolution to WPA
+
+1. The authentication protocol
+
+Previously everyone could read all the messages if they had the key. Now everyone had a different key this time. 
+
+To compute the pseudorandom number that is used for the key they use the MAC addresses, IPs... and also the SSID is used as a salt. This means that the more unique an SSID is the more security you have because attackers won't have a specific table for your access point.
+
+2. IV Space and IV Reuse
+3. Message Injection/Tampering due to CRC
+
+They increased the IV size and added the MAC address to the key part so two access points would not have the same key.
+
+Now they used MIC in order to check the CRC which is a crypto secure CRC.
+
+### Evolution to WPA2
+
+Here we could design everything from scratch.
+
+3. Message Injection/Tampering due to CRC
+
+For unguided medium with bit flips a block cypher is more secure. Here now all the origin and destination blocks are encrypted in one key.
+
+4. Retrieving the key
+
+Now they are using a block cypher which is more secure. They used AES which is more secure and they use a temporary key.
