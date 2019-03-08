@@ -53,3 +53,10 @@ Because it allows designing schedulability analyses for a wide class of scheduli
 
 For example we do not know what is the exact execution time or release time of the tasks at runtime.
 
+## What is a schedule-abstraction graph
+- A path in the graph represents an ordered set of dispatched jobs
+- A vertex abstracts a system update
+- An edge abstracts a dispatched job
+- A state represents the finish-time interval of any path reaching that state
+
+
