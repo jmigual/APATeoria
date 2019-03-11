@@ -231,3 +231,26 @@ For unguided medium with bit flips a block cypher is more secure. Here now all t
 4. Retrieving the key
 
 Now they are using a block cypher which is more secure. They used AES which is more secure and they use a temporary key.
+
+
+
+## GSM
+
+### Types 
+
+- Be in the middle and downgrade the cypher used for encryption
+- Passive listening and decrypt the data when required
+- Just passive listening and you can ask for a user's location
+
+# Network Layer
+
+Provides a point-to-point connection between two networks
+
+We use Internet Protocol for this
+
+## Enterprise topologies
+
+You need to create a list of importance of difference users. Usually the admins have the highest priority but they usually have a low-priority account. The high priority is only used in certain cases and it is good if two admins work together when using the high priority
+
+
+
