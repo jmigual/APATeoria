@@ -116,6 +116,49 @@ A task with $(m, k)$ weakly-hard timing constraint is feasible if and only if in
 
 In general if a task set is $(m, k)$ feasible, as long as we increase $k$ or decrease $m$ is always feasible.
 
+### Reservation-based scheduling
+
+#### Hierarchical scheduling
+Resource reservation can be used to develop hierarchical systems, where each component is implemented within a reservation.
+
+There's a global scheduler that for synchronizing data accesses. There are also local schedulers that interact with the global scheduler.
+
+[Xen project](https://xenproject.org) is one of the most famous hierarchical schedulers.
+
+Linux also uses a hierarchical hypervisor
+
+**Example**: static time partition
+
+- Example of reservation providing 4 units every 10 (bandwidth = 0.4)
+- Assume that the server is scheduled as the highest-priority entity in the system
+
+> $sbf(t)$ shows the minimum amount of time available in the reservation $S$ in every time interval of length $t$
+
+#### Analysis under resource reservation + EDF
+Assume that tasks inside the server are scheduled by EDF
+
+We can use Processor Demand Criterion as follows:
+$$
+\forall t > 0, \quad dbf(t) \le sbf(t)
+$$
+
+#### Faster test
+Assume that tasks inside the server are scheduled by EDF
+
+Design a faster **sufficient** schedulability test
+
+Replace $sbf(t)$ with a lower bound called $slbf(t) = \max\{0, \alpha (t - \Delta)\}$
+
+$$
+\alpha = \lim_{t \rightarrow \infty}\frac{sbf(t)}{t}
+$$
+$$
+\Delta = \sup_{r \ge 0} {t - \frac{sbf(t)}{\alpha}}
+$$
+
+**Example**: Periodic server
+Budget $Q_s$ and period $P_s$ running at the highest priority (among other servers) we have
+
 
 
 
