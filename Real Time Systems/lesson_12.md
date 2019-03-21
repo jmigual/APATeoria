@@ -114,10 +114,103 @@ $$
 \end{aligned}
 $$
 
-
 $$
 \Delta_a + F_a \cdot T_s + \delta_a
 $$
+
+## Small presentation
+Presentation by another woman about different projects that they are working on
+
+What if data is not static and comes and goes over the time?
+
+### From edge to cloud
+How to run AI on mobile devices?
+
+You can run AI on a mobile phone but training a neural network requires thousands of parameters. Usually the training is done in the cloud.
+
+### Private IoT sensing
+Is smartness at the cost of privacy?
+
+When you upload this information, do you anonymize that? What can you do with that?
+
+- Anonymize: this is not a really good solution
+- Not upload the data 😅
+- Lie in the data. Upload data that has been modified
+
+### Smart drone
+How to teach drone to find an object. Reinforce learning
+
+## Polling server vs background service
+
+If the polling server has the lowest priority, can we say it is like if the aperiodic tasks are executed as a background service?
+
+No since if there was a free slot but the polling server had already discharged the slot then the free space would not be used. So, in this case, **it can be worse than a background service**.
+
+## How to improve PS?
+
+> If aperiodic tasks come later than the release time of the server, they have to wai for the next release of the server
+
+How can we fix this?
+
+Keep the budget even if there is no aperiodic task in the queue. This is called **Deferrable Server (DS)**.
+
+_Slide 26_. What happens if DS has a higher priority than $\tau_2$?
+
+There's a deadline miss that could have been avoided otherwise
+
+## Issue with DS
+- Note that DS does not behave like a periodic task
+
+
+### WCRT of periodic tasks in the presence of a DS
+
+DS cannot impact the schedule of any high-priority task but it can for lower-priority tasks. This means that the analysis for this server is different than the one used for PS.
+
+## Constant Bandwidth Server
+
+- It is designed to work with EDF scheduling policy
+- It keeps the "bandwidth = utilisation" constant
+
+CBS parameters
+- Maximum budget: $Q_s$
+- Server period: $T_s$
+- Server bandwidth: $U_s = \frac{Q_s}{T_s}$
+- Current budget: $q_s$
+- Current deadline: $d_s$
+
+## CBS idea
+
+> Replenish the budget as soon as it is finished. However, each time you do so, increase the current deadline by the value of $T_s$
+
+This decreases priority since for EDF the deadline is the priority.
+
+It smoothly reduces priority of the current job of the server among other jobs in the system while keeping the utilization of the server constant
+
+## Basic CBS rules
+
+Arrival of job $J_k$ at time $a_k \implies$ assign a new $d_s$
+
+```python
+if not periodic_jobs.empty():
+    periodic_jobs.add(job)
+elif q_s >= (d_s - a_k)**_s:
+    q_s = Q_s
+    d_s = d_s + T_s
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
