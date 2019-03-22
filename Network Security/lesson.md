@@ -252,5 +252,49 @@ We use Internet Protocol for this
 
 You need to create a list of importance of difference users. Usually the admins have the highest priority but they usually have a low-priority account. The high priority is only used in certain cases and it is good if two admins work together when using the high priority
 
+## Issue 9 - Facebook stores passwords in plain text
+20.000 employees could have been able to access 600.000.000 passwords
+
+How could this happen?
+
+This means that in network architecture if a computer where to be infected then many other computers could have been infected.
+
+You run passwords through a hash function because users are very bad at picking passwords.
+
+> You can store passwords in clear text and this is one of the **worst** things that you can do
+
+Passwords were stored in the log files. Not everyone should be able to access to the log files.
+
+# Transport layer
+
+_The next thing were things can go horrible wrong_
+
+Connection application to application
+
+## TCP
+
+It works with error recovery and it is bidirectional, so there's a "tunnel" from A to B and another one from B to A
+
+$$
+\LARGE A \quad
+\normalsize
+\begin{matrix}
+    \Longrightarrow \\
+    \Longleftarrow
+\end{matrix}
+\quad \LARGE B
+$$
+
+The packets have an out of order control that they say up to which packet they've seen data.
+
+When a TCP connection is being made first the user sends, the server responds and the user has to acknowledge the server acknowledgement. This means that the server will know that the IP address exists.
+
+TCP stores all the information in some space in memory. For each connection there's a need of memory required
+
+### TCP Reset Attacks
+
+Some attackers could constantly monitor the connection and send a RST packet when the user access to a certain content
+
+
 
 
