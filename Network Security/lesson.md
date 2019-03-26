@@ -295,6 +295,20 @@ TCP stores all the information in some space in memory. For each connection ther
 
 Some attackers could constantly monitor the connection and send a RST packet when the user access to a certain content
 
+### Secure Sockets Layer and Transport Layer Security
+
+First introduced in 1985
+
+There are two ways of rolling these layers out:
+- In the browser there are two different ports:
+  - 80 for non-secure HTTP
+  - 443 for secure HTTP (HTTPS)
+- In mail protocols the approach is different:
+  1. Connect to port 25
+  2. Negotiate a possible encryption
+
+In the second option, the user does not realize that there's something wrong.
+
 
 
 
