@@ -218,6 +218,48 @@ $$
       - A **maximal** release delay at that simultaneous release
       - A **minimal** release delay at previous releases
   - Hence, a minimal pre-emption of $\tau_i$ occurs
+  - Recursive equation for task $\tau_i$
+    $$
+    BR_i^{(n)} = C_i + \sum_{j <i} \left(\left\lceil \frac{BR_i^{(n - 1)} - AJ_i}{T_j}\right\rceil - 1 \right)^+ \cdot C_i
+    $$
+    - Where $AJ_i$ is the activation jitter of $\tau_j$, $w^+ = \max\{w, 0\}$
+    - $BR_i$ is the largest possible solution of the equation
+  - Iterative procedure
+    - Similar to the case without jitter
+- Best-case finalization times
+  - $BF_i = BR_i$
+
+> ---
+> **EXERCICE**: Determine the response and finalization jitter
+>
+> Task | $C_i$ | $T_i$ | $D_i$ | $AJ_i$
+> --|--|--|--|--
+> $\tau_1$ | 1 | 4 | 2 | 1
+> $\tau_2$ | 3 | 6 | 5 | 1
+> $\tau_3$ | 3 | 20 | 18 | 2
+> 
+> $$
+> \begin{aligned}
+> BR_1 &= C_1 = 1 \\
+> WR_1 &= C_1 = 1 \\
+> 
+> WR_3^{(0)} &= 10 \rightarrow \text{assumption} \\
+> WR_3^{(1)} &= 3 + 
+>   \left\lceil \frac{10 + 1}{4} \right\rceil\cdot 1 + 
+>   \left\lceil \frac{10 + 1}{6} \right\rceil\cdot 3 = 3 + 3 + 6 = 12 \\
+> WR_3^{(2)} &= 3 +
+>   \left\lceil \frac{12 + 1}{4} \right\rceil\cdot 1 + 
+>   \left\lceil \frac{12 + 1}{6} \right\rceil\cdot 3 = 3 + 4 + 9 = 16 \\
+> WR_3^{(3)} &= 3 +
+>   \left\lceil \frac{16 + 1}{4} \right\rceil\cdot 1 + 
+>   \left\lceil \frac{16 + 1}{6} \right\rceil\cdot 3 = 3 + 5 + 9 = 17 \\
+> WR_3^{(4)} &= 3 +
+>   \left\lceil \frac{17 + 1}{4} \right\rceil\cdot 1 + 
+>   \left\lceil \frac{17 + 1}{6} \right\rceil\cdot 3 = 3 + 5 + 9 = 17 \\
+> \end{aligned}
+> $$
+> ---
+> 
 
 
 
