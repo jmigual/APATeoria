@@ -11,11 +11,13 @@ How do we schedule periodic + aperiodic tasks?
 
 ## Aperiodic task scheduling
 
-**Example**: Two periodic tasks scheduled by RM and a single aperiodic job $J_a$ (arrives at $a_a = 2$ and its WCET is $C_a = 2$). How do we schedule this task without missing a deadline?
-
-1. Run the task in the background, when there aren't other tasks running
-2. Start scheduling immediately (not very safe)
-3. Inside a reservation server (safer)
+> ---
+> **EXAMPLE**: Two periodic tasks scheduled by RM and a single aperiodic job $J_a$ (arrives at $a_a = 2$ and its WCET is $C_a = 2$). How do we schedule this task without missing a deadline?
+>
+> 1. Run the task in the background, when there aren't other tasks running
+> 2. Start scheduling immediately (not very safe)
+> 3. Inside a reservation server (safer)
+> ---
 
 ### Solution 1: scheduling as a background service
 
@@ -34,10 +36,11 @@ In this case we would have a _long response time_.
 The response time will be low but other task may need to be pre-emptied.
 
 **Advantages**:
-- Very short response time
+- Very short response time for the aperiodic task
+- More responsive system
 
 **Disadvantages**:
-- We cannot guarantee the deadline of periodic tasks anymore
+- Long response time and possible deadline misses for the other periodic tasks
 
 ## Handling aperiodic tasks
 
