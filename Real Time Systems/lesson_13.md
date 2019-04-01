@@ -12,7 +12,7 @@ A variation in the system. If you don't know where the variation is coming from 
 
 **Example**: multimedia in a networked environment
 
-> ---
+> ***
 > **EXAMPLE**: multiprocessor
 > 1. A strictly periodic system event activates task $\tau_1$
 > 2. Task $\tau_1$ sends message $\mu_j$
@@ -20,7 +20,7 @@ A variation in the system. If you don't know where the variation is coming from 
 > 3. Message $\mu_j$ triggers task $\tau_k$
 >    - $FJ_j$ causes $AJ_k$
 > 4. Task $\tau_k$ generates a system response
-> ---
+> ***
 
 
 ### Goal jitter analysis
@@ -33,7 +33,7 @@ A variation in the system. If you don't know where the variation is coming from 
 - Supported by commercial RTOS
 - ...
 
-> ---
+> ***
 > **EXAMPLE**
 > Task | Period $T$ | computation time $C$ | Utilization $U$
 > -|-|-|-
@@ -59,15 +59,15 @@ A variation in the system. If you don't know where the variation is coming from 
 > 
 > It can be seen that this task is feasible but just exactly.
 > 
-> ---
+> ***
 
 
 ## Response times
 
-> ---
+> ***
 > **EXAMPLE**: airbag
 > - If the airbag releases too soon or too early it can be fatal
-> ---
+> ***
 
 - Schedulability condition:
   - all jobs of all tasks must meet their deadline constraints
@@ -186,7 +186,7 @@ $$
     - All tasks with a higher priority experience
   - Hence, a _maximal_ pre-emption of $\tau_i$ occurs
 
-> ---
+> ***
 > **EXAMPLE**:
 > 
 > Task | $T$ | $C$ | $AJ$
@@ -198,7 +198,7 @@ $$
 > - $WR_2$ is independent of $AJ_2$
 > - $WF_2$ is equal to $AJ_2 + WR_2$
 > - $WF_2$ increases 10 due to $AJ_1$ and $AJ_2$
-> ---
+> ***
 
 - Worst case response times
   - Recursive equation for task $\tau_i$
@@ -229,7 +229,7 @@ $$
 - Best-case finalization times
   - $BF_i = BR_i$
 
-> ---
+> ***
 > **EXERCICE**: Determine the response and finalization jitter
 >
 > Task | $C_i$ | $T_i$ | $D_i$ | $AJ_i$
@@ -258,7 +258,7 @@ $$
 >   \left\lceil \frac{17 + 1}{6} \right\rceil\cdot 3 = 3 + 5 + 9 = 17 \\
 > \end{aligned}
 > $$
-> ---
+> ***
 > 
 
 

@@ -309,6 +309,11 @@ There are two ways of rolling these layers out:
 
 In the second option, the user does not realize that there's something wrong.
 
+## IDS Placement
+
+
+
+
 
 
 

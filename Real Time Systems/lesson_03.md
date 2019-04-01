@@ -1,4 +1,4 @@
-# Lesson 03 - Online Scheduling of Aperiodic Tasks
+# Lesson 3 - Online Scheduling of Aperiodic Tasks
 
 ## FIFO: the judgement day
 - Disadvantages:
