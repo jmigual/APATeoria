@@ -1,18 +1,27 @@
 # Lesson 3 - Online Scheduling of Aperiodic Tasks
 
-## FIFO: the judgement day
+### FIFO: the judgement day
 - Disadvantages:
-    - Creates non-pree
+    - Creates non-preemptive schedule
+    - Ignores task's deadline and priority
+    - Response times heavily depend on the arrival times
+    - Low schedulability
 
 - Advantages:
+  - Fast
+  - Simple implementation
+  - Low runtime overhead
+  - Wide applicability in network systems
 
-## Feasibility vs. schedulability
+## Scheduling complexity
+### Feasibility vs. schedulability
 
 A scheduling algorithm may not be able to schedule all the feasible tasks but only a subset of them. However, two algorithms could schedule the same tasks, so the intersection is possible.
 
-## General scheduling problem
+### General scheduling problem
+> Given a set $\tau$ of $n$ tasks, a set $P$ of $p$ processors, and a set $R$ of $r$ resources, find an assignment of $P$ and $R$ to $\tau$ that produces a feasible schedule under a set of constraints
 
-The scheduling problem is an NP-Complete problem. So Complexity in the scheduling algorithms is important.
+The scheduling problem is an NP-Complete problem. So Complexity in the scheduling algorithms is important. Polynomial time algorithms can be found under particular conditions
 
 **Complexity** is a very important factor but there are other factors:
 - Runtime
@@ -21,10 +30,44 @@ The scheduling problem is an NP-Complete problem. So Complexity in the schedulin
 - Memory limits
 - ...
 
-## Work-conserving vs non-work-conserving
+### Important things about complexity
+Different implementations can have different runtime but similar complexity
 
-- Work conserving: Does not leave the processor **idgle** as long as there is a ready task in the system
-- Non-work conserving: May leave the processor **idle** even if there is a task in the system
+- _Addition_ operation is usually faster than multiplication
+- _Integer_ operations are usually faster thant floating-point operations
+- Different implementations can have different runtime but similar complexity
+- Runtime can also depend on how the hardware platform executes it
+
+## Online scheduling policies and their properties
+
+### Work-conserving vs non-work-conserving
+
+- **Work conserving**: Does not leave the processor **idgle** as long as there is a ready task in the system
+- **Non-work conserving**: May leave the processor **idle** even if there is a ready task in the system
+
+### Static vs dynamic
+
+- **Static**: scheduling decisions are taken based on fixed parameters assigned to tasks before activation
+- **Dynamic**: Scheduling decisions are taken based on parameters _that change with time_ like:
+  - Execution time
+  - Absolute deadline
+
+### Offline vs online
+- **Offline**: all scheduling decisions are taken before task activation, the schedule is stored in a table
+- **Online**: scheduling decisions are taken at runtime
+
+### Optimal vs heuristic
+- **Optimal**: They generate a schedule that minimizes a cost function
+- **Non-optimal (heuristic)**: They generate a schedule according to a heuristic function but _there is no guarantee of success_
+
+> ***
+> **EXAMPLE**: Optimality criteria
+> - Feasibility: Find a feasible schedule if there is one
+> - Minimize the maximum lateness
+> - Minimize the number of deadline misses
+> - Assign a value to each task and maximize the cumulative value of feasible tasks
+> 
+> ***
 
 ## Scheduling algorithms
 
@@ -39,13 +82,15 @@ It selects the ready task with the shortest computation time.
 
 #### Is SJF suited for Real-Time?
 
-It is not optimal in the sense of feasibility
+- It is not optimal in the sense of feasibility
 
 
-## Fixed-priority scheduling
+### Fixed-priority scheduling
 - Each task has a priority $P_i$, typically $P_i \in [0, 255]$. ($P_i < P_j$ means that task $\tau_i$ has higher priority than task $\tau_j$)
 - The task with the highest priority is selected for execution
 - Tasks with the same priority are served FIFO
+
+- **Problem**: starvation
 
 ## Round robin
 - The ready queue is served with FIFO, but

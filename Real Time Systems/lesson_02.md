@@ -143,8 +143,9 @@ A task set $\tau$ is said to be schedulable with ana algorithm $A$, if and only 
 > -|-|-|-
 > $\tau_1$ | 8 | 5 | 14
 > $\tau_2$ | 3 | 10 | 14
-> $\tau_3$ | 4 | 2 | 17
+> $\tau_3$ | 4 | 2 | 17     
 > ![Generated FIFO schedule](images/02/FIFO.png){width=70%}
+> 
 > ***
 
 
