@@ -38,7 +38,7 @@ $$R_i = f_i - a_i$$
 
 $$C_i = f_i - s_i$$
 
-![Task definition](images/02/task_definition.png){width=50%}
+![Task definition parameters](images/02/task_definition.png){width=50%}
 
 #### How good is to model task's execution time by a constant value $C_i$?
 
@@ -126,6 +126,29 @@ A schedule $\sigma$ is said to be feasible if it satisfies all given requirement
 A task set $\tau$ is said to be feasible, if there exists  an algorithm that generates a feasible schedule for $\tau$.
 
 A task set $\tau$ is said to be schedulable with ana algorithm $A$, if and only if $A$ generates a feasible schedule for $\tau$.
+
+### Some well-known scheduling algorithms
+
+- First-in-first-out scheduling (FIFO)
+  - Also called First-come-first-serve (FCFS)
+- Round robing
+- Shortest-job first
+- Earliest deadline first (EDF)
+- Fixed-priority scheduling (FP)
+
+> ***
+> **EXAMPLE**: FIFO
+>
+> $\tau_i$ | $C_i$ | $a_i$|$d_i$
+> -|-|-|-
+> $\tau_1$ | 8 | 5 | 14
+> $\tau_2$ | 3 | 10 | 14
+> $\tau_3$ | 4 | 2 | 17
+> ![Generated FIFO schedule](images/02/FIFO.png){width=70%}
+> ***
+
+
+
 
 
 
