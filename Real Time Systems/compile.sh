@@ -5,9 +5,11 @@ files=$(ls lesson_*.md | sort)
 echo Compiling pandoc
 pandoc -t html \
     --standalone \
+    --self-contained \
     --toc --toc-depth=1 \
     --number-sections \
-    --mathjax \
+    --mathjax="" \
+    --template ../pandoc/template \
     --css ../pandoc/pandoc.css \
     $files -o RTS.html
 
