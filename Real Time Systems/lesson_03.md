@@ -90,18 +90,28 @@ It selects the ready task with the shortest computation time.
 - The task with the highest priority is selected for execution
 - Tasks with the same priority are served FIFO
 
-- **Problem**: starvation
+- **Problem**: _starvation_, low priority tasks may experience long delays due to preemption
 
 ## Round robin
 - The ready queue is served with FIFO, but
 - Each task $\tau_i$ cannot execute for more than **Q** time units
-- When **Q** expires, $\tau_i$ is preempted
+- When **Q** expires, $\tau_i$ is put again in the queue
 
 However, there are a lot of context switches
 
 ## Multi-level scheduling
 
-Have a high, medium and low priority queue
+Have a high, medium and low priority queue and each queue is scheduled using a different scheduling policy
+
+## Summary
+
+- Complexity matters, but it is not the only thing that matters
+- FIFO is fast and simple to implement, but bad at guaranteeing deadlines
+- Non-preemptive SJF minimizes the average response of the tasks
+- Fixed-priority scheduling may starve low priority tasks
+- Round and robing has a large number of preemptions
+
+
 
 
 
