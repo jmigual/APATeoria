@@ -1,6 +1,7 @@
 # Lesson 3 - Online Scheduling of Aperiodic Tasks
 
 ### FIFO: the judgement day
+
 - Disadvantages:
     - Creates non-preemptive schedule
     - Ignores task's deadline and priority
@@ -24,6 +25,7 @@ A scheduling algorithm may not be able to schedule all the feasible tasks but on
 The scheduling problem is an NP-Complete problem. So Complexity in the scheduling algorithms is important. Polynomial time algorithms can be found under particular conditions
 
 **Complexity** is a very important factor but there are other factors:
+
 - Runtime
 - Hardware platform capabilities
 - Memory consumption
@@ -53,10 +55,12 @@ Different implementations can have different runtime but similar complexity
   - Absolute deadline
 
 ### Offline vs online
+
 - **Offline**: all scheduling decisions are taken before task activation, the schedule is stored in a table
 - **Online**: scheduling decisions are taken at runtime
 
 ### Optimal vs heuristic
+
 - **Optimal**: They generate a schedule that minimizes a cost function
 - **Non-optimal (heuristic)**: They generate a schedule according to a heuristic function but _there is no guarantee of success_
 
@@ -86,6 +90,7 @@ It selects the ready task with the shortest computation time.
 
 
 ### Fixed-priority scheduling
+
 - Each task has a priority $P_i$, typically $P_i \in [0, 255]$. ($P_i < P_j$ means that task $\tau_i$ has higher priority than task $\tau_j$)
 - The task with the highest priority is selected for execution
 - Tasks with the same priority are served FIFO
@@ -93,6 +98,7 @@ It selects the ready task with the shortest computation time.
 - **Problem**: _starvation_, low priority tasks may experience long delays due to preemption
 
 ## Round robin
+
 - The ready queue is served with FIFO, but
 - Each task $\tau_i$ cannot execute for more than **Q** time units
 - When **Q** expires, $\tau_i$ is put again in the queue

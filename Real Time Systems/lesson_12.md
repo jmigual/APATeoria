@@ -26,9 +26,11 @@ Let's suppose that we have a FP scheduler.
 In this case we would have a _long response time_. 
 
 **Advantages**:
+
 - None of the periodic tasks will be affected by the aperiodic task
 
 **Disadvantages**:
+
 - If the schedule is busy, the task needs to wait a long time
 
 ### Solution 2: schedule them immediately
@@ -36,10 +38,12 @@ In this case we would have a _long response time_.
 The response time will be low but other task may need to be pre-emptied.
 
 **Advantages**:
+
 - Very short response time for the aperiodic task
 - More responsive system
 
 **Disadvantages**:
+
 - Long response time and possible deadline misses for the other periodic tasks
 
 ## Handling aperiodic tasks
@@ -59,6 +63,7 @@ We want to keep the system schedulable and also as short response time as possib
     - Having an online scheduling test
 
 ## Types of servers
+
 - Fixed-priority servers
 - Dynamic-priority servers (to be used with EDF scheduler)
 
@@ -162,6 +167,7 @@ _Slide 26_. What happens if DS has a higher priority than $\tau_2$?
 There's a deadline miss that could have been avoided otherwise
 
 ## Issue with DS
+
 - Note that DS does not behave like a periodic task
 
 
@@ -175,6 +181,7 @@ DS cannot impact the schedule of any high-priority task but it can for lower-pri
 - It keeps the "bandwidth = utilisation" constant
 
 CBS parameters
+
 - Maximum budget: $Q_s$
 - Server period: $T_s$
 - Server bandwidth: $U_s = \frac{Q_s}{T_s}$

@@ -5,6 +5,7 @@
 > A **model** is a representation of something. It does not capture all attributes but only the *relevant attributes*. 
 
 It should be:
+
 - Expressive: accurate to the real system
 - Tractable: not including too many details
 
@@ -17,6 +18,7 @@ We need models to be able to analyze a system. Then you can give other propertie
 ### Modeling computation
 
 Important aspects:
+
 - System to be controlled
 - System model
 - Definition of task/app parameters
@@ -43,6 +45,7 @@ $$C_i = f_i - s_i$$
 #### How good is to model task's execution time by a constant value $C_i$?
 
 The execution time can change depending on different factors:
+
 - Software
     - Input value
     - Program path (branches)
@@ -59,6 +62,7 @@ It is not a constant, it depends on architecture and software but we still need 
 Measurement is important. So, data is generated and the number of occurrences of a certain execution time is shown. E.g.: 40 times out of 100 the measured execution time is 26.
 
 Then three definitions are done:
+
 - Minimum execution time: $C_i^{\min}$
 - Maximum execution time: $C_i^{\max}$
 - Average execution time: $C_i^{\text{avg}}$
@@ -99,6 +103,7 @@ $$
 
 
 ### Slack and lateness
+
 - $\text{slack}_i$ Slack. How far are you from the deadline when you finish
 
 $$\text{slack}_i = d_i - f_i$$

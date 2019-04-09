@@ -56,6 +56,7 @@ Some tasks cannot be scheduled in preemptive mode and can be scheduled in non-pr
 3. Anomalies: you had a schedulable system. You increase the processor speed and suddenly it is not schedulable anymore
 
 ## Response-time analysis of NP-FP
+
 - **Maximum blocking** $B_i = \max\left\{C_j | \forall \tau_j, P_i < P_j \right\}$
 - **Maximum interference**
 - 

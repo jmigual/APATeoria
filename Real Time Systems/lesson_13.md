@@ -5,6 +5,7 @@ What do we call Jitter?
 A variation in the system. If you don't know where the variation is coming from we call it random.
 
 ## Motivation
+
 - Multi-processor analysis
 - **Finalization**: variation in finalization times
 - **Activation**: variation in activation times
@@ -24,6 +25,7 @@ A variation in the system. If you don't know where the variation is coming from 
 
 
 ### Goal jitter analysis
+
 - Determine schedulability in the context of jitter
 - Determine end-to-end response times
 
@@ -112,6 +114,7 @@ $$
 $$
 
 ### Introduction
+
 - Optimal instant of task $\tau_i : \tau_i$ "assumes" its $BR_i$
   - Incurs the lowest amount of preemption by higher priority tasks
 
@@ -125,6 +128,7 @@ $$
 ## Jitter analysis
 
 Types of (absolute) jitter:
+
 - Activation (or release) jitter $AJ$: variation in activation times
 - Response jitter $RJ$: variations in response times
 - Finalization (or end) jitter $FJ$: variation in finalization times
@@ -135,12 +139,14 @@ Types of (absolute) jitter:
 $$
 \varphi_i + k \cdot T_i \le a_{i, k} \le \varphi_i + k \cdot T_i + AJ_i
 $$
+
 - Where $\varphi_i$ denotes the start of the jitter interval
 
 ### Response jitter
 Response jitter $RJ_i$ of task $\tau_i$
 
 $R_{i,k}$ notation:
+
 - $i \Longrightarrow$ corresponds to task $\tau_i$
 - $k \Longrightarrow$ corresponds to job $k$ of task $\tau_i$
 
@@ -156,6 +162,7 @@ $$
 Why is it not equal? When we look at the best case and the worst case we are looking at the critical instant
 
 ### Finalization jitter
+
 - Relative finalization time $F_{i, k}$ of a job $\tau_{j,k}$
 
 $$

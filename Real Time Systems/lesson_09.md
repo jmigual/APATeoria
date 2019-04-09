@@ -47,6 +47,7 @@ Whenever a task accesses a resource, it enters a **non-preemptive mode** until i
 Simplicity and efficiency
 
 ### Disadvantages
+
 - Tasks can be blocked even if they don't use any critical sections
 - It restricts too many parameters. Even if there's an access to a different shared resource it also blocks
 
@@ -61,6 +62,7 @@ $$
 Simplicity and efficiency
 
 ### Disadvantages
+
 - A task could be blocked even if it "may" not access the resource
 - It is not transparent to programmers (due to ceilings)
 
@@ -69,6 +71,7 @@ Simplicity and efficiency
 Whenever a task accesses a resource $S$ that is locked by another task, the priority of the locking task **upgrades** to the priority of the highest-priority task that is currently blocked on resource $S$.
 
 There are two types of blocking:
+
 - Direct blocking
 - Push-through blocking
 
@@ -77,10 +80,12 @@ Theorem:
 > $\tau_i$ can be blocked at most for the duration of $\alpha_i = \min(n_i, m_i)$ critical sections
 
 ### Advantages
+
 - Removes the pessimism of NPP and HLP
 - It is transparent to the programmer
 
 ### Problems
+
 - More complex to implement
 - Prime to chained blocking
 - It does not avoid deadlocks

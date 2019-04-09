@@ -11,6 +11,7 @@
 ## Proportional share algorithm
 
 **Basic idea**:
+
 - Divide the timeline into slots of equal length
 - Within each slot serve each task for a time proportional to its utilization
 - Slot length: $\Delta = GCD(T_i, \forall i)$
@@ -43,6 +44,7 @@
 
 ### What do we do if an overrun happens?
 There are two choices:
+
 - Let the task continue: this creates a domino effect with the rest of the tasks
 - Abort the task: the system can be inconsistent with this method
 

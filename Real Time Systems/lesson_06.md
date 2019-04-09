@@ -9,6 +9,7 @@ When there is one big tasks and some very small tasks. However, this never happe
 ## Secrets behind
 
 They found the hardest-to-schedule task set with the minimal utilization:
+
 - It is schedulable by RM
 - It fully utilizes the processor. If the execution time of any of the tasks is increased by $\epsilon_i$
 - All tasks are released at the same time (no release offset)
@@ -17,6 +18,7 @@ They found the hardest-to-schedule task set with the minimal utilization:
 To make sure that your schedule is on time. Just draw the schedule and find the Worst Case Real Time.
 
 ## Computational complexity of RTA
+
 - Calculating the WCRT of a task using RTA is a **weakly NP-Hard** problem
 - It has a pseudo-polynomial time computational complexity.
 

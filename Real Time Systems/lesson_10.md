@@ -3,6 +3,7 @@
 ## Switching to multi-core systems
 
 Trends:
+
 - Consolidation
 - Parallelism
 
@@ -20,6 +21,7 @@ Why does it happen?
 ## Types of memory
 
 Usually we have:
+
 - Primary storage (DRAM)
 - Secondary storage (Disk)
 - Cache (SRAM)
@@ -46,6 +48,7 @@ Divide the memory in different banks, but still there are many I/O conflicts
 We always assume homogeneous processors
 
 ## Important factors
+
 - **Critical path length** $C_i^p$
 
 ## Multiprocessor models

@@ -47,6 +47,7 @@ It is not an exact test but any scheduling policy can be used.
 Because it allows designing schedulability analyses for a wide class of scheduling policies and task sets
 
 #### Why is it dumb?
+
 - If you have many tasks, it can take a lot of time to execute
 - Hyper-period could be too big but usually this is still doable 
 - There are uncertainties in the task set, like the execution time
@@ -54,6 +55,7 @@ Because it allows designing schedulability analyses for a wide class of scheduli
 For example we do not know what is the exact execution time or release time of the tasks at runtime.
 
 ## What is a schedule-abstraction graph
+
 - A path in the graph represents an ordered set of dispatched jobs
 - A vertex abstracts a system update
 - An edge abstracts a dispatched job
