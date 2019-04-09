@@ -170,6 +170,6 @@ It was thought that a task set can be feasibly scheduled by a work-conserving po
 
 **Take away message**:
 
-- EDF is good 
-- Test
+- EDF is a good policy for preemptive tasks but not for non-preemptive tasks
+- It is not an optimal policy among work-conserving scheduling policies for non-preemptive tasks
 
