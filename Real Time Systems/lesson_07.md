@@ -1,4 +1,4 @@
-# Lesson 07 - DB analysis + non-preemptive scheduling
+# Lesson 7 - DB analysis + non-preemptive scheduling
 
 Buttazzo's book, chapters 4 and 8
 
@@ -104,6 +104,7 @@ $$
 
 
 ### Disadvantages of preemptions
+
 1. Context switches cost
 2. Cache-related preemption delay (CRPD): It is the delay introduced by high-priority tasks that evict cache lines containing data used in the future
 3. Larger worst-case execution time. Due to CRPD the execution time is larger
@@ -115,6 +116,7 @@ $$
 Some tasks cannot be scheduled in preemptive mode and can be scheduled in non-preemptive mode
 
 ### Advantages of NP scheduling
+
 - Reduces context switch overhead, making WCETs smaller and more predictable
 - Simplifies the access to shared resources, no semaphores are needed for critical sections
 - Reduces the stack size, the tasks can share the same stack since no more than one task can be in execution
@@ -123,16 +125,41 @@ Some tasks cannot be scheduled in preemptive mode and can be scheduled in non-pr
 
 ![Example of obtaining a feasible task set when using NP-FP scheduler](images/07/NP_schedulability.png){width=75%}
 
-## Disadvantages of NP scheduling
-1. Some deadlines can be missed
-2. The utilization bound under non-preemptive scheduling drops to zero
-3. Anomalies: you had a schedulable system. You increase the processor speed and suddenly it is not schedulable anymore
 
-## Response-time analysis of NP-FP
+### Disadvantages of NP scheduling
 
-- **Maximum blocking** $B_i = \max\left\{C_j | \forall \tau_j, P_i < P_j \right\}$
-- **Maximum interference**
-- 
+- In general reduces schedulability because introduces blocking of high-priority tasks
+- The utilization bound under non-preemptive scheduling drops to zero
+- Anomalies: you had a schedulable system. You increase the processor speed and suddenly it is not schedulable anymore
+
+### Challenges of analyzing non-preemptive systems
+
+- The largest-response time may not occur in the first job after the critical instant
+- Self-pushing phenomenon: High-priority jobs activated during non-preemptive execution of lower priority tasks are pushed ahead and introduce higher delays in subsequent jobs of the same task.
+- The analysis of $\tau_i$ must be carried out for multiple jobs, until all tasks with higher priority than $P_i$ are completed
+
+### Response-time analysis of NP-FP
+
+![Response time block illustration](images/07/response_time.png){width=75%}
+
+- **Maximum blocking** (caused by the lower-priority tasks): 
+
+$$B_i = \max\left\{C_j | \forall \tau_j, P_i < P_j \right\}$$
+
+- **Maximum interference** (caused by the higher-priority tasks):
+
+$$
+I_i
+$$
+
+- **Worst-case occupied time** (due to blocking and inference):
+
+$$
+WO_i^{(n)} = \max\{ s_{i,k} - a_{i, k} | \forall J_{i, k}, 1 \le k \le \infty \}
+$$
+
+Which is a bit hard to calculate in this form, thus:
+
 
 $$
 WO_i^{(n)} = B_i + \sum_{k=1}^{i-1} \left(\left\lfloor\frac{WO_i^{(n-1)}}{T_k}\right\rfloor\right) \cdot C_k
@@ -141,7 +168,14 @@ $$
 R_i = C_i + WO_i
 $$
 
-## History of schedulability analysis of NP-FP
+Fixed-point iterations:
+
+- Start at $WO_i^{(n)} = B_i + \sum_{k = 1}^{i - 1} C_k$
+- Iterate until $WO_i^{(n)} = WO_i^{(n - 1)}$
+
+NOTE: This conditions only hold for a preemptively feasible task set with $D \le T$.
+
+#### History of schedulability analysis of NP-FP
 In 1994 Tindel introduced the test we saw earlier. They did not know that their test is correct only if some conditions met.
 
 In the late 90's this test was used in CAN controllers in the cars for any type of task set.
@@ -150,5 +184,16 @@ In 2007 TU/e noticed a bug in the test. However, thankfully no accident happened
 
 Engineers actually implemented the test in a wrong way which actually was the proper way that did not have a bug 🙃. 
 
+### Schedulability analysis for NP-EDF
+
+**Jeffay '91 Test**. Task set $\tau$ with periodic tasks sorted in a non-decreasing order of their periods is schedulable if $U \le 1$ and
+
+$$
+L \ge C_i + \sum_{j = 1}^{i - 1} 
+    \left\lfloor \frac{L - 1}{T_j} \cdot C_j \right\rfloor
+    \quad \forall \tau_i, 1 < i \le n, \forall L, T_1 < L < T_i
+$$
+
+This test is exact(necessary and sufficient) for non-preemptive sporadic tasks. It is just a sufficient test for non-preemptive periodic tasks
 
 
