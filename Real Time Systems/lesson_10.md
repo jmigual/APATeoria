@@ -244,4 +244,47 @@ $$
 ### Global vs partitioned
 
 - There are task sets that are schedulable only with a global scheduler
-- There are task sets that are schedulable only with a partitioned s
+- There are task sets that are schedulable only with a partitioned scheduler
+
+#### Pros of global
+
+- Allows parallel execution
+- Automatic load balancing
+- Lower avg. response time
+- Easier re-scheduling
+- More efficient reclaiming and overload management
+- Generally lower number of preemptions
+
+#### Pros of partitioned
+
+- Supported by automotive industry 
+- No migrations
+- Isolation between cores
+- Mature scheduling framework
+- Low scheduling overhead
+
+#### Cons of global
+
+- Migration costs
+- Inter-core synchronization
+- Loss of cache affinity
+- Weak scheduling framework
+
+#### Cons of partitioned
+
+- Cannot exploit unused capacity
+- Rescheduling not convenient
+- NP-hard allocation
+
+### Semi-partitioned scheduling
+
+- Tasks are statically allocated to processors if possible
+- Remaining tasks are split into chunks which are allocated to different processors
+
+Subtasks are not independent but are subject to a precedent constraint
+
+### Clustered scheduling
+
+A task can only migrate within a predefined subset of processors
+
+
