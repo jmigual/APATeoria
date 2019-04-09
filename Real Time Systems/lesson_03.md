@@ -78,7 +78,7 @@ It selects the ready task with the shortest computation time.
 - Kind of **static** (if $C_i$ is a constant parameter, it is given beforehand to the algorithm)
 - It can be used online or offline
 - Can be preemptive or non-preemptive
-- It minimizes the average response time
+- It minimizes the average response time. $\bar{R}(\sigma_{SJF})$ is the minimum response time achievable by any algorithm.
 
 #### Is SJF suited for Real-Time?
 
@@ -98,6 +98,26 @@ It selects the ready task with the shortest computation time.
 - When **Q** expires, $\tau_i$ is put again in the queue
 
 However, there are a lot of context switches
+
+### Upper bound on the WCRT of round robin
+
+- $n$ number of tasks in the system
+
+![Round robin step illustration](images/03/round_robin.png){width=50%}
+
+$$
+R_i \le (nQ) \cdot \frac{C_i}{Q} = nC_i
+$$
+
+### Upper bound on WCRT of round robin with context switch overhead
+
+- $\delta$ context switch time
+
+![Round robin step with overhead illustrated](images/03/round_robin_overhead.png){width=50%}
+
+$$
+R_i \le n(Q + \delta) \cdot \frac{C_i}{Q} = nC_i \left(\frac{Q + \delta}{Q}\right)
+$$
 
 ## Multi-level scheduling
 
