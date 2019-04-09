@@ -1,11 +1,21 @@
 # Lesson 4 - Online scheduling of aperiodic tasks
 
-## Absolute vs relative deadline
+Buttazzo's book, chapter 3
 
-- Absolute deadline: $d_i$. The exact time where the task should be finished
-- Relative deadline: $D_i = d_i - a_i$
+### Recall: Absolute vs relative deadline
 
-## Earliest deadline first (EDF)
+- $d_i$ Absolute deadline. The exact time where the task should be finished
+- $D_i$ Relative deadline 
+
+$$D_i = d_i - a_i$$
+
+> **Maximum lateness**: $L_{\max} = \max\{L_i | \forall \tau_i\}$
+> 
+> If $L_{\max} \le 0, there is no deadline miss
+
+## Online scheduling algorithms for real-time systems
+
+### Earliest deadline first (EDF)
 Order the ready queue by increasing the absolute deadline.
 
 - Assumptions
@@ -14,6 +24,9 @@ Order the ready queue by increasing the absolute deadline.
 
 - Property
     - Under the assumption above, EDF minimizes maximum lateness
+
+> How can we design an online test for EDF that tells if we can safely add a new task to the system at time $t$?
+
 
 Sometimes there can be a tie and we have to find a way to break the tie consistently.
 
