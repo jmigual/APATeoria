@@ -80,7 +80,8 @@ h5,
 h6 {
   color: #111;
   line-height: 125%;
-  margin-top: 2em;
+  margin-top: 1em;
+  margin-bottom: .5em;
   font-weight: normal;
 }
 
@@ -91,11 +92,11 @@ h6 {
 }
 
 h1 {
-  font-size: 2.5em;
+  font-size: 2em;
 }
 
 h2 {
-  font-size: 2em;
+  font-size: 1.7em;
 }
 
 h3 {
@@ -116,9 +117,12 @@ h6 {
 
 blockquote {
   color: #666666;
+  background-color: #fafafa;
   margin: 0;
+  padding-top: .1em;
+  padding-bottom: .1em;
   padding-left: 3em;
-  border-left: 0.5em #EEE solid;
+  border-left: 0.5em #DDD solid;
 }
 
 hr {
@@ -222,6 +226,10 @@ img {
   -ms-interpolation-mode: bicubic;
   vertical-align: middle;
 }
+/* 
+div[caption]:after {
+  content: "<center>" attr(caption) "</center>";
+} */
 
 .figure,
 figure {
