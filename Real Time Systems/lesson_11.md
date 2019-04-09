@@ -1,8 +1,12 @@
 # Lesson 11 - Reservation based scheduling
 
-## What do we do with varying workloads?
+Giorgio Buttazzo's book, chapter 9
 
-### Calculate and use the worst-case execution time
+## Varying workload
+
+### What can we do with a varying workload?
+
+#### Calculate and use the worst-case execution time
 
 **Advantages**:
 
@@ -15,20 +19,20 @@
 - Pessimistic analysis far from reality
 - It leads to overprovisioning the system
 
-### Model it using more expensive task models
+#### Model it using more expensive task models
 
 **Advantages**:
 
-- It is safe but not pesimistic: you can use it to obtain the WCRT of the task
+- It is safe but not pessimistic: you can use it to obtain the WCRT of the task
 - Necessary for hard real-time systems
 
 **Disadvantages**:
 
 - It is too complex to derive such a model from a general application
-- Some system do not have such a regular pattern
+- Some systems do not have such a regular pattern
 - It is hard to analyze such a complex workload
 
-### Just use a smaller value
+#### Just use a smaller value
 
 There will be cases where the actual execution time is larger than you expected it to be. This is called **overrun**. 
 
@@ -42,10 +46,11 @@ There will be cases where the actual execution time is larger than you expected 
 - It is unsafe, we may have deadline misses
 - If the value we assign is too small there are many overruns
 - You cannot use it for hard real-time systems
+- Handling overruns increases the overheads
 
-## Consequences of overruns
+### Consequences of overruns
 
-A task overrun may or may not cause a deadline miss. The deadline miss is not always for the task that has the overrun but it can be for another task
+A task overrun may or may not cause a deadline miss, but in general, it may delay the execution of other tasks, causing a deadline miss.
 
 ### What can go wrong if they are not controlled?
 
@@ -53,13 +58,13 @@ A task overrun may or may not cause a deadline miss. The deadline miss is not al
 
 In **FP**, low-priority tasks may starve due to an overrun in high-priority tasks
 
-## Handling overruns: not-so-good solutions
+### Handling overruns: not-so-good solutions
 
 - Cut the task as soon as the task overruns: this totally violates data consistency
 - Do not do anything. "Pray" that nothing will happen
 - Exception handling mechanisms: It can be a good or bad solution depending in how it is handled
 
-## Handling overruns: good solutions
+### Handling overruns: good solutions
 
 - Performance degradation (or graceful degradation)
   - Execute a shorter version of the program. Example
@@ -126,9 +131,9 @@ A task with $(m, k)$ weakly-hard timing constraint is feasible if and only if in
 
 In general if a task set is $(m, k)$ feasible, as long as we increase $k$ or decrease $m$ is always feasible.
 
-### Reservation-based scheduling
+## Reservation-based scheduling
 
-#### Hierarchical scheduling
+### Hierarchical scheduling
 Resource reservation can be used to develop hierarchical systems, where each component is implemented within a reservation.
 
 There's a global scheduler that for synchronizing data accesses. There are also local schedulers that interact with the global scheduler.
@@ -144,6 +149,12 @@ Linux also uses a hierarchical hypervisor
 
 > $sbf(t)$ shows the minimum amount of time available in the reservation $S$ in every time interval of length $t$
 
+### Analyzing reservation-based scheduling
+
+To describe the time available in a reservation, we need to identify, for any interval $[0, t]$, the minimum time allocated in the worst-case situation.
+
+Supply bound function $sbf(t)$ minimum amount of time available in the reservation $S$ in every time interval of length $t$
+
 #### Analysis under resource reservation + EDF
 Assume that tasks inside the server are scheduled by EDF
 
@@ -152,22 +163,57 @@ $$
 \forall t > 0, \quad dbf(t) \le sbf(t)
 $$
 
+For each point where either the value of $sbf(t)$ or $dbf(t)$ changes, check if $dbf(t)$ is smaller than $sbf(t)$
+
 #### Faster test
 Assume that tasks inside the server are scheduled by EDF
 
 Design a faster **sufficient** schedulability test
 
-Replace $sbf(t)$ with a lower bound called $slbf(t) = \max\{0, \alpha (t - \Delta)\}$
+Replace $sbf(t)$ with a lower bound called $slbf(t)$
 
 $$
-\alpha = \lim_{t \rightarrow \infty}\frac{sbf(t)}{t}
-$$
-$$
-\Delta = \sup_{r \ge 0} {t - \frac{sbf(t)}{\alpha}}
+\begin{aligned}
+slbf(t) &= \max\{0, \alpha (t - \Delta)\} \\
+\alpha &= \lim_{t \rightarrow \infty}\frac{sbf(t)}{t} \\
+\Delta &= \sup_{r \ge 0} {t - \frac{sbf(t)}{\alpha}} \\
+\end{aligned}
 $$
 
-**Example**: Periodic server
-Budget $Q_s$ and period $P_s$ running at the highest priority (among other servers) we have
+- $\alpha$: Bandwidth
+- $\Delta$: Service delay
+
+> ***
+> 
+> **EXAMPLE**: Periodic server
+> 
+> Budget $Q_s$ and period $P_s$ running at the highest priority (among other servers) we have
+> 
+> ![Example of periodic server $sbf(t)$](images/11/example_sbft.png){width=75%}
+> $$
+> \begin{aligned}
+> \Delta &= P_s - Q_s   
+> \alpha &= \frac{Q_s}{P_s}
+> \end{aligned}
+> $$
+> ***
+
+## Observations about periodic servers
+
+In a periodic server with bandwidth $\alpha$, we have that:
+
+$$
+\begin{cases}
+    Q &= \alpha P \\
+    \Delta &= 2(P - Q) = 2P(1 - \alpha)
+\end{cases}
+$$
+
+The delay is proportional to the server period
+
+A reservation can be wasted because:
+
+- Occasional load 
 
 
 
