@@ -32,6 +32,8 @@ $$
 $$
 
 
+![Different tests comparison](images/06/bounds.png){width=75%}
+
 Under which circumstances hyperbolic bound is better than L&L test?
 
 When there is one big tasks and some very small tasks. However, this never happens usually in a normal system.
