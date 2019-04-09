@@ -251,6 +251,8 @@ figcaption {
 }
 
 table {
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 2em;
   border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
