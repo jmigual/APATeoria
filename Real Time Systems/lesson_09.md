@@ -161,6 +161,34 @@ $$
 ![Example of chained blocking avoidance](images/09/PCP_chained_1.png){width=100%}
 
 
+#### Properties
+
+**Theorem 1**: Under PCP, a task can be blocked at most on a single critical section
+
+**Theorem 2**: PCP prevents chained blocking
+
+**Theorem 3**: PCP prevents deadlocks
+
+#### Advantages
+
+- It limits blocking to the length of a single critical section
+- It avoids deadlocks when using nested critical sections
+
+#### Disadvantages
+
+- More complex to implement
+- It can create unnecessary blocking
+- It is not transparent to the programmer: resource ceilings must be specified in the source code
+
+
+### Summary
+
+Protocol | Compatible with | Pessimism | Blocking at | Transparent | Deadlock free | Implementation 
+-|-|-|-|-|-|-
+NPP | anyh | high | Arrival | yes | yes | easy
+HLP | FP | medium | Arrival | no | yes | easy
+PIP | FP | low | Resource access | yes | no | hard
+PCP | FP | medium | Resource access | no | yes | harder
 
 
 

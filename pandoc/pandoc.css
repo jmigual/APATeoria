@@ -302,6 +302,7 @@ table td {
   body {
     font-size: 12pt;
     max-width: 100%;
+    box-shadow: none;
   }
 
   a,
@@ -345,12 +346,12 @@ table td {
     max-width: 100% !important;
   }
 
-  @page :left {
-    margin: 15mm 20mm 15mm 10mm;
+  @page {
+    margin: 15mm 10mm 15mm 10mm;
   }
 
-  @page :right {
-    margin: 15mm 10mm 15mm 20mm;
+  h1 {
+    page-break-before: always;
   }
 
   p,
