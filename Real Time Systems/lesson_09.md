@@ -185,7 +185,7 @@ $$
 
 Protocol | Compatible with | Pessimism | Blocking at | Transparent | Deadlock free | Implementation 
 -|-|-|-|-|-|-
-NPP | anyh | high | Arrival | yes | yes | easy
+NPP | any | high | Arrival | yes | yes | easy
 HLP | FP | medium | Arrival | no | yes | easy
 PIP | FP | low | Resource access | yes | no | hard
 PCP | FP | medium | Resource access | no | yes | harder

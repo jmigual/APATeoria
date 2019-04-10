@@ -81,8 +81,12 @@ $$
 
 - Context switches: in general FP has more context switches
 - Permanent load
-    - FP: starvation of low priority tasks that end up never executing
-    - EDF: All tasks execute at a lower rate but no task is blocked
+    - FP: 
+        - High priority tasks execute at the proper rate
+        - Starvation of low priority tasks that end up never executing
+    - EDF: 
+        - All tasks execute at a lower rate
+        - No task is blocked
 - Implementation overhead
     - Both EFD and FP can be implemented using a binary min heap
         - FP: build the heap using priorities
