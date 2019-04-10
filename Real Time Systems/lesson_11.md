@@ -165,12 +165,10 @@ $$
 
 For each point where either the value of $sbf(t)$ or $dbf(t)$ changes, check if $dbf(t)$ is smaller than $sbf(t)$
 
-#### Faster test
-Assume that tasks inside the server are scheduled by EDF
+#### Faster test: approximating supply lower-bound function with a line
+Assume that tasks inside the server are scheduled by EDF. Design a faster **sufficient** schedulability test
 
-Design a faster **sufficient** schedulability test
-
-Replace $sbf(t)$ with a lower bound called $slbf(t)$
+Replace $sbf(t)$ with a **lower bound** called _supply lower-bound function_ $slbf(t)$
 
 $$
 \begin{aligned}
