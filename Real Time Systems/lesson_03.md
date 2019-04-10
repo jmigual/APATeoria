@@ -9,10 +9,10 @@
     - Low schedulability
 
 - Advantages:
-  - Fast
-  - Simple implementation
-  - Low runtime overhead
-  - Wide applicability in network systems
+    - Fast
+    - Simple implementation
+    - Low runtime overhead
+    - Wide applicability in network systems
 
 ## Scheduling complexity
 ### Feasibility vs. schedulability
@@ -51,8 +51,8 @@ Different implementations can have different runtime but similar complexity
 
 - **Static**: scheduling decisions are taken based on fixed parameters assigned to tasks before activation
 - **Dynamic**: Scheduling decisions are taken based on parameters _that change with time_ like:
-  - Execution time
-  - Absolute deadline
+    - Execution time
+    - Absolute deadline
 
 ### Offline vs online
 

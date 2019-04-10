@@ -14,15 +14,15 @@
 ### Classes of real-time systems
 
 - Hard real-time: systems where it is absolutely imperative that responses occur within the required deadline.
-  - Safety critical
-  - Business critical
+    - Safety critical
+    - Business critical
 - Soft real-time: systems where deadlines are important but which will still function correctly if deadlines are occasionally missed.
-  - Online gaming
-  - Augmented Reality
+    - Online gaming
+    - Augmented Reality
 - Firm real-time: systems which are soft real-time but in which ther eis no benefit from late delivery of service
-  - Virtual reality
-  - Video streaming
-  - Voice over IP
+    - Virtual reality
+    - Video streaming
+    - Voice over IP
 
 ## Taxonomy of real-time systems
 
@@ -32,9 +32,9 @@
 - It can have inputs and outputs
 - It can be activated by events
 - They usually:
-  - Share data
-  - Communicate with each other
-  - Perform I/O operations
+    - Share data
+    - Communicate with each other
+    - Perform I/O operations
 
 **Job**:
 
@@ -44,11 +44,11 @@
 The activation pattern of tasks can be:
 
 - Periodic:
-  - Single rate: all tasks have the same period
-  - Multi rate: tasks have different periods
+    - Single rate: all tasks have the same period
+    - Multi rate: tasks have different periods
 - Aperiodic
-  - Bounded arrival time
-  - Unbounded arrival time: event-based activation
+    - Bounded arrival time
+    - Unbounded arrival time: event-based activation
 
 **Periodic**:
 
@@ -56,16 +56,16 @@ The activation pattern of tasks can be:
 - It allows static analysis techniques to be used
 - It is widely used in real systems
 - Types:
-  - Single rate
-  - Multi rate
+    - Single rate
+    - Multi rate
 
 **Aperiodic**:
 
 - They are activated by _events_
 - The workload is dynamic, it cannot be predicted
 - Analyzing these tasks is challenging:
-  - Since it is hard to predict the future workload, it is hard to analyze the system to find the worst-case response time of the tasks
-  - With unbounded arrival time times, it is impossible to guarantee the timeliness of a resource-constrained system
+    - Since it is hard to predict the future workload, it is hard to analyze the system to find the worst-case response time of the tasks
+    - With unbounded arrival time times, it is impossible to guarantee the timeliness of a resource-constrained system
 
 **Sporadic tasks**:
 

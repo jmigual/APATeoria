@@ -6,11 +6,12 @@ echo Compiling pandoc
 pandoc -t html \
     --standalone \
     --self-contained \
-    --toc --toc-depth=1 \
+    --toc --toc-depth=2 \
     --number-sections \
     --mathjax="" \
     --template ../pandoc/template \
     --css ../pandoc/pandoc.css \
+    --verbose \
     $files -o RTS.html
 
 echo Compilation finished

@@ -81,24 +81,24 @@ $$
 
 - Context switches: in general FP has more context switches
 - Permanent load
-  - FP: starvation of low priority tasks that end up never executing
-  - EDF: All tasks execute at a lower rate but no task is blocked
+    - FP: starvation of low priority tasks that end up never executing
+    - EDF: All tasks execute at a lower rate but no task is blocked
 - Implementation overhead
-  - Both EFD and FP can be implemented using a binary min heap
-    - FP: build the heap using priorities
-    - EDF: build the heap using the absolute deadlines
-  - However, using a bitmap data structure FP can be implemented in $O(1)$
+    - Both EFD and FP can be implemented using a binary min heap
+        - FP: build the heap using priorities
+        - EDF: build the heap using the absolute deadlines
+    - However, using a bitmap data structure FP can be implemented in $O(1)$
 
 **Conclusion**:
 
 - EDF:
-  - Higher schedulability
-  - Reduces context switches
-  - During overloads does not starve low-priority tasks
+    - Higher schedulability
+    - Reduces context switches
+    - During overloads does not starve low-priority tasks
 - FP:
-  - Simple to implement
-  - Widely implemented in most operating systems
-  - More predictable during overloads
+    - Simple to implement
+    - Widely implemented in most operating systems
+    - More predictable during overloads
 
 ## Non-preemptive scheduling
 
@@ -143,17 +143,14 @@ Some tasks cannot be scheduled in preemptive mode and can be scheduled in non-pr
 ![Response time block illustration](images/07/response_time.png){width=75%}
 
 - **Maximum blocking** (caused by the lower-priority tasks): 
-
 $$B_i = \max\left\{C_j | \forall \tau_j, P_i < P_j \right\}$$
 
 - **Maximum interference** (caused by the higher-priority tasks):
-
 $$
 I_i
 $$
 
 - **Worst-case occupied time** (due to blocking and inference):
-
 $$
 WO_i^{(n)} = \max\{ s_{i,k} - a_{i, k} | \forall J_{i, k}, 1 \le k \le \infty \}
 $$

@@ -59,37 +59,34 @@ Representing a parallel code requires more complex structures like a graph (usua
 ### Structured parallelism
 
 - Fork-Join Graphs
-  - After a fork node, all immediate successors must be executed
-  - A join node is executed only after all immediate predecessors are completed
+    - After a fork node, all immediate successors must be executed
+    - A join node is executed only after all immediate predecessors are completed
 - Nested fork-join model can have nested forks and joins
 
 #### Assumptions and parameters
 
 - Arrival pattern
-  - Periodic
-  - Sporadic
-  - Aperiodic
+    - Periodic
+    - Sporadic
+    - Aperiodic
 - Task parameters: $\tau_i = \{ c_{i,1}, c_{i,2},..., c_{i,m} \}, D_i, T_i$
 
 #### Important factors
 
 - **Sequential computation time**:
-  - If $C_i^s \le D_i$ holds, the task is schedulable on a single core system
-
+    - If $C_i^s \le D_i$ holds, the task is schedulable on a single core system
 $$
 C_i^s = \sum_{j = 1}^{m_i} c_{i, j}
 $$
 
 - **CPU utilization** of a parallel task:
-  - If $\sum U_i > m$ then the task set is certainly NOT schedulable on a multicore platform with $m$ cores
-
+    - If $\sum U_i > m$ then the task set is certainly NOT schedulable on a multicore platform with $m$ cores
 $$
 U_i = \frac{C_i^s}{T_i}
 $$
 
 - **Critical path length**: the length of the longest path in the graph
-  - Necessary schedulability test: $C_i^p \le D_i$
-
+    - Necessary schedulability test: $C_i^p \le D_i$
 $$
 C_i^p
 $$
@@ -152,7 +149,7 @@ How does it work:
 #### Disadvantages
 
 - Migration cost
-  - A migrated task needs to load a lot of data into cache which becomes a big source of unpredictability
+    - A migrated task needs to load a lot of data into cache which becomes a big source of unpredictability
 - Scheduling overheads
 - Few schedulability tests
 - No job-level fixed-priority scheduling algorithm is optimal
@@ -166,11 +163,11 @@ So, regardless of the number of cores in the system, we may not be able to find 
 #### Negative results about global scheduling
 
 - Weak theoretical framework
-  - Unkown critical instant
-  - Global-EDF is not optimal
-  - Any global job-level fixed-priority scheduler is not optimal
-  - Optimal algorithms exist only for sequential implicit deadline tasks
-  - Many sufficient test
+    - Unkown critical instant
+    - Global-EDF is not optimal
+    - Any global job-level fixed-priority scheduler is not optimal
+    - Optimal algorithms exist only for sequential implicit deadline tasks
+    - Many sufficient test
 
 ### Partitioned scheduling
 

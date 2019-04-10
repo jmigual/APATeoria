@@ -19,10 +19,10 @@ We have a computing system with a set $\tau$ of $n$ periodic real-time tasks: $\
 - Tasks are fully preemptive
 - Context switch, preemption, and scheduling overheads are zero
 - Tasks are independent:
-  - No precedence relations
-  - No resource constraints
-  - No blocking I/O operations
-  - No self suspension
+    - No precedence relations
+    - No resource constraints
+    - No blocking I/O operations
+    - No self suspension
 
 ### Formulating the arrival time and absolute deadline
 
@@ -62,23 +62,23 @@ Note: Utilization is defined for the task, not for the job
 ### Cyclic scheduling
 
 - Method
-  - The time axis is divided in interval of equal length *(time slots)*
-  - Each task is statistically allocated in a slot in order to meet the desired request rate
-  - The execution in each slot is activated by a timer
-  - There are **major** cycles and **minor cycles**. Within one major there are several minor cycles.
-    - Minor $\Delta = GCD(T_i, \forall i)$
-    - Major $T = LCM(T_i, \forall i)$
+    - The time axis is divided in interval of equal length *(time slots)*
+    - Each task is statistically allocated in a slot in order to meet the desired request rate
+    - The execution in each slot is activated by a timer
+    - There are **major** cycles and **minor cycles**. Within one major there are several minor cycles.
+        - Minor $\Delta = GCD(T_i, \forall i)$
+        - Major $T = LCM(T_i, \forall i)$
 - Steps:
   1. Obtain the length of major and minor cycles
   2. Assign tasks to time slots
 - Advantages:
-  - It has very few overhead
-  - It uses flash memory instead of ram memory
+    - It has very few overhead
+    - It uses flash memory instead of ram memory
 - Disadvantages:
-  - It requires to know all about the tasks that are going to run in the system
-  - Not robust against overloads
-  - It is difficult to update the code since it may change the schedule
-  - It is not easy to handle aperiodic activities
+    - It requires to know all about the tasks that are going to run in the system
+    - Not robust against overloads
+    - It is difficult to update the code since it may change the schedule
+    - It is not easy to handle aperiodic activities
 
 ### What do we do if an overrun happens?
 There are two choices:
@@ -156,7 +156,6 @@ Assumptions:
 - Tasks are fully preemptive
 - Context switch, preemption, and scheduling overheads are zero
 - Tasks are independent
-
 $$
 U \le n \cdot (2^{\frac{1}{n}} - 1)
 $$
@@ -186,16 +185,16 @@ Hyperbolic bound is tight:
 ## Summary
 
 - Scheduling algorithms for periodic real-time tasks:
-  - Processor sharing
-  - Cyclic scheduling
-  - Rate monotonic (RM)
-  - Deadline monotonic (DM)
-  - EDF
+    - Processor sharing
+    - Cyclic scheduling
+    - Rate monotonic (RM)
+    - Deadline monotonic (DM)
+    - EDF
 - RM schedulability tests:
-  - Necessary vs sufficient tests
-  - Liu and Layland's test
-    - It is a sufficient utilization-based test for RM
-  - Hyperbolic bound
-    - It is a sufficient utilization-based test for RM
-    - It is the tightest test among all utilization-based tests for RM
+    - Necessary vs sufficient tests
+    - Liu and Layland's test
+        - It is a sufficient utilization-based test for RM
+    - Hyperbolic bound
+        - It is a sufficient utilization-based test for RM
+        - It is the tightest test among all utilization-based tests for RM
 

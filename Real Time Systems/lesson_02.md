@@ -33,11 +33,9 @@ Then you add the operating system model and the platform model and do a timing a
 - $s_i$ Start time. When the first instruction of the task is actually executed
 - $a_i$ Activation time. When the task wants to start executing instructions
 - $R_i$ Response time. Time between the task is activated and finishes. 
-
 $$R_i = f_i - a_i$$
 
 - $C_i$ Computation time. Time between the task starts and finishes. 
-
 $$C_i = f_i - s_i$$
 
 ![Task definition parameters](images/02/task_definition.png){width=50%}
@@ -96,7 +94,6 @@ if $f_i \le d_i$, or equivalently $R_i \le D_i$.
 
 - $D_i$ Relative deadline
 - $d_i$ Absolute deadline
-
 $$
 d_i = a_i + D_i
 $$
@@ -105,11 +102,9 @@ $$
 ### Slack and lateness
 
 - $\text{slack}_i$ Slack. How far are you from the deadline when you finish
-
 $$\text{slack}_i = d_i - f_i$$
 
 - $L_i$ Lateness. How far you finish **after** your deadline. It should be negative or 0 to be fine. (_lateness = tardiness_)
-
 $$L_i = f_i - d_i$$
 
 ## Online scheduling
@@ -135,7 +130,7 @@ A task set $\tau$ is said to be schedulable with ana algorithm $A$, if and only 
 ### Some well-known scheduling algorithms
 
 - First-in-first-out scheduling (FIFO)
-  - Also called First-come-first-serve (FCFS)
+    - Also called First-come-first-serve (FCFS)
 - Round robing
 - Shortest-job first
 - Earliest deadline first (EDF)

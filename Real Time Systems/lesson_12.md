@@ -55,14 +55,14 @@ We want to keep the system schedulable and also as short response time as possib
 ### Soft and hard aperiodic tasks
 
 - **Hard** aperiodic tasks:
-  - Task with **hard** deadlines must be guaranteed under worst-case conditions
-  - Offline guarantee is only possible if we can bound inter-arrival times
+    - Task with **hard** deadlines must be guaranteed under worst-case conditions
+    - Offline guarantee is only possible if we can bound inter-arrival times
 
 - **Soft** aperiodic tasks:
-  - Deadlines should be executed as soon as possible but without jeopardizing hard tasks
-  - We are interested in:
-    - Minimizing the response time
-    - Having an online admission test
+    - Deadlines should be executed as soon as possible but without jeopardizing hard tasks
+    - We are interested in:
+        - Minimizing the response time
+        - Having an online admission test
 
 ### Types of servers
 
@@ -136,7 +136,6 @@ We know that the server has a $C_s = 2$ every 4 times. The period can help us in
 - $\Delta_a$: Initial delay. Delay between the task is released and the server has some budge again
 - $F_a$: Number of full service periods
 - $\delta_a$: Final chunk. Part of the last service period that will be used by the task
-
 $$
 \begin{aligned}
     \Delta_a &= \left\lceil \frac{a_a}{T_s}\right\rceil \cdot T_s - a_s \rightarrow \text{ a bit pessimistic}\\
@@ -219,17 +218,16 @@ DS cannot impact the schedule of any high-priority task but it can for lower-pri
 CBS parameters
 
 - Assigned by the user:
-  - $Q_s$: Maximum budget
-  - $T_s$: Server period
-  - $U_s$: Server bandwidth 
-
+    - $Q_s$: Maximum budget
+    - $T_s$: Server period
+    - $U_s$: Server bandwidth 
 $$
 U_s = \frac{Q_s}{T_s}
 $$
 
 - Maintained by the server (dynamic)
-  - $q_s$: Current budget (initialized to 0)
-  - $d_s$: Current deadline (initialized to 0)
+    - $q_s$: Current budget (initialized to 0)
+    - $d_s$: Current deadline (initialized to 0)
 
 ### CBS idea
 

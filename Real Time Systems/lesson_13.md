@@ -4,27 +4,32 @@ What do we call Jitter?
 
 A variation in the system. If you don't know where the variation is coming from we call it random.
 
-## Motivation
+### Motivation
 
 - Multi-processor analysis
-- **Finalization**: variation in finalization times
-- **Activation**: variation in activation times
-- When there's some dependence between two tasks
+- $FJ$: **Finalization** jitter, variation in finalization times
+- $AJ$: **Activation**, variation in activation times
+- When there are some dependence between two tasks
 
 **Example**: multimedia in a networked environment
 
 > ***
+> 
 > **EXAMPLE**: multiprocessor
+> 
 > 1. A strictly periodic system event activates task $\tau_1$
 > 2. Task $\tau_1$ sends message $\mu_j$
 >    - $FJ_j$ causes $AJ_j$
 > 3. Message $\mu_j$ triggers task $\tau_k$
 >    - $FJ_j$ causes $AJ_k$
 > 4. Task $\tau_k$ generates a system response
+> 
+> $AJ_k$ influences system response and response times of a task $\tau_l$ with a lower priority
+> 
 > ***
 
 
-### Goal jitter analysis
+**Goal jitter analysis**:
 
 - Determine schedulability in the context of jitter
 - Determine end-to-end response times
@@ -33,10 +38,14 @@ A variation in the system. If you don't know where the variation is coming from 
 
 - De-facto standard
 - Supported by commercial RTOS
-- ...
+- Rate monotonic analysis (RMA)
+    - Adopted by leading companines and institutions
+    - Usage from simple control applications to large defense and aerospace applications
 
 > ***
+> 
 > **EXAMPLE**
+> 
 > Task | Period $T$ | computation time $C$ | Utilization $U$
 > -|-|-|-
 > $\tau_1$ | 10 | 3 | 0.3
@@ -64,16 +73,17 @@ A variation in the system. If you don't know where the variation is coming from 
 > ***
 
 
-## Response times
+### Response times
 
 > ***
+> 
 > **EXAMPLE**: airbag
+> 
 > - If the airbag releases too soon or too early it can be fatal
+> 
 > ***
 
-- Schedulability condition:
-  - all jobs of all tasks must meet their deadline constraints
-
+- Schedulability condition: all jobs of all tasks must meet their deadline constraints
 $$
 \forall_{i, k, \varphi} BD_i \le R_{i,k}(\varphi) \le WD_i
 $$
@@ -83,7 +93,10 @@ $$
 
 _Book chapter 4_
 
-Recursive equation for task $\tau_i$:
+### Response time analysis
+
+**Calculation**: Recursive equation for task $\tau_i$:
+
 $$
 \begin{aligned}
 WR_i^{(0)} &= C_i \\
@@ -92,38 +105,108 @@ WR_i^{(n)} &= C_i + \sum_{j < i} \left\lceil \frac{WR_i^{(n-1)}}{T_j} \right\rce
 \end{aligned}
 $$
 
+- Assume a task $\tau_j$ with a higher priority than $\tau_i$
+    - $\left\lceil \frac{x}{T_j} \right\rceil$ denotes the maximum number of preemptions of task $\tau_i$ in an interval $[0, x)$ by task $\tau_j$
 - Intuition
-  - LHS: amount of time available
-  - RHS: max amount of time requested
+    - LHS: amount of time available
+    - RHS: max amount of time requested
+- Solution: iterative approach
 - Observation
-  - Best-case and worst-case notions are duals
+    - Best-case and worst-case notions are duals
 
 ## Best-case response times of FPPS
 
+### Introduction
 - Formalization
-  - Best-case response time $BR_i$ of a periodic task $\tau_i$, where $\varphi$ is the phasing of the task set
-
+    - Best-case response time $BR_i$ of a periodic task $\tau_i$, where $\varphi$ is the phasing of the task set
 $$
 BR_i \equiv \inf_{\varphi, k} R_{i, k}(\varphi)
 $$
 
  - Hence:
-
 $$
 \forall_{i, k, \varphi} BR_i \le R_{i, k}(\varphi)
 $$
 
-### Introduction
+- Best-case part of schedulability condition:
+$$
+\forall i \quad BD_i \le BR_i
+$$
 
-- Optimal instant of task $\tau_i : \tau_i$ "assumes" its $BR_i$
-  - Incurs the lowest amount of preemption by higher priority tasks
+- Optimal instant of task $\tau_i : \tau_i$ "assumes" its $BR_i$ incurs the lowest amount of preemption by higher priority tasks
 
+- An optimal instant:
+    - Job $\tau_{i, k}$ ends simultaneously with the release of all tasks with a higher priority, and $\tau_{i, k}$'s release time is equal to its start time
+    - Specific for each task
+
+### Techniques
+
+#### Calculation
+
+- Recursive calculation for task $\tau_i$:
 $$
 \begin{aligned}
     BR_i^{(0)} &= WR_i \\
     BR_i^{(l + 1)} &= C_i + \sum_{j < i} \left( \left\lceil \frac{BR_i^{(l)}}{T_j} \right\rceil - 1 \right) \cdot C_j
 \end{aligned}
 $$
+
+- Assume task $\tau_j$ with a higher priority than $\tau_i$:
+    - $\left\lceil \frac{x}{T_j} \right\rceil - 1$ denotes the minimal number of preemptions of task $\tau_i$ in an interval $(0, x)$ by task $\tau_j$
+- Intuition
+    - LHS: amount of time available (or provided) in $(0, x)$
+    - RHS: min amount of time requested in $(0, x)$ by $\tau_i$ and $\forall j < i \tau_j$
+- Solution: iterative approach. Stop when $BR_i^{(l+1)} \le BR_i^{(n)}$.
+
+> ***
+> 
+> **EXAMPLE** for task $\tau_3$
+> 
+> ![Analysis of $\tau_3$ BR](images/13/BR_example.png)
+> 
+> | $C_i$ | $T_i$
+> -|-|-
+> $\tau_1$ | 3 | 10
+> $\tau_2$ | 11 | 19
+> $\tau_3$ | 5 | 56
+> 
+> - Assume $BD_i = 0$
+> 
+> $$
+> \begin{aligned}
+> BR_3^{(0)} &= WR_3 = 56 \\
+> BR_3^{(1)} &= C_3 + \sum_{j < 3} 
+>   \left(\left\lceil \frac{BR_3^{(0)}}{T_j} \right\rceil - 1 \right) C_j = \\
+> &= 5 + \left( \left\lceil \frac{56}{10} \right\rceil - 1 \right) \cdot 3
+>      + \left( \left\lceil \frac{56}{19} \right\rceil - 1 \right) \cdot 11
+>      = 5 + 5 \cdot 3 + 2 \cdot 11 = 42 \\
+> BR_3^{(2)} &= 5 
+>      + \left( \left\lceil \frac{42}{10} \right\rceil - 1 \right) \cdot 3
+>      + \left( \left\lceil \frac{42}{19} \right\rceil - 1 \right) \cdot 11
+>      = 5 + 4 \cdot 3 + 2 \cdot 11 = 39 \\
+> BR_3^{(3)} &= 5 
+>      + \left( \left\lceil \frac{39}{10} \right\rceil - 1 \right) \cdot 3
+>      + \left( \left\lceil \frac{39}{19} \right\rceil - 1 \right) \cdot 11
+>      = 5 + 3 \cdot 3 + 2 \cdot 11 = 36 \\
+> BR_3^{(4)} &= 5 
+>      + \left( \left\lceil \frac{36}{10} \right\rceil - 1 \right) \cdot 3
+>      + \left( \left\lceil \frac{36}{19} \right\rceil - 1 \right) \cdot 11
+>      = 5 + 3 \cdot 3 + 1 \cdot 11 = 25 \\
+> BR_3^{(5)} &= 5 
+>      + \left( \left\lceil \frac{25}{10} \right\rceil - 1 \right) \cdot 3
+>      + \left( \left\lceil \frac{25}{19} \right\rceil - 1 \right) \cdot 11
+>      = 5 + 2 \cdot 3 + 1 \cdot 11 = 22 \\
+> BR_3^{(6)} &= 5 
+>      + \left( \left\lceil \frac{22}{10} \right\rceil - 1 \right) \cdot 3
+>      + \left( \left\lceil \frac{22}{19} \right\rceil - 1 \right) \cdot 11
+>      = 5 + 2 \cdot 3 + 1 \cdot 11 = 22 \\
+> \end{aligned}
+> $$
+> 
+> - Because $BR_3^{(5)} = BR_3^{(6)} = 22 \ge BD_3 = 0, BR_3 = 2$
+> 
+> ***
+
 
 ## Jitter analysis
 
@@ -135,12 +218,12 @@ Types of (absolute) jitter:
 
 > The finalization jitter of the last task is usually the activation jitter of the next task
 
-- Assumption of activation on times:
+- Activation jitter $AJ_i$ of a task $\tau_i$
+    - Assumption of activation on times:
 $$
 \varphi_i + k \cdot T_i \le a_{i, k} \le \varphi_i + k \cdot T_i + AJ_i
 $$
-
-- Where $\varphi_i$ denotes the start of the jitter interval
+    - Where $\varphi_i$ denotes the start of the jitter interval
 
 ### Response jitter
 Response jitter $RJ_i$ of task $\tau_i$
@@ -149,7 +232,6 @@ $R_{i,k}$ notation:
 
 - $i \Longrightarrow$ corresponds to task $\tau_i$
 - $k \Longrightarrow$ corresponds to job $k$ of task $\tau_i$
-
 $$
 RJ_i \equiv \sup_{\varphi, k, l} (R_{i, k}(\varphi) - R_{i,l}(\varphi))
 $$
@@ -164,11 +246,9 @@ Why is it not equal? When we look at the best case and the worst case we are loo
 ### Finalization jitter
 
 - Relative finalization time $F_{i, k}$ of a job $\tau_{j,k}$
-
 $$
 F_{i,k} \equiv f_{i,k} - (\varphi_i + kT_i)
 $$
-
 - Finalization jitter $FJ_i$ of a task $\tau_i$
 $$
 FJ_i \equiv \sup_{\varphi, k, l} (F_{i, k} (\varphi) - F_{i, l}(\varphi))
@@ -188,10 +268,10 @@ $$
 ### Activation (or release) jitter
 
 - Worst-case response times
-  - Critical instant revised
-    - Task $\tau_i$ is released simultaneously with all tasks with a higer priority 
-    - All tasks with a higher priority experience
-  - Hence, a _maximal_ pre-emption of $\tau_i$ occurs
+    - Critical instant revised
+        - Task $\tau_i$ is released simultaneously with all tasks with a higer priority 
+        - All tasks with a higher priority experience
+    - Hence, a _maximal_ pre-emption of $\tau_i$ occurs
 
 > ***
 > **EXAMPLE**:
@@ -208,33 +288,33 @@ $$
 > ***
 
 - Worst case response times
-  - Recursive equation for task $\tau_i$
+    - Recursive equation for task $\tau_i$
     $$
     WR_i^{(n)} = C_i + \sum_{j < i} \left\lceil \frac{WR_i^{(n-1)} + AJ_j}{T_j}\right\rceil \cdot C_j
     $$
     - Where $AJ_j$ is the activation jitter of $\tau_j$
     - $WR_i$ is the smallest positive solution of the equation
-  - Iterative procedure
-    - Similar to the case without jitter
+    - Iterative procedure
+        - Similar to the case without jitter
 - Worst-case finalization times
-  - $WF_i = AJ_i + WR_i$
+    - $WF_i = AJ_i + WR_i$
 - Best-case response times
-  - Optimal instant revisited
-    - Job $\tau_{i, k}$ ends simultaneously ith the release of all tasks with a higher priority, and $\tau_{i, k}$'s release time is equal to its start time
-    - All tasks with a higher priority experience
+    - Optimal instant revisited
+        - Job $\tau_{i, k}$ ends simultaneously ith the release of all tasks with a higher priority, and $\tau_{i, k}$'s release time is equal to its start time
+        - All tasks with a higher priority experience
       - A **maximal** release delay at that simultaneous release
       - A **minimal** release delay at previous releases
-  - Hence, a minimal pre-emption of $\tau_i$ occurs
-  - Recursive equation for task $\tau_i$
+    - Hence, a minimal pre-emption of $\tau_i$ occurs
+    - Recursive equation for task $\tau_i$
     $$
     BR_i^{(n)} = C_i + \sum_{j <i} \left(\left\lceil \frac{BR_i^{(n - 1)} - AJ_i}{T_j}\right\rceil - 1 \right)^+ \cdot C_i
     $$
     - Where $AJ_i$ is the activation jitter of $\tau_j$, $w^+ = \max\{w, 0\}$
     - $BR_i$ is the largest possible solution of the equation
-  - Iterative procedure
-    - Similar to the case without jitter
+    - Iterative procedure
+        - Similar to the case without jitter
 - Best-case finalization times
-  - $BF_i = BR_i$
+    - $BF_i = BR_i$
 
 > ***
 > **EXERCICE**: Determine the response and finalization jitter

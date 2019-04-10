@@ -67,13 +67,13 @@ In **FP**, low-priority tasks may starve due to an overrun in high-priority task
 ### Handling overruns: good solutions
 
 - Performance degradation (or graceful degradation)
-  - Execute a shorter version of the program. Example
-    - Fast and low quality
-    - Middle ground
-    - Slow but high quality
+    - Execute a shorter version of the program. Example
+        - Fast and low quality
+        - Middle ground
+        - Slow but high quality
 - Resource reservation
-  - Allows analyzing WCRT despite possible transient overruns
-  - Isolates task's overrun from each other
+    - Allows analyzing WCRT despite possible transient overruns
+    - Isolates task's overrun from each other
 
 ## Performance degradation
 

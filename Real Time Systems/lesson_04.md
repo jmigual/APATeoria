@@ -6,7 +6,6 @@ Buttazzo's book, chapter 3
 
 - $d_i$ Absolute deadline. The exact time where the task should be finished
 - $D_i$ Relative deadline 
-
 $$D_i = d_i - a_i$$
 
 > **Maximum lateness**: $L_{\max} = \max\{L_i | \forall \tau_i\}$
@@ -115,28 +114,28 @@ Timer interrupt handler:
 ### Advantages
 
 - Extremely predictable
-  - Provides full knowledge about when the tasks will be executing
-  - You can analyze the performance of your control system
+    - Provides full knowledge about when the tasks will be executing
+    - You can analyze the performance of your control system
 - Easy to certify
-  - Avionics industry uses table-driven scheduling
+    - Avionics industry uses table-driven scheduling
 - Extremely flexible for scheduling optimizations
-  - It is easy to include optimization techniques while building the schedule
-  - Can handle various system constraints
+    - It is easy to include optimization techniques while building the schedule
+    - Can handle various system constraints
 - Low runtime overhead
-  - A true $O(1)$ algorithm for scheduling in most hardware platforms
+    - A true $O(1)$ algorithm for scheduling in most hardware platforms
 - Very small "code" footprint
-  - Only requires a few instructions to implement
+    - Only requires a few instructions to implement
 
 ### Disadvantages
 
 - Requires a concrete knowledge of task activation times
-  - Cannot be applied on event-based systems or dynamic workloads
+    - Cannot be applied on event-based systems or dynamic workloads
 - Building an optimal schedule may be tractably hard
-  - The scheduling problem is NP-Hard
+    - The scheduling problem is NP-Hard
 - It uses a large amount of memory
-  - Memory is money! Many embedded systems have a limited processing power and memory because:
-    - Memory is expensive
-    - Consumes a lot of energy
+    - Memory is money! Many embedded systems have a limited processing power and memory because:
+        - Memory is expensive
+        - Consumes a lot of energy
 
 ### Can we save space by compressing the table
 

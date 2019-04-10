@@ -36,10 +36,10 @@ Semaphores guarantee that at any time, only one of these tasks can enter the cri
 ### Guidelines:
 
 - Try to shorten the critical section
-  - Global variables can be copied into local variables
+    - Global variables can be copied into local variables
 - Avoid critical sections across loops or conditions
 - Avoid nested critical sections
-  - You will keep one lock and wait for another one, wasting tasks on the system
+    - You will keep one lock and wait for another one, wasting tasks on the system
 - Avoid cross-cutting critical sections
 
 Do these guidelines solve the "blocking" problem?
