@@ -156,7 +156,7 @@ $$
 - Intuition
     - LHS: amount of time available (or provided) in $(0, x)$
     - RHS: min amount of time requested in $(0, x)$ by $\tau_i$ and $\forall j < i \tau_j$
-- Solution: iterative approach. Stop when $BR_i^{(l+1)} \le BR_i^{(n)}$.
+- Solution: iterative approach. Stop when $BR_i^{(l+1)} = BR_i^{(n)}$.
 
 > ***
 > 
@@ -236,7 +236,7 @@ $$
 RJ_i \equiv \sup_{\varphi, k, l} (R_{i, k}(\varphi) - R_{i,l}(\varphi))
 $$
 
-A bound on response jitter
+A bound on response jitter:
 $$
 RJ_i \le WR_i - BR_i
 $$
@@ -269,11 +269,22 @@ $$
 
 - Worst-case response times
     - Critical instant revised
-        - Task $\tau_i$ is released simultaneously with all tasks with a higer priority 
+        - Task $\tau_i$ is released simultaneously with all tasks with a higher priority 
         - All tasks with a higher priority experience
-    - Hence, a _maximal_ pre-emption of $\tau_i$ occurs
+          - A maximal release delay at that simultaneous release
+          - A minimal release delay at subsequent releases
+    - Hence, a _maximal_ preemption of $\tau_i$ occurs
+    - Recursive equation for task $\tau_i$
+    $$
+    WR_i^{(n)} = C_i + \sum_{j < i} \left\lceil \frac{WR_i^{(n-1)} + AJ_j}{T_j}\right\rceil \cdot C_j
+    $$
+    - Where $AJ_j$ is the activation jitter of $\tau_j$
+    - $WR_i$ is the smallest positive solution of the equation
+    - Iterative procedure
+        - Similar to the case without jitter
 
 > ***
+> 
 > **EXAMPLE**:
 > 
 > Task | $T$ | $C$ | $AJ$
@@ -285,17 +296,9 @@ $$
 > - $WR_2$ is independent of $AJ_2$
 > - $WF_2$ is equal to $AJ_2 + WR_2$
 > - $WF_2$ increases 10 due to $AJ_1$ and $AJ_2$
+> 
 > ***
 
-- Worst case response times
-    - Recursive equation for task $\tau_i$
-    $$
-    WR_i^{(n)} = C_i + \sum_{j < i} \left\lceil \frac{WR_i^{(n-1)} + AJ_j}{T_j}\right\rceil \cdot C_j
-    $$
-    - Where $AJ_j$ is the activation jitter of $\tau_j$
-    - $WR_i$ is the smallest positive solution of the equation
-    - Iterative procedure
-        - Similar to the case without jitter
 - Worst-case finalization times
     - $WF_i = AJ_i + WR_i$
 - Best-case response times
@@ -348,5 +351,10 @@ $$
 > ***
 > 
 
+
+## Concluding remarks
+
+- Jitter can be reduced by using buffers, changing precedence constraints into data dependency constraints. This, however, may increase latency
+- The analysis does not hold for deadlines plus jitter larger than periods, i.e. for $WD_i + AJ_i > T_i$.
 
 
