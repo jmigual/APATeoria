@@ -66,6 +66,7 @@ Different implementations can have different runtime but similar complexity
 
 > ***
 > **EXAMPLE**: Optimality criteria
+> 
 > - Feasibility: Find a feasible schedule if there is one
 > - Minimize the maximum lateness
 > - Minimize the number of deadline misses

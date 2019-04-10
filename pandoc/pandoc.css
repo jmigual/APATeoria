@@ -9,19 +9,6 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
-body {
-  color: #444;
-  font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
-  font-size: 12px;
-  line-height: 1.7;
-  padding: 1em;
-  margin: auto;
-  max-width: 46em;
-  /* max-width: 42em; */
-  background: #fefefe;
-  padding: 4em;
-  box-shadow: 2px 0 7px gray, -2px 0 7px gray;
-}
 
 a {
   color: #0645ad;
@@ -282,15 +269,44 @@ table td {
   text-align: center;
 }
 
-@media only screen and (min-width: 480px) {
+/* @media only screen and (min-width: 480px) {
   body {
     font-size: 14px;
   }
-}
+}*/
 
-@media only screen and (min-width: 768px) {
+/* @media only screen and (max-width: 768px) {
   body {
     font-size: 16px;
+  }
+} */
+
+body {
+  color: #444;
+  font-family: Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.7;
+  margin: auto;
+  background: #fefefe;
+  padding: 4em;
+}
+
+@media only screen and (max-width: 768px) {
+  body {
+    font-size: 16px;
+    box-shadow: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media only screen and (min-width: 769px) {
+  body {
+    max-width: 46em;
+    padding: 1em;
+    box-shadow: 2px 0 7px gray, -2px 0 7px gray;
   }
 }
 
