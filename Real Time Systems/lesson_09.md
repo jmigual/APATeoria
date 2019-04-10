@@ -13,7 +13,7 @@ Each shared resource is protected by a different semaphore
 - $s = 1 \implies$ free resource
 - $s = 0 \implies$ busy (locked) resource
 
-```python
+``` {.python .numberLines}
 def wait(s):
     if s == 0:
         # Task must be blocked
