@@ -229,7 +229,6 @@ If $n > \beta \cdot m$ and $\forall i, U_i \le U_{max}$, then the task set is sc
 
 $$
 \begin{aligned}
-    
 U^{EDF+FF} &\le \frac{\beta \cdot m + 1}{\beta + 1} \\
 \beta &= \left\lfloor \frac{1}{U_{max}} \right\rfloor
 \end{aligned}

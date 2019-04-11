@@ -95,7 +95,7 @@ R_i^{(n)} = C_i + \sum_{k = 1}^{i - 1} \left\lceil \frac{R_i^{(n - 1)}}{T_k}
 $$
 
 - Starting point: $R_i^{(0)} = C_i$
-- Iterate until: $R_i^{(n)} \le R_i^{(n-1)}
+- Iterate until: $R_i^{(n)} \le R_i^{(n-1)}$
 
 #### Understanding the terms
 
