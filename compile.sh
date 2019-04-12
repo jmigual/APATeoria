@@ -39,6 +39,7 @@ pandoc -t html \
     --toc --toc-depth=2 \
     --number-sections \
     --verbose \
+    --katex="" \
     "${files[@]}" -o "$OUT_PATH/pandoc.html"
     # --self-contained \
     # --standalone \
@@ -66,10 +67,10 @@ if [ -d "$OUT_PATH/images" ]; then
 fi
 rm "$OUT_PATH/pandoc.html" "$OUT_PATH"/*.js*
 
-# echo Compilation finished
-# if [[ $? == 0 ]]; then
-#     xdg-open RTS.html > /dev/null 2>&1
-# fi
+echo Compilation finished
+if [[ $? == 0 ]]; then
+    xdg-open "$OUT_PATH"/index.html > /dev/null 2>&1
+fi
 
 
 

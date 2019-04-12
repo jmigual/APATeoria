@@ -288,7 +288,6 @@ body {
   line-height: 1.7;
   margin: auto;
   background: #fefefe;
-  padding: 4em;
 }
 
 @media only screen and (max-width: 768px) {
@@ -305,7 +304,7 @@ body {
 @media only screen and (min-width: 769px) {
   body {
     max-width: 46em;
-    padding: 1em;
+    padding: 4em;
     box-shadow: 2px 0 7px gray, -2px 0 7px gray;
   }
 }

@@ -25,19 +25,26 @@ export default {
         exclude: /(node_modules)/,
         use: {
           loader: 'html-loader',
-          options: {
-          }
+          options: {}
         }
       },
       {
-        test: /\.(png|jp(e*)g|svg)$/,
-        exclude: /(node_modules)/,
+        test: /\.(png|jp(e*)g|svg|woff(2?)|ttf|eot|svg)$/,
+        // exclude: /(node_modules)/,
         use: [{
           loader: 'base64-inline-loader',
           options: {
             // limit: 800000000,
           }
         }]
+      },
+      {
+        test: /\.(s?)css$/,
+        use: [
+          "style-loader", // creates style nodes from JS strings
+          "css-loader", // translates CSS into CommonJS
+          "sass-loader" // compiles Sass to CSS, using Node Sass by default
+        ]
       }
     ]
   },
