@@ -38,19 +38,33 @@ echo Compiling pandoc
 pandoc -t html \
     --toc --toc-depth=2 \
     --number-sections \
-    --self-contained \
     --verbose \
     "${files[@]}" -o "$OUT_PATH/pandoc.html"
+    # --self-contained \
+    # --standalone \
     # --katex="" \
     # --css ../pandoc/pandoc.css \
-    # --standalone \
     # --template ../pandoc/template \
     # --mathjax \
 
 cd "$OLDPWD"
 
+# mv "$OUT_PATH/pandoc.html" "$OUT_PATH/pandoc.htx"
+
+if [ -d "$SELECTED_DIR/images" ]; then
+    cp -R "$SELECTED_DIR/images" "$OUT_PATH"
+fi
+
 echo Compiling webpack
-npx webpack --config $SCRIPT_PATH/webpack/webpack.config.babel.js
+npx -n "--max_old_space_size=8192" webpack --config $SCRIPT_PATH/webpack/webpack.config.babel.js --display errors-only
+
+# Clean up
+
+echo Cleaning up
+if [ -d "$OUT_PATH/images" ]; then
+    rm -r "$OUT_PATH/images"
+fi
+rm "$OUT_PATH/pandoc.html" "$OUT_PATH"/*.js*
 
 # echo Compilation finished
 # if [[ $? == 0 ]]; then
