@@ -12,7 +12,7 @@ pandoc -t html \
     --template ../pandoc/template \
     --css ../pandoc/pandoc.css \
     --verbose \
-    $files -o RTS.html
+    $files -o NS.html
 
 echo Compilation finished
 if [[ $? == 0 ]]; then
