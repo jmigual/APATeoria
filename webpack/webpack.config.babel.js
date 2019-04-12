@@ -1,16 +1,23 @@
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import HtmlWebpackInlineSourcePlugin from 'html-webpack-inline-source-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
+
+const ROOT = path.join(__dirname, '..');
+
+console.log(ROOT);
+
 export default {
-    entry: path.join(__dirname, 'src/index.js'),
+    entry: path.join(ROOT, 'src/index.js'),
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(ROOT, 'dist'),
         filename: '[name].bundle.js'
     },
+    mode: 'production',
     module: {
         rules: [{
             test: /\.js/,
-            exclude: /(node_modules|bower_components)/,
+            exclude: /(node_modules)/,
             use: [{
                 loader: 'babel-loader'
             }]
@@ -19,8 +26,10 @@ export default {
     plugins: [
         new HtmlWebpackPlugin({
             title: 'Custom template',
-            template: path.join(__dirname, 'src/index.template.html')
+            template: path.join(ROOT, 'src/index.template.ejs'),
+            inlineSource: '.(js|css)'
         }),
+        new HtmlWebpackInlineSourcePlugin(),
         new ScriptExtHtmlWebpackPlugin({
             defaultAttribute: 'defer'
         })

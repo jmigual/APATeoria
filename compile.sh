@@ -12,6 +12,7 @@ fi
 
 SCRIPT_DIR=$(dirname "$0")
 SCRIPT_PATH=$(realpath "$SCRIPT_DIR")
+OUT_PATH="$SCRIPT_PATH/dist"
 
 SELECTED_DIR=$(realpath "$1")
 
@@ -24,18 +25,29 @@ IFS=$'\n' file_names=($(basename -a "${files[@]}"))
 echo Files:
 printf '%s\n' "${file_names[@]}" | column -c 80
 
-# echo Compiling pandoc
-# pandoc -t html \
-#     --toc --toc-depth=2 \
-#     --number-sections \
-#     --katex="" \
-#     --verbose \
-#     "${files[@]}" -o RTS.html
-#     # --css ../pandoc/pandoc.css \
-#     # --standalone \
-#     # --template ../pandoc/template \
-#     # --self-contained \
-#     # --mathjax \
+# Check if output directory exists
+if [ -d "$OUT_PATH" ]; then
+    rm -r "$OUT_PATH"
+fi
+
+mkdir "$OUT_PATH"
+
+cd "$SELECTED_DIR"
+
+echo Compiling pandoc
+pandoc -t html \
+    --toc --toc-depth=2 \
+    --number-sections \
+    --self-contained \
+    --verbose \
+    "${files[@]}" -o "$OUT_PATH/pandoc.html"
+    # --katex="" \
+    # --css ../pandoc/pandoc.css \
+    # --standalone \
+    # --template ../pandoc/template \
+    # --mathjax \
+
+cd "$OLDPWD"
 
 echo Compiling webpack
 npx webpack --config $SCRIPT_PATH/webpack/webpack.config.babel.js
