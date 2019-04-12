@@ -18,11 +18,6 @@
   <meta name="keywords" content="$for(keywords)$$keywords$$sep$, $endfor$" />
   $endif$
   <title>$if(title-prefix)$$title-prefix$ – $endif$$pagetitle$</title>
-  <style type="text/css">
-    code {
-      white-space: pre;
-    }
-  </style>
   $if(quotes)$
   <style type="text/css">
     q {
@@ -44,12 +39,12 @@
   $for(header-includes)$
   $header-includes$
   $endfor$
+  <!--
   <script type="text/javascript">
-    var fileref=document.createElement('script')
-    fileref.setAttribute("type","text/javascript")
-    /* fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_HTMLorMML") */
-    fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js")
-    fileref.onload = function () {
+    var scriptFile = document.createElement('script');
+    scriptFile.setAttribute("type","text/javascript");
+    scriptFile.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js");
+    scriptFile.onload = function () {
       console.log("MathJax loaded");
 
       MathJax.Hub.Config({
@@ -83,9 +78,10 @@
           }
         },
       });
-    }
-    document.getElementsByTagName("head")[0].appendChild(fileref)
+    };
+    document.getElementsByTagName("head")[0].appendChild(fileref);
   </script>
+  -->
 </head>
 
 <body>
