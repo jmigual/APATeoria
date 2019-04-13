@@ -1,7 +1,13 @@
 import path from 'path';
+import webpack from 'webpack';
+
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import HtmlWebpackInlineSourcePlugin from 'html-webpack-inline-source-plugin';
 import ScriptExtHtmlWebpackPlugin from 'script-ext-html-webpack-plugin';
+
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserJSPlugin from 'terser-webpack-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 
 const ROOT = path.join(__dirname, '..');
 const DIST = path.join(ROOT, 'dist');
@@ -11,6 +17,17 @@ export default function (env) {
     entry: path.join(ROOT, 'src/index.js'),
     output: {
       path: DIST,
+    },
+    optimization: {
+      minimize: true,
+      mergeDuplicateChunks: true,
+      minimizer: [
+        new TerserJSPlugin({
+          parallel: true,
+        }),
+        new OptimizeCSSAssetsPlugin({
+
+        })],
     },
     mode: 'production',
     module: {
@@ -36,18 +53,14 @@ export default function (env) {
         },
         {
           test: /\.(png|jp(e*)g|svg|woff(2?)|ttf|eot|svg)$/,
-          // exclude: /(node_modules)/,
           use: [{
             loader: 'base64-inline-loader',
-            options: {
-              // limit: 800000000,
-            }
           }]
         },
         {
           test: /\.(s?)css$/,
           use: [
-            "style-loader", // creates style nodes from JS strings
+            MiniCssExtractPlugin.loader, // creates style nodes from JS strings
             "css-loader", // translates CSS into CommonJS
             "sass-loader" // compiles Sass to CSS, using Node Sass by default
           ]
@@ -58,12 +71,16 @@ export default function (env) {
       new HtmlWebpackPlugin({
         title: env.title,
         template: path.join(ROOT, 'src/index.template.ejs'),
-        inlineSource: '.(js|css|png|jp(e*)g|svg)'
+        inlineSource: '.(js|css)',
       }),
       new HtmlWebpackInlineSourcePlugin(),
       new ScriptExtHtmlWebpackPlugin({
         defaultAttribute: 'defer'
-      })
+      }),
+      new MiniCssExtractPlugin({
+        filename: '[name].css',
+        chunkFilename: '[id].css',
+      }),
     ],
     stats: {
       colors: true
