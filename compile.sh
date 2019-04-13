@@ -57,18 +57,22 @@ mkdir "$OUT_PATH"
 cd "$SELECTED_DIR"
 
 echo Compiling pandoc
-pandoc -t html \
+PANDOC=$(pandoc -t html \
+    --standalone \
     --toc --toc-depth=2 \
     --number-sections \
     --verbose \
     --katex="" \
-    "${files[@]}" -o "$OUT_PATH/pandoc.html"
+    "${files[@]}")
     # --self-contained \
-    # --standalone \
     # --katex="" \
     # --css ../pandoc/pandoc.css \
     # --template ../pandoc/template \
     # --mathjax \
+
+PANDOC="${PANDOC#*<body>}"
+PANDOC="${PANDOC%</body>*}"
+echo "$PANDOC" > $OUT_PATH/pandoc.html
 
 cd "$OLDPWD"
 
