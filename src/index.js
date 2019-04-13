@@ -1,9 +1,10 @@
 import katex from 'katex';
+import 'katex/dist/katex.css';
 
 import md from '../dist/pandoc.html';
 
 import './base.scss';
-import 'katex/dist/katex.css';
+import './code.scss';
 
 document.body.innerHTML = md;
 

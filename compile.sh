@@ -1,12 +1,31 @@
 #!/usr/bin/env bash
-
 # set -x
+set -o pipefail
 shopt -s nullglob
 
-if [ "$#" -ne 1 ]; then
-    echo Usage: $(basename "$0") directory
+SCRIPT_NAME=$(basename "$0")
+
+# Use getopt to get the options
+eval set -- $(getopt -o "s" -l "server" -n "$SCRIPT_NAME" -- "$@")
+
+# Parse given options
+SERVER=false
+while true; do
+    case "$1" in
+        -s | --server ) SERVER=true; shift ;;
+        -- ) shift; break ;;
+        * ) break ;;
+    esac
+done
+
+# Check for proper number of arguments
+if [ "$#" -lt 1 ]; then
+    echo Usage: $SCRIPT_NAME [OPTIONS] directory
     echo 
     echo Processes the directory that contains Markdown '*.md' files
+    echo
+    echo OPTIONS:
+    echo '-s, --server'
     exit 0
 fi
 
@@ -15,6 +34,7 @@ SCRIPT_PATH=$(realpath "$SCRIPT_DIR")
 OUT_PATH="$SCRIPT_PATH/dist"
 
 SELECTED_DIR=$(realpath "$1")
+SELECTED_NAME=$(basename "$SELECTED_DIR")
 
 echo Script path: \""$SCRIPT_PATH"\"
 
@@ -50,17 +70,23 @@ pandoc -t html \
 
 cd "$OLDPWD"
 
-# mv "$OUT_PATH/pandoc.html" "$OUT_PATH/pandoc.htx"
-
 if [ -d "$SELECTED_DIR/images" ]; then
     cp -R "$SELECTED_DIR/images" "$OUT_PATH"
 fi
 
+WEBPACK_COMMAND=webpack
+if [ $SERVER ]; then
+    WEBPACK_COMMAND=(webpack-dev-server --color)
+fi
+
+
 echo Compiling webpack
-npx -n "--max_old_space_size=8192" webpack --config $SCRIPT_PATH/webpack/webpack.config.babel.js --display errors-only
+npx "${WEBPACK_COMMAND[@]}" \
+    --config $SCRIPT_PATH/webpack/webpack.config.babel.js \
+    --display errors-only \
+    --env.title="$SELECTED_NAME"
 
 # Clean up
-
 echo Cleaning up
 if [ -d "$OUT_PATH/images" ]; then
     rm -r "$OUT_PATH/images"
