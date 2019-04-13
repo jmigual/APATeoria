@@ -332,7 +332,6 @@ $$
 > \begin{aligned}
 > BR_1 &= C_1 = 1 \\
 > WR_1 &= C_1 = 1 \\
-> 
 > WR_3^{(0)} &= 10 \rightarrow \text{assumption} \\
 > WR_3^{(1)} &= 3 + 
 >   \left\lceil \frac{10 + 1}{4} \right\rceil\cdot 1 + 
@@ -348,6 +347,7 @@ $$
 >   \left\lceil \frac{17 + 1}{6} \right\rceil\cdot 3 = 3 + 5 + 9 = 17 \\
 > \end{aligned}
 > $$
+> 
 > ***
 > 
 
