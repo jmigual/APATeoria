@@ -2,6 +2,9 @@
  * Add this to the pandoc generated HTML
  */
 
+$phone_screen: "only screen and (max-width: 768px)";
+$laptop_screen: "only screen and (min-width: 769px)";
+
 html {
   font-size: 100%;
   overflow-y: scroll;
@@ -216,6 +219,7 @@ img {
   -ms-interpolation-mode: bicubic;
   vertical-align: middle;
 }
+
 /* 
 div[caption]:after {
   content: "<center>" attr(caption) "</center>";
@@ -235,51 +239,46 @@ figure img {
 }
 
 figcaption {
-  font-size: 0.8em;
-  font-style: italic;
+  font: {
+    size: 0.8 em;
+    style: italic;
+  }
   margin: 0 0 .8em;
 }
 
 table {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 2em;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd;
-  border-spacing: 0;
-  border-collapse: collapse;
-}
+  margin: {
+    left: auto;
+    right: auto;
+    bottom: 2em;
+  }
 
-table th {
-  padding: .2em 1em;
-  background-color: #eee;
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-}
+  border: {
+    bottom: 1px solid #ddd;
+    right: 1px solid #ddd;
+    spacing: 0;
+    collapse: collapse;
+  }
 
-table td {
-  padding: .2em 1em;
-  border-top: 1px solid #ddd;
-  border-left: 1px solid #ddd;
-  vertical-align: top;
+  & th {
+    padding: .2em 1em;
+    background-color: #eee;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+  }
+
+  & td {
+    padding: .2em 1em;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    vertical-align: top;
+  }
 }
 
 .author {
   font-size: 1.2em;
   text-align: center;
 }
-
-/* @media only screen and (min-width: 480px) {
-  body {
-    font-size: 14px;
-  }
-}*/
-
-/* @media only screen and (max-width: 768px) {
-  body {
-    font-size: 16px;
-  }
-} */
 
 body {
   color: #444;
@@ -288,21 +287,25 @@ body {
   line-height: 1.7;
   margin: auto;
   background: #fefefe;
-}
 
-@media only screen and (max-width: 768px) {
-  body {
+  @media #{$phone_screen} {
     font-size: 16px;
     box-shadow: none;
     margin: 0;
-    padding: 0;
+    padding: 1em;
     width: 100%;
     max-width: 100%;
-  }
-}
 
-@media only screen and (min-width: 769px) {
-  body {
+    &>div {
+      overflow-x: scroll;
+    }
+
+    & span .katex {
+      overflow-x: scroll;
+    }
+  }
+
+  @media #{$laptop_screen} {
     max-width: 46em;
     padding: 4em;
     box-shadow: 2px 0 7px gray, -2px 0 7px gray;
@@ -362,6 +365,8 @@ body {
 
   img {
     max-width: 100% !important;
+
+    @media screen {}
   }
 
   @page {
