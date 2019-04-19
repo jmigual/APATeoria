@@ -1,44 +1,47 @@
-import katex from 'katex';
-import 'katex/dist/katex.css';
-
 import md from '../dist/pandoc.html';
 
 import './base.scss';
 import './code.scss';
 
-document.body.innerHTML = md;
+import renderMath from './math';
 
-// Render math
-let inlineList = document.querySelectorAll(".math.inline");
-let displayList = document.querySelectorAll(".math.display");
+function wrapTables() {
+  // Wrap all tables in div, this allows the tables to be scrolled horizontally in a phone screen
+  let tableList = document.querySelectorAll(":not(div) > table");
 
-for (let element of inlineList) {
-    let text = element.textContent;
-    element.innerHTML = "";
-
-    katex.render(text, element, {
-        displayMode: false,
-        throwOnError: true
-    })
-}
-
-for (let element of displayList) {
-    let text = element.textContent;
-    element.innerHTML = "";
-
-    katex.render(text, element, {
-        displayMode: true,
-        throwOnError: true
-    })
-}
-
-// Wrap all tables in div
-let tableList = document.querySelectorAll("body > table");
-
-for (let table of tableList) {
+  for (let table of tableList) {
     let wrapper = document.createElement("div");
+    wrapper.classList.add("table");
 
     table.parentNode.insertBefore(wrapper, table);
     wrapper.appendChild(table);
+  }
 }
 
+function addCaptions() {
+  // Search for all the elements with a caption attribute
+  let captionList = document.querySelectorAll("*[caption]");
+
+  for (let element of captionList) {
+    let text = element.getAttribute("caption");
+
+    // Ignore empty elements
+    if (text === null || text === "") continue;
+
+    let par = document.createElement('p');
+    par.innerHTML = text;
+    par.classList.add("caption");
+
+    element.appendChild(par);
+  }
+}
+
+function createElements() {
+  document.body.innerHTML = md;
+
+  renderMath();
+  wrapTables();
+  addCaptions();
+}
+
+document.addEventListener('DOMContentLoaded', createElements);

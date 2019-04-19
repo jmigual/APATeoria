@@ -101,13 +101,15 @@ Timer interrupt handler:
 > 
 > **EXAMPLE**
 > 
-> Task | Start time
-> -|-
-> 1 | 0
-> 2 | 10
-> 3 | 12
-> 1 | 20
-> 4 | 30
+> |Task | Start time|
+> |-|-|
+> |1 | 0|
+> |2 | 10|
+> |3 | 12|
+> |1 | 20|
+> |4 | 30|
+> 
+> Table: Task example
 > 
 > ***
 

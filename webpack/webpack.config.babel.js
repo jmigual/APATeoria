@@ -21,6 +21,7 @@ export default function (env) {
     optimization: {
       minimize: true,
       mergeDuplicateChunks: true,
+      usedExports: true,
       minimizer: [
         new TerserJSPlugin({
           parallel: true,
@@ -29,7 +30,7 @@ export default function (env) {
 
         })],
     },
-    mode: 'production',
+    mode: 'development',
     module: {
       rules: [{
           test: /\.js/,

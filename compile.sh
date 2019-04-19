@@ -6,15 +6,17 @@ shopt -s nullglob
 SCRIPT_NAME=$(basename "$0")
 
 # Use getopt to get the options
-eval set -- $(getopt -o "s" -l "server,no-clean" -n "$SCRIPT_NAME" -- "$@")
+eval set -- $(getopt -o "s" -l "server,no-clean,no-show" -n "$SCRIPT_NAME" -- "$@")
 
 # Parse given options
 SERVER=false
 CLEAN=true
+SHOW=true
 while true; do
     case "$1" in
         -s | --server ) SERVER=true; shift ;;
         --no-clean ) CLEAN=false; shift ;;
+        --no-show ) SHOW=false; shift ;;
         -- ) shift; break ;;
         * ) break ;;
     esac
@@ -91,8 +93,8 @@ npx "${WEBPACK_COMMAND[@]}" \
     -p \
     --progress \
     --config $SCRIPT_PATH/webpack/webpack.config.babel.js \
+    --env.title="$SELECTED_NAME" \
     --display errors-only \
-    --env.title="$SELECTED_NAME"
 
 # Clean up
 
@@ -101,11 +103,13 @@ if $CLEAN; then
     if [ -d "$OUT_PATH/images" ]; then
         rm -r "$OUT_PATH/images"
     fi
-    rm "$OUT_PATH/pandoc.html" "$OUT_PATH"/*.js*
+    rm "$OUT_PATH/pandoc.html" "$OUT_PATH"/*.js* "$OUT_PATH"/*.css
 fi
 
 echo Compilation finished
-if [[ $? == 0 ]] && ! $SERVER; then
+ls -lh $OUT_PATH
+
+if [[ $? == 0 ]] && ! $SERVER && $SHOW; then
     xdg-open "$OUT_PATH"/index.html > /dev/null 2>&1
 fi
 

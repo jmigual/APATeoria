@@ -16,46 +16,36 @@ html {
 a {
   color: #0645ad;
   text-decoration: none;
-}
 
-a:visited {
-  color: #0b0080;
-}
+  &:visited {
+    color: #0b0080;
+  }
 
-a:hover {
-  color: #06e;
-}
+  &:hover {
+    color: #06e;
+  }
+  
+  &:active {
+    color: #faa700;
+  }
+  
+  &:focus {
+    outline: thin dotted;
+  }
 
-a:active {
-  color: #faa700;
-}
-
-a:focus {
-  outline: thin dotted;
-}
-
-*::-moz-selection {
-  background: rgba(255, 255, 0, 0.3);
-  color: #000;
+  &::selection {
+    background: rgba(255, 255, 0, 0.5);
+    color: #0645ad;
+  }
 }
 
 *::selection {
-  background: rgba(255, 255, 0, 0.3);
+  background: rgba(255, 255, 0, 0.5);
   color: #000;
 }
 
-a::-moz-selection {
-  background: rgba(255, 255, 0, 0.3);
-  color: #0645ad;
-}
-
-a::selection {
-  background: rgba(255, 255, 0, 0.3);
-  color: #0645ad;
-}
-
 p {
-  margin: 1em 0;
+  margin: 1em 0 .5em;
 }
 
 img {
@@ -184,7 +174,7 @@ sub {
 
 ul,
 ol {
-  margin: 1em 0;
+  margin: .5em 0 1em;
   padding: 0 0 0 2em;
 }
 
@@ -194,7 +184,7 @@ li p:last-child {
 
 ul ul,
 ol ol {
-  margin: .3em 0;
+  margin: 0;
 }
 
 dl {
@@ -220,37 +210,34 @@ img {
   vertical-align: middle;
 }
 
-/* 
-div[caption]:after {
-  content: "<center>" attr(caption) "</center>";
-} */
-
-.figure,
-figure {
+.figure {
   display: block;
   text-align: center;
   margin: 1em 0;
+
+  & img {
+    border: none;
+    margin: 0 auto;
+  }
 }
 
-.figure img,
-figure img {
-  border: none;
-  margin: 0 auto;
-}
-
-figcaption {
+.caption {
   font: {
     size: 0.8 em;
     style: italic;
   }
   margin: 0 0 .8em;
+  text-align: center;
+}
+
+div.table, div.sourceCode {
+  margin-bottom: 2em;
 }
 
 table {
   margin: {
     left: auto;
     right: auto;
-    bottom: 2em;
   }
 
   border: {
@@ -310,6 +297,12 @@ body {
     padding: 4em;
     box-shadow: 2px 0 7px gray, -2px 0 7px gray;
   }
+
+  @media print {
+    font-size: 12pt;
+    max-width: 100%;
+    box-shadow: none;
+  }
 }
 
 @media print {
@@ -318,12 +311,6 @@ body {
     color: black !important;
     filter: none !important;
     -ms-filter: none !important;
-  }
-
-  body {
-    font-size: 12pt;
-    max-width: 100%;
-    box-shadow: none;
   }
 
   a,
