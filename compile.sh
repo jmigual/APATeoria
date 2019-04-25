@@ -63,6 +63,7 @@ PANDOC=$(pandoc -t html \
     --standalone \
     --toc --toc-depth=2 \
     --number-sections \
+    -F mermaid-filter \
     --verbose \
     --katex="" \
     "${files[@]}")
