@@ -127,3 +127,7 @@ panic --> safe
 - Message types
     - Values
     - Frequency
+- With wireless communications **bits can get corrupted** 
+
+## System architecture
+
