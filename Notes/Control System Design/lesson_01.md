@@ -41,7 +41,7 @@ class O hide;
 
 #### Closed loop
 
-```mermaid
+```{.mermaid caption="Feedback connection"}
 graph LR
 
 I(Input) --> P((+))
