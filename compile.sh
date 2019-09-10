@@ -63,7 +63,7 @@ PANDOC=$(pandoc -t html \
     --standalone \
     --toc --toc-depth=2 \
     --number-sections \
-    -F mermaid-filter \
+    --filter mermaid-filter \
     --verbose \
     --katex="" \
     --metadata=title:$SELECTED_NAME \

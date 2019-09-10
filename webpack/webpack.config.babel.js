@@ -96,6 +96,7 @@ export default function (env) {
       index: 'index.html',
       inline: true,
       open: true,
+      host: "0.0.0.0",
       port: 8080,
     }
   }
