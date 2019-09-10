@@ -25,13 +25,45 @@ The control specifications are:
 - Robustness
 - Adaptation
 
+#### Open loop
+
+```mermaid
+graph LR
+A(System 1) --> B(System 2)
+I(Input) --> A
+B --> O(Output)
+
+classDef hide display:none;
+class I hide;
+class O hide;
+
+```
+
+#### Closed loop
+
+```mermaid
+graph LR
+
+I(Input) --> P((+))
+P --> A
+A(System 1) --> B(System 2)
+B --> O(Output)
+B --> P
+
+classDef hide display:none
+class I hide
+class O hide
+```
+
+
+
 ### The use of Mathematical Models
 
 **Objective**: quantitative description of a system
 
 > ***
 >
-> **Example**: Mass-spring-damper system
+> **EXAMPLE**: Mass-spring-damper system
 > $$
 > \begin{cases}
 > F &= m \ddot{q}
