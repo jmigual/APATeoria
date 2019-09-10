@@ -36,7 +36,12 @@ function renderDisplayMath() {
 
 export default function renderMath() {
   console.log(renderMathInElement);
-  renderMathInElement(document.body);
+  renderMathInElement(document.body, {
+    // "preProcess": x => {
+    //   console.log(x);
+    //   return x;
+    // }
+  });
   // console.log("Rendering inline math");
   // renderInlineMath();
 

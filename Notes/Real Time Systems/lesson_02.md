@@ -36,7 +36,8 @@ Then you add the operating system model and the platform model and do a timing a
 $$R_i = f_i - a_i$$
 
 - $C_i$ Computation time. Time between the task starts and finishes. 
-$$C_i = f_i - s_i​$$
+
+$$C_i = f_i - s_i$$
 
 ![Task definition parameters](images/02/task_definition.png){width=50%}
 
@@ -101,8 +102,9 @@ $$
 
 ### Slack and lateness
 
-- $\text{slack}_i​$ Slack. How far are you from the deadline when you finish
-$$\text{slack}_i = d_i - f_i​$$
+- $\text{slack}_i$ Slack. How far are you from the deadline when you finish
+
+$$\text{slack}_i = d_i - f_i$$
 
 - $L_i$ Lateness. How far you finish **after** your deadline. It should be negative or 0 to be fine. (_lateness = tardiness_)
 $$L_i = f_i - d_i$$
@@ -123,7 +125,7 @@ $$
 **Definitions**:
 A schedule $\sigma$ is said to be feasible if it satisfies all given requirements. How do we guarantee that we meet all given requirements?
 
-A task set $\tau$ is said to be feasible, if there exists  an algorithm that generates a feasible schedule for $\tau​$.
+A task set $\tau$ is said to be feasible, if there exists  an algorithm that generates a feasible schedule for $\tau$.
 
 A task set $\tau$ is said to be schedulable with an algorithm $A$, if and only if $A$ generates a feasible schedule for $\tau$.
 
