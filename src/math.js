@@ -1,5 +1,6 @@
 import katex from 'katex/dist/katex.mjs';
 import 'katex/dist/katex.css';
+import renderMathInElement from 'katex/dist/contrib/auto-render';
 
 
 function renderInlineMath() {
@@ -9,6 +10,7 @@ function renderInlineMath() {
   for (let element of inlineList) {
     let text = element.textContent;
     element.innerHTML = "";
+    console.log("Text", text);
 
     katex.render(text, element, {
       displayMode: false,
@@ -33,6 +35,11 @@ function renderDisplayMath() {
 }
 
 export default function renderMath() {
-  renderInlineMath();
-  renderDisplayMath();
+  console.log(renderMathInElement);
+  renderMathInElement(document.body);
+  // console.log("Rendering inline math");
+  // renderInlineMath();
+
+  // console.log("Rendering display math");
+  // renderDisplayMath();
 }

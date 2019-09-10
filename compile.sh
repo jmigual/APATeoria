@@ -66,6 +66,8 @@ PANDOC=$(pandoc -t html \
     -F mermaid-filter \
     --verbose \
     --katex="" \
+    --metadata=title:$SELECTED_NAME \
+    --metadata=lang:en \
     "${files[@]}")
     # --self-contained \
     # --katex="" \
@@ -73,10 +75,10 @@ PANDOC=$(pandoc -t html \
     # --template ../pandoc/template \
     # --mathjax \
 
+
 PANDOC="${PANDOC#*<body>}"
 PANDOC="${PANDOC%</body>*}"
 echo "$PANDOC" > $OUT_PATH/pandoc.html
-
 cd "$OLDPWD"
 
 if [ -d "$SELECTED_DIR/images" ]; then
@@ -88,7 +90,6 @@ if $SERVER; then
     WEBPACK_COMMAND=(webpack-dev-server --color)
 fi
 
-
 echo Compiling webpack
 npx "${WEBPACK_COMMAND[@]}" \
     -p \
@@ -96,8 +97,6 @@ npx "${WEBPACK_COMMAND[@]}" \
     --config $SCRIPT_PATH/webpack/webpack.config.babel.js \
     --env.title="$SELECTED_NAME" \
     --display errors-only \
-
-# Clean up
 
 if $CLEAN; then
     echo Cleaning up
