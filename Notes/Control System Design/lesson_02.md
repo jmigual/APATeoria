@@ -193,3 +193,181 @@ If $A^TP + PA < 0$ the function $V(x)$ is a Lyapunov function
 >
 > ***
 
+## System properties
+
+- Memoryless / Dynamic
+- Causality
+- Linearity
+- Time-invariance
+
+### Memoryless vs dynamic
+
+A system is said to be **memoryless** if its output at a given time is dependent only on the input at the same time
+
+- Memoryless systems
+  - $y(t) = \left(2u(t) - u^2(t)\right)^2$
+  - $i(t) = \frac{u(t)}R$ (resistor)
+- Dynamical system:
+  - $v(t) = \frac{1}{C} \int_{-\infty}^t i(\tau) d\tau$ (capacity)
+  - $y(t) = 4u(t - 3)$ (delay)
+  - $m\ddot{x}(t) + c\dot{x}(t) + kx(t) = F(t)$ (mechanical system)
+
+### Causal
+
+A system is **causal** if the output at any time depends only on values of the input at that the present time and in the past
+
+### Linear
+
+Let $y_1(t)$ be the output of the system to the input $u_1(t)$ and let $y_2(t)$ be the output of the input $u_2(t)$. A system is said to be **linear** if it satisfied the following properties:
+
+- The input $u_1(t) + u_2(t)$ will give an output $y_1(t) + y_2(t)$
+- The input $\alpha u_1(t)$ will give an output $\alpha y_1(t)$ for any (complex) constant $\alpha$
+
+> ***
+>
+> **EXAMPLE**: Inductor
+>
+> ***
+
+### Time-invariant
+
+A system is said to be **time invariant** if the behavior and characteristics are fixed over time.
+
+An input-output system is time-invariant if a time-shift $\tau$ in the input leads to the same time-shift in the output
+$$
+u(t) \implies y(t),\ t \in \mathbb{R}\ \implies\ u(t - \tau) \implies y(t - \tau),\ t \in \mathbb{R}$
+$$
+
+### System properties
+
+Linear time-invariant system:
+$$
+\begin{aligned}
+\dot{x}(t) &= Ax(t) + Bu(t) \\
+y(t) &= Cx(t) + Du(t) \\
+\end{aligned}
+$$
+Linear time-varying system:
+$$
+\begin{aligned}
+\dot{x}(t) &= A(t)x(t) + B(t)u(t) \\
+y(t) &= C(t)x(t) + D(t)u(t) \\
+\end{aligned}
+$$
+Non-linear time-invariant system:
+$$
+\begin{aligned}
+\dot{x}(t) &= f\left(x(t), u(t)\right) \\
+y(t) &= g\left(x(t), u(t)\right)
+\end{aligned}
+$$
+Non-linear time-varying system:
+$$
+\begin{aligned}
+\dot{x}(t) &= f(t, x(t), u(t)) \\
+y(t) &= g(t, x(t), u(t))
+\end{aligned}
+$$
+
+## Matrix exponentials
+
+_Book 5.2_
+$$
+\begin{aligned}
+\dot{x} = a \cdot x \quad ,\quad x(0) = x_0 \implies x(t) = e^{at} \cdot x_0
+\end{aligned}
+$$
+Solution of $\dot{x} = Ax$ is $x(t)  = e^{At}x_0$
+
+Substitution:
+$$
+\begin{aligned}
+\dot{x}(t) &= \frac{d}{dt}\left(e^{At}x_0\right) \\
+&= \frac{d}{dt}\left(I + At + \frac{A^2t^2}{}\right)
+\end{aligned}
+$$
+Substitution of $\dot{x} = Ax + Bu$ is $x(t) =  e^{At} \left[x_0 + \int_0^t e^{-At}Bu(\tau)d\tau\right]$
+
+Substitution:
+$$
+\begin{aligned}
+\dot{x}(t) &=
+\end{aligned}
+$$
+
+### Stability of linear ODE
+
+- For LTI system $\dot{x} = Ax, x \in \mathbb{R}^n$, stability of equilibrium is related to the **eigenvalues** of state matrix $A$
+- $\lambda(A) = \{s \in \mathbb{C}: \det (sI - A) = 0\}$
+- $\det(sI - A)$ is known as the _characteristic polynomial_
+- diagonal case: $A = \operatorname{diag}(\lambda_1, ..., \lambda_n) = \begin{pmatrix} \lambda1 & & & 0 \\ & \lambda_2 & & \\ & & \ddots & \\ 0 & & & \lambda_n\end{pmatrix}$
+- Result: equilibrium point $x_e = 0$ is
+  - stable if $\Re(\lambda_i) \le 0$
+  - Asymptotically stable if $\Re(\lambda_i) < 0, i = 1,..., n$ 
+  - MISSING
+
+### Transformation of state equations
+
+Consider the original system:
+$$
+\begin{aligned}
+\dot{x}(t) &= Ax(t) + Bu(t) \\
+y(t) &= Cx(t) + Du(t)
+\end{aligned}
+$$
+and define new state $z(t) = Tx(t)$ or $x(t) = T^{-1}z(t)$ where $T$ is non-singular matrix. This gives:
+$$
+T^{-1}\dot{z}(t) = 
+$$
+Multiply first equation with $T$ to obtain:
+$$
+\begin{aligned}
+\dot{z}(t) &= TAT^{-1}z(t) + TBu(t) \\
+y(t) &= CT^{-1}z(t) + Du(t)
+\end{aligned}
+$$
+Define:
+$$
+\begin{aligned}
+&A' = TAT^{-1} && B' = TB \\
+&C' = CT^{-1} && D' = D
+\end{aligned}
+$$
+
+- Property:
+
+$$
+e^{A't} = e^{TAT^{-1}t} = Te^{At}T^{-1}
+$$
+
+- Two systems related by a similarity transformation have same I/O response
+
+$$
+\begin{aligned}
+C'e^{A't}B'u(t) &= \\
+&=
+\end{aligned}
+$$
+
+### Solution to autonomous ODE
+
+- Let us focus on the "dynamical" part of ODE
+
+Let us consider two cases
+
+- Case 1: $A$ is diagonalizable
+- Case 2: $A$ is not diagonalizable
+
+#### Case 1: $A$ is diagonalizable
+
+If $A$ has $n$ distinct eigenvalues. Eigenvalue decomposition
+$$
+\lambda_im_i = Am_i\quad \text{for} m_i \ne 0
+$$
+
+#### Case 2: $A$ is not diagonalizable
+
+What if $A$ is **not diagonalizable**?
+
+- Jordan transformation $TAT^{-1} = J = \begin{bmatrix}J_1 & 0 & \cdots & 0 \\ 0 & \ddots & \ddots & 0 \\ 0 & \ddots & \ddots & 0\\ 0 & \cdots & 0 & J_n \end{bmatrix}$
+- 
