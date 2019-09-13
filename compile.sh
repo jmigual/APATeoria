@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# set -x
+#set -x
 set -o pipefail
 shopt -s nullglob
 
@@ -59,7 +59,9 @@ mkdir "$OUT_PATH"
 cd "$SELECTED_DIR"
 
 echo Compiling pandoc
-PANDOC=$(pandoc -t html \
+PANDOC=$(pandoc \
+    --from "markdown+emoji" \
+    --to html \
     --standalone \
     --toc --toc-depth=2 \
     --number-sections \
