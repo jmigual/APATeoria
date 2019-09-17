@@ -24,7 +24,8 @@ export default function (env) {
       usedExports: true,
       minimizer: [
         new TerserJSPlugin({
-          parallel: true,
+          parallel: 4,
+          cache: true
         }),
         new OptimizeCSSAssetsPlugin({
 
