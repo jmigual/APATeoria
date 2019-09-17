@@ -1,5 +1,3 @@
-import md from '../dist/pandoc.html';
-
 import './base.scss';
 import './code.scss';
 
@@ -37,8 +35,6 @@ function addCaptions() {
 }
 
 function createElements() {
-  document.body.innerHTML = md;
-
   renderMath();
   wrapTables();
   addCaptions();

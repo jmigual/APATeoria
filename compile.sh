@@ -80,7 +80,20 @@ PANDOC=$(pandoc \
 
 PANDOC="${PANDOC#*<body>}"
 PANDOC="${PANDOC%</body>*}"
-echo "$PANDOC" > $OUT_PATH/pandoc.html
+cat << EOF > $OUT_PATH/pandoc.html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content= "width=device-width, initial-scale=1.0"> 
+    <title>$SELECTED_NAME</title>
+  </head>
+  <body>
+  $PANDOC
+  </body>
+</html>
+EOF
+
 cd "$OLDPWD"
 
 if [ -d "$SELECTED_DIR/images" ]; then
@@ -98,7 +111,8 @@ npx "${WEBPACK_COMMAND[@]}" \
     --progress \
     --config $SCRIPT_PATH/webpack/webpack.config.babel.js \
     --env.title="$SELECTED_NAME" \
-    --display errors-only \
+    --display normal
+#    --display errors-only \
 
 if $CLEAN; then
     echo Cleaning up

@@ -49,7 +49,9 @@ export default function (env) {
           exclude: /(node_modules)/,
           use: {
             loader: 'html-loader',
-            options: {}
+            options: {
+              url: false
+            }
           }
         },
         {
@@ -71,13 +73,13 @@ export default function (env) {
     plugins: [
       new HtmlWebpackPlugin({
         title: env.title,
-        template: path.join(ROOT, 'src/index.template.ejs'),
-        inlineSource: '.(js|css)',
+        template: path.join(DIST, 'pandoc.html'),
+        inlineSource: '.(js|css)'
       }),
       new HtmlWebpackInlineSourcePlugin(),
-      new ScriptExtHtmlWebpackPlugin({
-        defaultAttribute: 'defer'
-      }),
+      // new ScriptExtHtmlWebpackPlugin({
+      //   defaultAttribute: 'defer'
+      // }),
       new MiniCssExtractPlugin({
         filename: '[name].css',
         chunkFilename: '[id].css',

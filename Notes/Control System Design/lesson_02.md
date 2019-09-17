@@ -168,7 +168,6 @@ x_2 \\
 x_1 = \theta, \ x_2 = \dot{\theta}
 $$
 
-
 ![Pendulum example](images/02/pendulum.png){width=75%}
 
 
@@ -176,9 +175,11 @@ $$
 ### Limit cycle
 
 The solutions in the phase plane converge to a circular trajectory. In the time domain this corresponds to an oscillatory solution.
+
 $$
 \dot{x} = y + x(1 - x^2 - y^2) \quad,\quad\dot{y}=-x+y(1 - x^2 - y^2)
 $$
+
 ![Limit cycle example](images/02/limit_cycle.png){width=75%}
 
 ## Stability
