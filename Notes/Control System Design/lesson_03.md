@@ -120,10 +120,164 @@ $$
 > 0 \\ k\omega_o^2
 > \end{bmatrix} \\
 > &= \frac{k\omega_o^2}{s^2 + 2\zeta\omega_os + \omega_o^2}
-> \end{aligned} 
+> \end{aligned}
 > $$
 >
-> 
+> - Frequency response $G(j\omega) = Me^{j\theta}$, where
+>
+> $$
+> M = \frac{k\omega_o^2}{\sqrt{(\omega_o^2 - \omega)^2+(2\zeta\omega_o\omega)^2}}\ ,\quad
+> \phi = \frac{\sin\theta}{\cos\theta} = \frac{-2\zeta\omega_o\omega}{\omega_o^2-\omega^2}
+> $$
+>
+> - $M$: Magnitude
+> - $\phi$: Phase
+>
+> ![Bode plot](images/03/bode_plot.png){width=75%}
+>
+> The higher the damping the smoother the phase change goes
+>
+> - Step response
+>
+> ![Step response](images/03/step_response.png){width=60%}
+>
+> - Damping ratio $\zeta$: over-damping ($\zeta > 1$), critical damping ($\zeta = 1$), underdamping ($\zeta < 1$)
+> - Can find closed-form solutions for natural, step, frequency responses
+> - Steady-state response to $u(t) = 1 \rightarrow y(t) = G_{yu}(0) \cdot 1 = k$
 >
 > ***
+
+- Rise time ($T_r$): How fast does it go up
+- Settling time ($T_s$): How long does it take to get stable
+- Steady-state value ($y_{ss}$): Final stable value
+- Overshoot ($M_p$): Extra distance from the maximum value to the stable value
+
+### Transfer Functions, alternative derivation
+
+- Consider integrable function $f(t), f:\mathbb{R}^+ \rightarrow \mathbb{R}$ and s.t. $f(t) < e^{s_0t}$
+- Laplace transform $\mathcal{L}$ yields and $F = \mathcal{L}f:\mathbb{C} \rightarrow\mathbb{C}$, defined by
+
+$$
+F(s) = \int_0^{\infty}e^{-s\tau}f(\tau)d\tau,\quad\Re(s) > s_0
+$$
+
+- Properties of $\mathcal{L}$
+  - $\mathcal{L}(af(t) + bg(t)) = a\mathcal{L}f(t) + b\mathcal{L}g(t) = aF(s) + bG(s)$
+  - $\mathcal{L}\frac{df(t)}{df} = -f(0) + s\mathcal{L}f(t) = -f(0) + sF(s)$
+  - $\mathcal{L}\int_0^t f(\tau)d\tau = \frac{1}{s}\mathcal{L}f(t) = \frac{F(s)}{s}$
+  - $\mathcal{L}((f*g)(t)) = F(s)G(s)$
+- Now consider the system
+
+$$
+\begin{cases}
+\dot{x} &= Ax + Bu \\ 
+y &= Cx + Du
+\end{cases}
+$$
+
+- Take Laplace transforms (with zero initial conditions):
+
+$$
+\begin{cases}
+sX(s) &= AX(s) + BU(s) \\
+Y(s) &= CX(s) + DU(s)
+\end{cases}
+$$
+
+$$
+(sI - A)X(s) = BU(s) \implies X(s) = (sI-A)^{-1}BU(s)
+$$
+
+
+
+- Substitute for $X(s)$ to obtain:
+
+$$
+\begin{aligned}
+Y(s) &= CX(s) + DU(s) \\
+&= C(sI - A)^{-1}BU(s) + DU(s) \\
+&= \left\{C(sI - A)^{-1}B + D\right\}U(s)
+&= G_{yu}(s)U(s)
+\end{aligned}
+$$
+
+- Notice that Laplace transforms can be used to solve ODE
+
+> ***
+>
+> **EXAMPLE**: Let an LTI system be defined by the differential equations:
+> $$
+> \begin{aligned}
+> \frac{d^2}{dt^2}x_1(t) - x_2(t) + \frac{d}{dt}u(t) &= 0 \\
+> -\frac{d}{dt}x_2(t) + x_1(t) + u(t) &= 0 \\
+> x_1(t) + x_2(t) &= y(t)
+> \end{aligned}
+> $$
+>
+> - Obtain: $Y(s) = \frac{s - 1}{1 - s^3}U(s) = \frac{1}{s^2+s+1}U(s)$
+>
+> - More generally, consider
+>
+> $$
+> \frac{d^ny}{dt^n} + a_1\frac{d^{n-1}y}{dt^{n-1}}+...+a_ny = 
+> b_0\frac{d^mu}{dt^m} + b_1\frac{d^{m-1}u}{dt^{m-1}}+...+b_mu
+> $$
+>
+> $$
+> s^nY(s) + a_1s^{n-1}Y(s) + ...+a_nY(s)=b_0s^mU(s)+...+b_mU(s)
+> $$
+>
+> $$
+> \frac{Y(s)}{U(s)} = \frac{b_0s^m + b_1s^{m-1}+...+b_m}{s^n+a_1s^{n-1}+...a_n}
+> $$
+>
+> ***
+
+### Transfer Functions, invariance w.r.t. coordinate transformation
+
+- Consider model $\dot{x} = Ax + Bu,\quad y=Cx + Du$
+- corresponding transfer function
+
+$$
+Y(s) = \left(C(sI - A)^{-1}B + D\right)U(s)
+$$
+
+- Introduce similarity transformation $z = Tx$, and deduce model
+
+$$
+\dot{z}=TAT^{-1}z + TBu\qquad y=CT^{-1}z+Du$
+$$
+
+- Transfer function for new model is again
+
+$$
+Y(s) = \left(C(sI-A)^{-1}B + D\right)U(s)
+$$
+
+### Block Diagrams and Transfer Functions
+
+_Book 8.3_
+
+- TF manipulation allows modular analysis
+- Recall similar analysis done for state-space models
+
+![Serial blocks](images/03/block_1.png){width=30%}
+$$
+G_{yu} = G_2G_1
+$$
+![Parallel blocks](images/03/block_2.png){width=30%}
+$$
+G_{yu} = G_1 + G_2
+$$
+![Feedback loop](images/03/block_3.png){width=30%}
+$$
+G_{yu} = \frac{G_1}{1 + G_1G_2}
+$$
+
+### Bode plot
+
+- Consider $u(t) = e^{st},\ s=i\omega t$ (recall frequency response, Lecture 2)
+- Then, $y(t) = G(i\omega t)e^{i\omega t} = Me^{i(\omega t + \phi)}$
+  - gain: $M = \left|G(i\omega)\right|$
+  - phase: $\phi = \angle G(i\omega) = \tan^{-1} \frac{\Im G(i\omega)}{\Re G(i\omega)}$
 
