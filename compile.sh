@@ -73,9 +73,7 @@ PANDOC=$(pandoc \
     "${files[@]}")
     # --self-contained \
     # --katex="" \
-    # --css ../pandoc/pandoc.css \
     # --template ../pandoc/template \
-    # --mathjax \
 
 
 PANDOC="${PANDOC#*<body>}"

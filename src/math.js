@@ -1,5 +1,5 @@
 import '../submodules/KaTeX/dist/katex.css'
-import renderMathInElement from 'katex/dist/contrib/auto-render';
+import renderMathInElement from '../submodules/KaTeX/dist/contrib/auto-render';
 
 
 // function renderInlineMath() {
