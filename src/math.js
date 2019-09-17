@@ -1,4 +1,4 @@
-import 'katex/dist/katex.css';
+import '../submodules/KaTeX/dist/katex.css'
 import renderMathInElement from 'katex/dist/contrib/auto-render';
 
 
