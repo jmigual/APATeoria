@@ -280,4 +280,59 @@ $$
 - Then, $y(t) = G(i\omega t)e^{i\omega t} = Me^{i(\omega t + \phi)}$
   - gain: $M = \left|G(i\omega)\right|$
   - phase: $\phi = \angle G(i\omega) = \tan^{-1} \frac{\Im G(i\omega)}{\Re G(i\omega)}$
+- Input is magnified by $M$, phase-shifted by $\phi$
+
+### Loop transfer function
+
+_Book 9.1_
+
+We introduce the loop transfer function
+$$
+L(s) = P(s)C(s)
+$$
+which is the transfer function obtained by breaking the feedback loop
+
+```{.mermaid caption="Basic feedback loop"}
+graph LR
+classDef hide display:none;
+
+Input -- r --> Add(( ))
+C[C] -- u --> P[P]
+Add -- e --> C
+P -- y --> Output
+P -- - --> Add
+
+class Input hide
+class Output hide
+```
+
+$$
+\begin{aligned}
+e &= y - r
+\end{aligned}
+$$
+
+### Nyquist plot
+
+_Book 9.2_
+
+It is the curve $L(j\omega)$ in the complex plane parametrized by $\omega$
+$$
+L(s) = \frac{1.4e^{-s}}{(s + 1)^2}
+$$
+![Nyquist example](images/03/nyquist.png){width=50%}
+
+### Nyquist stability criterion
+
+_Book 9.2_
+
+- $N_{enc}$ is number of clockwise encirclements
+- $P$ is the number of unstable poles of $L(s)$
+- Then
+
+$$
+N_{enc} = 0 - P \implies N_{enc} = -P \implies
+$$
+
+> For the system to be stable, $L(j\omega)$ should encircle the point -1 in the clockwise direction as many times as the number of unstable poles of $L(j\omega)$
 
