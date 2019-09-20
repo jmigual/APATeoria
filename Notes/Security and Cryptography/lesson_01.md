@@ -1,4 +1,4 @@
-# Lesson 1
+# Lecture 1
 
 ## Introduction
 
