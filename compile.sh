@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#set -x
+# set -x
 set -o pipefail
 shopt -s nullglob
 
@@ -39,6 +39,7 @@ OUT_PATH="$SCRIPT_PATH/dist"
 
 SELECTED_DIR=$(realpath "$1")
 SELECTED_NAME=$(basename "$SELECTED_DIR")
+PATH_IMAGES="$SELECTED_DIR/images"
 
 echo Script path: \""$SCRIPT_PATH"\"
 
@@ -94,8 +95,15 @@ EOF
 
 cd "$OLDPWD"
 
-if [ -d "$SELECTED_DIR/images" ]; then
-    cp -R "$SELECTED_DIR/images" "$OUT_PATH"
+if [ -d $PATH_IMAGES ]; then
+    echo Copying images
+    for image in "$PATH_IMAGES"/*/*.{png,jpg,jpeg}; do
+        PATH_IM_REL=$(realpath --relative-to="$PATH_IMAGES" "$image")
+        PATH_IM_OUT="$OUT_PATH/images/$PATH_IM_REL"
+        mkdir -p $(dirname "$PATH_IM_OUT")
+        npx imagemin $image > "$OUT_PATH/images/$PATH_IM_REL" &
+    done
+    wait
 fi
 
 WEBPACK_COMMAND=webpack
@@ -108,7 +116,6 @@ npx "${WEBPACK_COMMAND[@]}" \
     -p \
     --progress \
     --config $SCRIPT_PATH/webpack/webpack.config.babel.js \
-    --env.title="$SELECTED_NAME" \
     --display normal
 #    --display errors-only \
 

@@ -27,7 +27,8 @@ export default function (env) {
         }),
         new OptimizeCSSAssetsPlugin({
 
-        })],
+        })
+      ],
     },
     mode: 'development',
     module: {
@@ -40,8 +41,7 @@ export default function (env) {
               presets: ['@babel/preset-env'],
               // plugins: ['@babel/plugin-transform-runtime']
             }
-          }, 
-        ]
+          }, ]
         },
         {
           test: /\.(html)$/,
@@ -71,18 +71,14 @@ export default function (env) {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        title: env.title,
         template: path.join(DIST, 'pandoc.html'),
         inlineSource: '.(js|css)'
       }),
       new HtmlWebpackInlineSourcePlugin(),
-      // new ScriptExtHtmlWebpackPlugin({
-      //   defaultAttribute: 'defer'
-      // }),
       new MiniCssExtractPlugin({
         filename: '[name].css',
         chunkFilename: '[id].css',
-      }),
+      })
     ],
     stats: {
       colors: true
