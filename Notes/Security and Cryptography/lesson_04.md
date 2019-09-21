@@ -177,3 +177,30 @@ $$
 - Linear complexity: $L_2 \cdot 2^{L_1}$
 
 ![Graphical representation of the shrinking generator](images/04/non_linear_shrinking.png){width=60%}
+
+#### Trivium
+
+- Hardware based
+- Security unknown
+
+![Graphical representation of the trivium generator](images/04/non_linear_trivium.png){width=60%}
+
+#### RC4
+
+- Simple
+- Broken
+- Used for 20 years
+
+```python
+i = (i + 1) % 256
+j = (j + S[i]) % 256
+S[i], S[j] = S[j], S[i]
+t = (S[i] + S[j]) % 256
+K = S[t]
+```
+
+## Summary
+
+- Many modern stream ciphers can be obtained by combining, in a non-linear way, simple bit generators called LSFRs
+- LFSR-based stream ciphers are very fast ciphers, suitable for implementation in hardware, to encrypt real-time data such as voice or video. But they need to be augmented with a method to produce a form of non-linear output.
+- RC4 provides a fast and compact byte oriented stream cipher for use in software, but it is **no longer considered secure**.
