@@ -23,7 +23,7 @@ $$
 - This cipher is IND-PASS secure if PRF is secure (See the textbook)
 - Then, how are we going to build a secure PRF?
 
-### Linear Feedback Shift Registers
+## Linear Feedback Shift Registers (LFSRs)
 
 - For generating a binary stream, we can use feedback shift registers
 
@@ -109,3 +109,71 @@ $$
 - This polynomial is not good because:
   - It is singular
   - Depending on the initial state then $N$ becomes 1
+
+### Security of LFSRs
+
+- With $L$ registers and $2L$ known output bits reveal the connection polynomial
+  - First $L$ bits reveal the $s$ values
+  - We need to learn the $L$ unknowns: $c$ values
+
+$$
+s_j = \sum_{i=1}^L c_i \cdot s_{j-i}
+$$
+
+- Therefore, LFSRs are **not secure**
+
+### Linear Complexity
+
+- Linear Complexity
+  - $L(s)$ is 0, if $s$ is the zero sequence
+  - $L(s)$ is $\infty$ if no LFSR generates $s$
+  - $L(s)$ is the length of the shortest LFSR to generate $s$
+- Finite set of **n** bits
+  - For all $n\ge 1$ we have $0\le L(s^n)\le n$
+  - If $s$ is periodic with period $N$ then $L(s) \le N$
+  - $L(s \oplus t) \le L(s) + L(t)$
+
+### Combining LFSRs
+
+- Use $n$ LFSRs
+- Use the outputs for a **non-linear** combination function
+
+![Combining LFSRs](images/04/non_linear.png){width=50%}
+
+
+
+### Period of a Combination of LSFRs
+
+- There are several functions. E.g.:
+
+$$
+f(x_1,x_2,x_3,x_4,x_5) = 1 \oplus x_2 \oplus x_3 \oplus (x_4 \cdot x_5) \oplus (x_1 \cdot x_2 \cdot x_3 \cdot x_5)
+$$
+
+- If it is a Boolean function of sums of products, we call it **algebraic normal form**
+- Suppose there are $n$ LFSRs with periods $L_1, L_2, ...,L_n$. Then the linear complexity of $f(x_1, x_2, ...,x_n)$ is
+
+$$
+f(L_1,...,L_n)
+$$
+
+###  Non-linear combiners
+
+- Geffe is not secure (book section 12.3)
+
+#### Alternating-Step Generator
+
+- 3 LFSRs of size $L_1, L_2, L_3$ pairwise co-prime
+
+- Period: $2^{L_1} \cdot (2^{L_2} - 1) \cdot (2^{L_3} - 1)$
+
+- Linear complexity: $(L_2 + L_3) \cdot 2^{L_1}$
+
+  ![Graphical representation of the alternating-step generator](images/04/non_linear_alternating.png){width=60%}
+
+#### Shrinking Generator
+
+- Period: $(2^{L_2} - 1)\cdot 2^{L_1 - 1}$
+- Linear complexity: $L_2 \cdot 2^{L_1}$
+
+![Graphical representation of the shrinking generator](images/04/non_linear_shrinking.png){width=60%}
