@@ -245,7 +245,7 @@ $$
 - Introduce similarity transformation $z = Tx$, and deduce model
 
 $$
-\dot{z}=TAT^{-1}z + TBu\qquad y=CT^{-1}z+Du$
+\dot{z}=TAT^{-1}z + TBu\qquad y=CT^{-1}z+Du
 $$
 
 - Transfer function for new model is again
@@ -335,4 +335,37 @@ N_{enc} = 0 - P \implies N_{enc} = -P \implies
 $$
 
 > For the system to be stable, $L(j\omega)$ should encircle the point -1 in the clockwise direction as many times as the number of unstable poles of $L(j\omega)$
+
+### Stability Margins
+
+- The distance from point "-1" is therefore a measure of stability and damping.
+- Important margins are:
+  - $\phi_m$ = Phase margin (OK is $45^{\circ}$)
+  - $g_m$ = Gain margin (OK is $4 - 6 = 12 - 16$ dB)
+  - $s_m$ = Vector stability margin (also just _stability margin_)
+
+### Different margins
+
+> ***
+>
+> **EXAMPLE**:
+> $$
+> L(s) = \frac{0.38(s^2 + 0.1s + 0.55)}{s(s+1)(s^2 + 0.06s + 0.5)}
+> $$
+>
+> - Gain margin: $g_m = 266$
+> - Phase margin: $\phi_m = 70^{\circ}$
+> - Stability margin: $s_m =  0.27$
+>
+> ![Nyquist plot of system](images/03/different_margins.png){width=30%}
+>
+> ***
+
+### PID Control
+
+- Transfer functions allow the study of the properties of PID controllers, and the proper selection of their characteristic parameters
+- Consider $u(t) = k_p e(t) + k_i \int_0^t e(\tau) d\tau + k_d \frac{de(t)}{dt}$
+- Controller block $C(s) = k_p + \frac{k_i}{s} + k_d s$
+
+![PID blocks](images/03/pid_blocks.png){width=75%}
 
