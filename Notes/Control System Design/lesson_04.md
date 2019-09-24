@@ -87,11 +87,11 @@ is known as Kalman rank condition
 > - Consider
 >
 > $$
-> A = \begin{bmatrix}
+> A = \left[\begin{array}{rrr}
 > -5 & -4 & 4 \\ 1 & 0 & -2 \\ -1 & -1 & -1
-> \end{bmatrix}\quad B = \begin{bmatrix}
+> \end{array}\right]\quad B = \left[\begin{array}{r}
 > 3 \\ -1 \\ 1
-> \end{bmatrix}
+> \end{array}\right]
 > $$
 >
 > - Compute
@@ -99,22 +99,22 @@ is known as Kalman rank condition
 > $$
 > W_r = \begin{bmatrix}
 > B & AB & A^2 B
-> \end{bmatrix} = \begin{bmatrix}
+> \end{bmatrix} = \left[\begin{array}{rrr}
 > 3 & -7 & 19 \\ -1 & 1 & -1 \\
 > 1 & -3 & 9
-> \end{bmatrix}
+> \end{array}\right]
 > $$
 >
 > - Perform elementary column operations $(2^{\circ} + 1^{\circ},3^{\circ} - 1^{\circ})$
 >
 > $$
-> \operatorname{rank} \begin{bmatrix}
+> \operatorname{rank} \left[\begin{array}{rrr}
 > 3 & -7 & 19 \\
 > -1 & 1 & -1 \\
 > 1 & -3 & 9
-> \end{bmatrix} = \operatorname{rank} \begin{bmatrix}
+> \end{array}\right] = \operatorname{rank} \left[\begin{array}{rrr}
 > 3 & -4 & 16 \\ -1 & 0 & 0 \\ 1 & -2 & 8
-> \end{bmatrix} = 2 < n = 3 \implies (A,B) \text{ not reachable}
+> \end{array}\right] = 2 < n = 3 \implies (A,B) \text{ not reachable}
 > $$
 >
 > ***
@@ -183,9 +183,9 @@ $$
 > \end{bmatrix},\quad C=\begin{bmatrix}
 > \alpha & 1
 > \end{bmatrix} \\
-> W_o &= \begin{bmatrix}
+> W_o &= \left[\begin{array}{rl}
 > \alpha & 1 \\ 0 & 2 + \alpha
-> \end{bmatrix}
+> \end{array}\right]
 > \end{aligned}
 > $$
 >
@@ -212,4 +212,55 @@ $$
   \lambda I - A \\ C
   \end{bmatrix} = n, \forall \lambda \in C
   $$
+
+> ***
+>
+> **EXAMPLE**: Consider $(A,B)$:
+> $$
+> A = \left[\begin{array}{rrr}
+> -5 & -4 & 4 \\ 1 & 0 & -2 \\ -1 & -1 & -1
+> \end{array}\right]\quad
+> \left[\begin{array}{r}
+> 3 \\ -1 \\ 1
+> \end{array}\right]
+> $$
+>
+> - Matrix $A$ has eigenvalues in the set $\{-1, -2, -3\}$
+> - Perform following computations
+>
+> $$
+> \operatorname{rank} \left[\begin{array}{c|c}
+> (\lambda I - A)|_{\lambda=-1} & B
+> \end{array}\right] = \operatorname{rank} \left[\begin{array}{rrr|r}
+> 4 & 4 & -4 & 3 \\
+> -1 & -1 & 2 & -1 \\
+> 1 & 1 & 0 & 1 
+> \end{array}\right] = 3
+> $$
+>
+> - Eigenvalue $-1$ is reachable
+>
+> $$
+> \operatorname{rank} \left[\begin{array}{c|c}
+> (\lambda I - A)|_{\lambda=-2} & B
+> \end{array}\right] = \operatorname{rank} \left[\begin{array}{rrr|r}
+> 3 & 4 & -4 & 3 \\
+> -1 & -2 & 2 & -1 \\
+> 1 & 1 & -1 & 1 
+> \end{array}\right] = 2
+> $$
+>
+> - Eigenvalue $-2$ is unreachable
+>
+> $$
+> \operatorname{rank} \left[\begin{array}{c|c}
+> (\lambda I - A)|_{\lambda=-1} & B
+> \end{array}\right] = \operatorname{rank} \left[\begin{array}{rrr|r}
+> 2 & 4 & -4 & 3 \\
+> -1 & -3 & 2 & -1 \\
+> 1 & 1 & -2 & 1 
+> \end{array}\right] = 3
+> $$
+>
+> - Eigenvalue $-3$ is reachable
 
