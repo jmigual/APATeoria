@@ -262,14 +262,19 @@ _Book 8.3_
 - Recall similar analysis done for state-space models
 
 ![Serial blocks](images/03/block_1.png){width=30%}
+
 $$
 G_{yu} = G_2G_1
 $$
+
 ![Parallel blocks](images/03/block_2.png){width=30%}
+
 $$
 G_{yu} = G_1 + G_2
 $$
+
 ![Feedback loop](images/03/block_3.png){width=30%}
+
 $$
 G_{yu} = \frac{G_1}{1 + G_1G_2}
 $$
@@ -320,6 +325,7 @@ It is the curve $L(j\omega)$ in the complex plane parametrized by $\omega$
 $$
 L(s) = \frac{1.4e^{-s}}{(s + 1)^2}
 $$
+
 ![Nyquist example](images/03/nyquist.png){width=50%}
 
 ### Nyquist stability criterion

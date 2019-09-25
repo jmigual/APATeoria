@@ -26,6 +26,8 @@ $$
 
 ### Algebraic Conditions for Reachability
 
+_Book 6.1_
+
 - Reachability depends on the form $e^{At}B$, i.e. on matrices $A$ and $B$
 - Assume initial state $x(0) =0$
 - For input $u(t) = \delta(t)$ we find the state
@@ -195,6 +197,8 @@ $$
 
 ### Reachability and Observability: Alternative Test by Hautus
 
+_Book 6.1_
+
 - Rationale: $\lambda I - A$ has rank $n$ for all $\lambda$ not equal to an eigenvalue of $A \implies$ rank check  needs only to be evaluated when $\lambda$ is equal to an eigenvalue of $A$
 
 - Finding unreachable or unobservable _eigenvalues_ can be done using:
@@ -263,4 +267,319 @@ $$
 > $$
 >
 > - Eigenvalue $-3$ is reachable
+>
+> ***
+
+## Lack of unreachability and of unobservability
+
+_Book 8.3_
+
+- **UC 1**: Physical unreachability - uncoupled variables are not affected by input
+- **UC 2**: Parallel interconnection controlled by single input
+- **UO 1**: Directly unmeasured variables are not fed back to measured ones
+- **UO 2**: Single variables cannot be extracted from global observation function
+
+- This is particular true for SISO systems
+
+> ***
+>
+> **EXAMPLE**: Consider the system in series, described via the following block diagram:
+>
+> ![Example blocks](images/04/series_blocks.png){width=75%}
+>
+> $$
+> \begin{aligned}
+> \dot{\mathcal{E}}_1(t) &= -\mathcal{E}_1(t) + 2u(t) \\
+> \dot{\mathcal{E}}_2(t) &= -\mathcal{E}_1(t) - 2\mathcal{E}_2(t) - u(t) \\
+> y(t) &= \mathcal{E}_1(t) + \mathcal{E}_2(t) + u(t)
+> \end{aligned}
+> $$
+>
+> - System matrices:
+>
+> $$
+> \begin{aligned}
+> A &= \begin{bmatrix}\begin{array}{rr}
+> -1 & 0 \\ -1 & -2
+> \end{array}\end{bmatrix}\quad & B &= \begin{bmatrix}\begin{array}{r}
+> 2 \\ -1
+> \end{array}\end{bmatrix} \\
+> C &= \begin{bmatrix}1 & 1\end{bmatrix} &
+> D &= \begin{bmatrix}1\end{bmatrix}
+> \end{aligned}
+> $$
+>
+> - Eigenvalues matrix $A$: $(\lambda_1 = -1, \lambda_2 = -2)$
+> - Reachability and observability matrices:
+>
+> $$
+> W_r = \begin{bmatrix}\begin{array}{rr}
+> 2 & -2 \\ -1 & 0
+> \end{array}\end{bmatrix}\quad 
+> W_o = \begin{bmatrix}\begin{array}{rr}
+> 1 & 1 \\ -2 & -2
+> \end{array}\end{bmatrix}
+> $$
+>
+> - The matrix $W_r$ has full rank so the system is reachable
+> - The matrix $W_o$ has rank 1, so the system is not observable
+> - Check reachability with Hautus test
+>
+> $$
+> \begin{bmatrix}
+> \lambda I - A & B
+> \end{bmatrix} = \begin{bmatrix}
+> \lambda + 1 & 0 & 2 \\ 1 & \lambda + 2 & -1
+> \end{bmatrix}
+> $$
+>
+> - For $\lambda = -1$ we find:
+>
+> $$
+> \operatorname{rank}\left(\begin{bmatrix}
+> \lambda I - A & B
+> \end{bmatrix}_{\lambda=-1}\right) = \operatorname{rank}
+> \left(\begin{bmatrix}\begin{array}{rrr}
+> 0 & 0 & 2 \\ 1 & 1 & -1
+> \end{array}\end{bmatrix}\right) = 2
+> $$
+>
+> - For $\lambda = -2$ we find:
+>
+> $$
+> \operatorname{rank}\left(\begin{bmatrix}
+> \lambda I - A & B
+> \end{bmatrix}_{\lambda=-2}\right) = \operatorname{rank}
+> \left(\begin{bmatrix}\begin{array}{rrr}
+> -1 & 0 & 2 \\ 1 & 0 & -1
+> \end{array}\end{bmatrix}\right) = 2
+> $$
+>
+> - This means that the system is reachable
+> - Check observability with Hautus test
+>
+> $$
+> \begin{bmatrix}c \\ \lambda I - A\end{bmatrix} =
+> \begin{bmatrix}
+> 1 & 1 \\ \lambda + 1 & 0 \\ 1 & \lambda + 2
+> \end{bmatrix}
+> $$
+>
+> - For $\lambda=-1$ we find:
+>
+> $$
+> \operatorname{rank}\left(\begin{bmatrix}
+> C \\ \lambda I - A
+> \end{bmatrix}_{\lambda=-1}\right) = \operatorname{rank}
+> \left(\begin{bmatrix}\begin{array}{rr}
+> 1 & 1 \\ 0 & 0 \\ 1 & 1
+> \end{array}\end{bmatrix}\right) = 1
+> $$
+>
+> - For $\lambda = -2$ we find:
+>
+> $$
+> \operatorname{rank}\left(\begin{bmatrix}
+> C \\ \lambda I - A
+> \end{bmatrix}_{\lambda=-2}\right) = \operatorname{rank}
+> \left(\begin{bmatrix}\begin{array}{rr}
+> 1 & 1 \\ -1 & 0 \\ 1 & 1
+> \end{array}\end{bmatrix}\right) = 2
+> $$
+>
+> - This means that the system is not observable
+> - Compute transfer function
+>
+> $$
+> \begin{aligned}
+> G(s) &= C(sI - A)^{-1}B + D \\
+> &= \frac{s^2 + 4s + 3}{s^2 + 3s + 2} \\
+> &= \frac{(s+3)(s+1)}{(s+2)(s+1)}
+> \end{aligned}
+> $$
+>
+> - Pole-zero cancellation for $s=-1$
+>
+> ***
+
+### Duality
+
+_Book 7.2_
+
+- Reachability, observability are dual concepts
+
+$$
+\begin{aligned}
+(A,B) \text{ reachable } &\iff (A^T, B^T) \text{ observable } \\
+(A,C) \text{ observable } &\iff (A^T, C^T) \text{ reachable}
+\end{aligned}
+$$
+
+- The above fact relates to the following propositions
+  - For every property that holds for Reachability there exists a dual property in terms of observability
+  - State feedback and observer design problems are closely related (as we shall see later in class)
+  - Both Reachability and observability are invariant under similarity transformations (will elaborate in exercise session)
+
+## Canonical forms
+
+_Book 6.1 + 7.1_
+
+- Consider the system
+
+$$
+\dot{x}(t) + Ax(t) + Bu(t),\quad y(t) = Cx(t) + Du(t)
+$$
+
+- Given similarity transformation $z(t) = Tx(t)$ with
+
+$$
+\begin{aligned}
+A' &= TAT^{-1}\qquad & B'&=TB \\
+C' &= CT^{-1} & D' &= D
+\end{aligned}
+$$
+
+- to obtain
+
+$$
+\dot{z}(t) = A'z(t) + B'u(t),\quad y(t) = C'z(t) + D'u(t)
+$$
+
+- Then if $(A,B)$ is reachable $\implies (A', B')$ is reachable
+- Then if $(A,C)$ is observable $\implies (A',C')$ is observable
+
+### Reachable Canonical form
+
+_Book 6.1_
+
+- Consider the following system to be reachable
+
+$$
+\dot{x}(t) = Ax(t) + Bu(t),\quad y(t) = Cx(t) + Du(t)
+$$
+
+- Transform SISO model coordinates as $z=Tx$ to obtain the following:
+
+$$
+\begin{aligned}
+A_r &= \begin{bmatrix}
+-a_1 & -a_2 & -a_3 & \cdots & -a_n \\
+1 & 0 & 0 & \cdots & 0 \\
+0 & 1 & 0 & \cdots & 0 \\
+\vdots & \ddots & \ddots & \ddots & \vdots \\
+0 & \cdots & 0& 1 & 0
+\end{bmatrix},\quad &B_r &= \begin{bmatrix}1 \\ 0 \\ vdots \\ 0 \\ 0\end{bmatrix}\\
+C_r &= \begin{bmatrix}c_1 & c_2 & c_3 & \cdots & c_n\end{bmatrix}, &
+D_r &= \begin{bmatrix}d\end{bmatrix}
+\end{aligned}
+$$
+
+- Its block diagram contains th every constants appearing in the model
+
+![Reachable block diagram](images/04/reachable_block.png){width=75%}
+
+- The characteristic polynomial (same as that of original model) is:
+
+$$
+\lambda(s) = s^n + a_1 s^{n-1} + \dotsb + a_{n-1}s + a_n
+$$
+
+- This canonical form also yield the following reachability matrix:
+
+$$
+\begin{aligned}
+\begin{bmatrix}
+B_r & A_rB_r & A_r^2B_r & A_r^3B_r & \cdots & A_r^{n-1}B_c
+\end{bmatrix} = \\
+=\begin{bmatrix}
+1 & -a_1 & a_1^2 - a_2 & \cdots & * & * & * \\
+0 & 1 & -a_1 & \cdots & * & * & * \\
+0 & 0 & 1 & \cdots & * &*&* \\
+\vdots & \vdots & \vdots &  & \vdots & \vdots & \vdots \\
+0 & 0 & 0 & \cdots & 1 & -a_1 & *\\
+0 & 0 & 0 & \cdots & 0 & 1 & -a_1  \\
+0 & 0 & 0 & \cdots & 0 & 0 & 1
+\end{bmatrix}
+\end{aligned}
+$$
+
+$\implies (A_r,B_r)$ in reachable canonical form is reachable (as expected)
+
+### Reachability - Similarity transformation
+
+Note: Similarity transformations do not affect reachability
+
+- How to find $T$ that gets the reachable canonical form? From $(A,B)$ (with $W_r$) to $(A_r = TAT^{-1},B_r=TB)$ with $T$.
+- **Fact**: If $(A,B)$ is reachable, then there exists a transformation $T$ that yields the reachable canonical form
+- $W_r =$  reachability matrix of original system
+- $\tilde{W}_r$ reachability matrix of system in reachable canonical form
+
+Then
+$$
+T = \tilde{W}_rW_r^{-1}
+$$
+
+### Observability Canonical Form
+
+_Book 7.1_
+
+- Consider the observable system
+
+$$
+\dot{x}(t) = Ax(t) + Bu(t),\quad y(t) = Cx(t) + Du(t)
+$$
+
+- Transform SISO model coordinates as $x=T\bar{x}$ to obtain
+
+$$
+\begin{aligned}
+A_o &= \begin{bmatrix}
+-a_1 & 1 & 0 & \cdots & 0 \\
+-a_2 & 0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+-a_{n-1} & 0 & 0 & \cdots & 1 \\
+-a_n & 0 & 0 & \cdots & 0
+\end{bmatrix},\quad & B_o &= \begin{bmatrix}
+b_1 \\ b_2 \\ \vdots \\ b_{n-1} \\ b_n
+\end{bmatrix},\\
+C_o &= \begin{bmatrix} 1& 0 & \cdots & 0 & 0 \end{bmatrix},
+& D_o &=\begin{bmatrix}d\end{bmatrix}
+\end{aligned}
+$$
+
+- Its block diagram contains the very constants appearing in the model
+
+![Blocks of observable system](images/04/observable_block.png){width=75%}
+
+- This canonical form yields the observability matrix:
+
+$$
+\begin{bmatrix}
+C_o \\ C_oA_o \\ C_oA_o^2 \\ \vdots \\ C_oA_o^{n-1}
+\end{bmatrix}=\begin{bmatrix}
+1 & 0 & 0 & \cdots & 0 & 0 & 0 \\
+-a_1 & 1 & 0 & \cdots & 0 & 0 & 0 \\
+* & -a_1 & 1 & \cdots & 0 & 0 & 0 \\
+\vdots & \vdots &\vdots &  &\vdots &\vdots &\vdots \\
+* & * &* & \cdots& 1 & 0 & 0 \\
+*&*&*&\cdots &-a_1 & 1 & 0 \\
+*&*&*&\cdots &*&-a_1&1
+\end{bmatrix}
+$$
+
+$\implies (A_o,C_o)$ in observable canonical form is observable
+
+### Observability - Similarity transformation
+
+Note: Similarity transformations do not affect observability
+
+- How to find a $T$ that gets the observable canonical form:? From $(A,C)$ (with $W_o$) to $(A_o =TAT^{-1},C_o=CT^{-1})$ with $T$
+- **Fact** If $(A,C)$ is observable, then there exists a transformation $T$ that yields the observable canonical form
+- $W_o=$ observability matrix of original system
+- $\tilde{W}_o=$ observability matrix of system in reachable canonical form
+
+Then:
+$$
+T=\tilde{W}_o^{-1}W_o
+$$
 
