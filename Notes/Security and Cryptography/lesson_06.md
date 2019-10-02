@@ -330,3 +330,6 @@ S = addRoundKey(S, K[0])
 - Mode of operations are important
   - Use CBC or CTR
   - Block ciphers can be used as a stream cipher in CFB, OFB and CTR modes
+
+
+
