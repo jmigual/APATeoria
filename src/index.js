@@ -18,10 +18,11 @@ function wrapTables() {
 
 function addCaptions() {
   // Search for all the elements with a caption attribute
-  let captionList = document.querySelectorAll("*[caption]");
+  let captionList = document.body.querySelectorAll("[caption],[data-caption]");
 
   for (let element of captionList) {
-    let text = element.getAttribute("caption");
+    let text = element.getAttribute("caption") || "";
+    text += element.getAttribute("data-caption") || "";
 
     // Ignore empty elements
     if (text === null || text === "") continue;
