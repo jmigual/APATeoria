@@ -226,3 +226,129 @@ def md(m, t, l, s_0):
   - Store $2^{\frac{n}{2}}$ possible messages for $m_1$ and for each possible $m_2$ check whether its hash is in the list
 - **Smart**: Pollard-$\rho$ with Floyd's cycle finding algorithm
   - Computational complexity still $O\left(2^{\frac{n}{2}}\right)$  - but only constant small storage required 
+
+## HMAC
+
+-  It is desired to have a keyed hash from unkeyed hash function, e.g.:
+
+$$
+{\color{blue}t} = {\color{blue}H}({\color{red}k}||{\color{blue}m}||\mathsf{pad}_i (|{\color{red}k}| + |{\color{blue}m}|, \boldsymbol{b}))
+$$
+
+- However, this is not secure. Imagine that the adversary asks for
+
+$$
+{\color{blue}t} = \mathsf{MD}[{\color{blue}f},{\color{blue}s}]\Big({\color{red}k}||{\color{blue}m}||\mathsf{pad}_i(l+|{\color{blue}m}|,l)\Big)
+$$
+
+- Then it is possible for her to construct valid keyed hashes in the form of
+
+$$
+{\color{blue}m}||\mathsf{pad}_i(\mathcal{l} + |{\color{blue}m}|, \mathcal{l})||{\color{blue}m'}
+$$
+
+### Nested MAC: NMAC
+
+- How to achieve a secure keyed hash based on MD construction?
+- Nested MAC
+
+$$
+\mathsf{NMAC}_{{\color{red}k_1},{\color{red}k_2}}({\color{blue}m}) = {\color{blue}F}_{\color{red}k_1}({\color{blue}G}_{\color{red}k_2}({\color{blue}m}))
+$$
+
+$$
+\begin{aligned}
+{\color{blue}F}_{\color{red}k_1}({\color{blue}x}) &= {\color{blue}f}\Big(\Big({\color{blue}x}||\mathsf{pad}_2(l+|{\color{blue}x}|,l)\Big) ||{\color{red}k_1}\Big) = \mathsf{MD}[{\color{blue}f},{\color{red}k_1}]^*({\color{blue}m}) \\
+{\color{blue}G}_{\color{red}k_2}({\color{blue}m}) &= \mathsf{MD}[{\color{blue}f},{\color{red}k_2}]^*({\color{blue}m})
+\end{aligned}
+$$
+
+### HMAC from NMAC
+
+- Now we can construct HMAC as follows
+
+$$
+\begin{aligned}
+\mathsf{HMAC}_{\color{red}k}(m) &= {\color{blue}H}\Big(({\color{red}k}\oplus {\color{blue}\mathsf{opad}}) || {\color{blue}H}(({\color{red}k}\oplus {\color{blue}\mathsf{ipad}}) || {\color{blue}m}))\Big) \\
+&= \mathsf{MD}[{\color{blue}f},{\color{blue}IV}](({\color{red}k}\oplus {\color{blue}\mathsf{opad}})||\mathsf{MD}[{\color{blue}f},{\color{blue}IV}](({\color{red}k}\oplus {\color{blue}\mathsf{ipad}})||{\color{blue}m})))
+\end{aligned}
+$$
+
+- Opad: outer pad: `0x36` repeated $l/8$ times
+- Ipad: inner pad: `0x5c` repeated $l/8$ times
+
+### MAC from a Block Cipher
+
+- Because of the padding methods, this is not secure
+
+![Block cipher flow](images/07/mac_cipher.png){width=75%}
+
+
+
+- In practice, we pick block cipher keys $k_1$ and $k_2$ and compute
+
+$$
+\mathsf{EMAC}_{{\color{red}k_1},{\color{red}k_2}}({\color{blue}m}) = {\color{blue}e}_{\color{red}k_2}(\textsf{CBC-MAC}_{\color{red}k_1}({\color{blue}m})))
+$$
+
+- This one is secure given that underlying block cipher is secure
+
+
+
+## SHA-3
+
+- Attacks against MD-5 and SHA-1 lead to a competition in 2007
+  - 64 applicants
+  - Reduced to 5 in 2010
+    - BLAKE, a proposal based on the ChaCha stream cipher
+    - Grostl, a Merkle-Damgard construction using components, such as the S-Box, from AES
+    - JH, a sponge-like construction with a similar design philosophy to AES
+    - **Keccak**, a sponge construction, and the eventual winner
+    - Skein, a function based on the Threefish block cipher
+  - Winner announced in October 2012
+
+### The Sponge Function
+
+- A modern technique to create
+  - Hash functions
+  - MACs
+  - Key Derivation Functions and more
+
+![The sponge construction](images/07/sponge_construction.png){width=75%}
+
+
+
+### IND-CCA Secure Encryption
+
+
+
+![IND-CCA encryption (above) and decryption (below) using a sponge](images/07/sha_3_encryption.png){width=75%}
+
+
+
+
+
+## Summary
+
+- Keyed hash functions have well-defined security mode
+- Unkeyed hash functions rely on "Human ignorance"
+- Collision Resistance is required due to birthday paradox
+
+- Most hash functions are iterative, built on MD4, which are surprisingly weaker than expected
+
+- Best functions now are SHA-2 and SHA-3
+
+- MAC is a keyed hash function
+- KDF is hash function with arbitrary length codomain
+
+- MAC and KDF can be created out of either block ciphers or hash functions
+
+- Hash functions have several properties:
+  - Arbitrary length input
+  - Fixed output
+  - Efficient
+  - Preimage resistant
+  - Second preimage resistant $\rightarrow 2^n$
+  - Collision resistant $\rightarrow \sqrt{2^n} \rightarrow 2^{\frac{1}{2}n}$
+
+- Need to know: **HMAC**
