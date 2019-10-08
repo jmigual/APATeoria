@@ -91,3 +91,133 @@ $$
   2. If $\operatorname{gcd}(a,N)=g \ne 1$ and $\operatorname{gcd}(a,N)$ divides $b$, there are $g$ solutions
   3. Otherwise there is no solution
 
+- The number of integers in $\mathbb{Z}/N\mathbb{Z}$ that are co-prime to $N$ is given by Euler's Totient Function:
+
+$$
+\phi(N) = \prod_{i=1}^np_i^{e_i - 1}(p_i-1)
+$$
+
+where
+$$
+N = \prod_{i=1}^n p_i^{e_i}
+$$
+For $\mathbb{Z}_8 = \{0, 1, 2, 3, 4, 5, 6, 7\}$, $\phi(8) = 4 \implies$ there are 4 co-primes in this set
+
+### Multiplicative Inverse Modulo $N$
+
+- Solution for $a\cdot x = b \mod N$
+- We need to find $c$ such that $a \cdot c = c\dot a = 1 \mod N$
+- Such a $c$ is called the multiplicative inverse modulo $N$ of $a$: $a^{-1}$
+- $a^{-1}$ exists only when $\operatorname{gcd}(a,N)=1$
+
+### Fields
+
+- If $N$ is a prime $p$, then all none-zero elements have a multiplicative inverse in $\mathbb{Z}/p\mathbb{Z}$
+- Thus, $a \cdot x = b \mod p$ has unique solution
+- A ring like $\mathbb{Z}/p\mathbb{Z}$ with all none-zero elements having a multiplicative inverse is called a field
+
+**Definition**: A field is a set with two operations $(G,\times,+)$ such that:
+
+- $(G,+)$ is an abelian group
+- $(G\setminus 0,x)$ is an abelian group
+- $(G,\times,+)$ satisfies the distribution law
+
+- $(\mathbb{Z}/N\mathbb{Z})^*$ is the set of all elements that are invertible (the set of elements that are co-prime of $N$)
+
+$$
+(\mathbb{Z}/N\mathbb{Z})^* = \{x \in \mathbb{Z}/N\mathbb{Z}: \operatorname{gcd}(x,N)=1\}
+$$
+
+- The size of $(\mathbb{Z}/N\mathbb{Z})^*$ is $\phi(N)$
+- If $N$ is a prime $p$
+
+$$
+(\mathbb{Z}/p\mathbb{Z})^* = \{1, \dotsc, p -1\}
+$$
+
+### Theorems
+
+- **Lagrange's Theorem**: If $(G,\times)$ is a group of order (size) $n = \# G$ then for all $a$ in $G$ we have $a^n = 1$
+- So, if $x$ is in $(\mathbb{Z}/N\mathbb{Z})^*$, then:
+
+$$
+x ^{\phi(N)} = 1 \pmod{N}
+$$
+
+- **Fermat's Little Theorem**: Suppose $p$ is a prime and $a$ is in $\mathbb{Z}$, then
+
+$$
+a^p = a \pmod{p}
+$$
+
+## Basic Algorithms
+
+### Greatest Common Divisor
+
+- If we could factor numbers, it would be easy to find gcd
+- However, computing factors is not easy
+
+### The Euclidean Algorithm
+
+- Computation of $\operatorname{gcd}(a,b)$
+- $a = qb + r$ where $r$ is less than $b$
+
+Set $r_0 = a$ and $r_1 =b$ and compute $r_2,r_3,\dotsc$ by $r_{i+2} = r_i \mod r_{i+1}$ until $r_{m+1}=0$
+
+### Extended Euclidean Algorithm
+
+- For $\operatorname{gcd}(a,b)=r$, this algorithm computes $ax + by=r$
+- Hence, for $\operatorname{gcd}(a,N)=d$ where $d=1$ we can compute $ax+yN=1$
+- Here $\boldsymbol{x}$ is the multiplicative inverse of $a$ in modulo $N$
+
+- $\operatorname{gcd}(a,b)=ax+by=r$
+- If $\operatorname{gcd}(a,b)=1\implies ax+by=1$
+
+> ***
+>
+> **EXAMPLE**:
+>
+> - $\operatorname{gcd}(7,11) = 1$
+> - $11=7 \cdot 1 + 4$
+> - $7 = 4 \cdot 1 + 3$
+> - $4 = 3 \cdot 1 + 1$
+> - $1 = 4 - 3$: Now go back
+> - $1 = 4 - (7 - 4) = 2\cdot 4 - 7$
+> - $1 = 2 \cdot (11-7) - 7$
+> - $1 = 2 \cdot 11 - 3 \cdot 7$
+>
+> ***
+
+```{.python caption="Extended Euclidean Algorithm"}
+def inverse(a, b):
+    (s, s1) = (0, 1)
+    (t, t1) = (1, 0)
+    (r, r1) = (b, a)
+    while r != 0:
+        q = r1 // r
+        (r1, r) = (r, r1 - q*r)
+        (s1, s) = (s, s1 - q*s)
+        (t1, t) = (t, t1 - q*t)
+    d = r1
+    x = t
+    y = s
+    return d, x, y
+```
+
+### CRT: Chinese Remainder Theorem
+
+- Ancient Chinese army needs to be fed
+- But how many soldiers are there?
+
+Let $m_1,\dotsc,m_r$ be pairwise relatively prime and let $x = a_i \mod m_i$ for all $i$ and $M = \prod_i^r m_i$. The Chinese Remainder Theorem guarantees a unique solution given by
+$$
+x = \sum_{i=1}^r a_iM_iy_i \mod M
+$$
+where
+$$
+M_i = M/m_i
+$$
+and
+$$
+y_i = M_i^{-1} \mod m_i
+$$
