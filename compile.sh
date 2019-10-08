@@ -43,7 +43,7 @@ PATH_IMAGES="$SELECTED_DIR/images"
 
 echo Script path: \""$SCRIPT_PATH"\"
 
-files=("$SELECTED_DIR"/lesson*.md)
+files=("$SELECTED_DIR"/*.md)
 IFS=$'\n' files=($(sort <(printf "%s\n" "${files[@]}")))
 IFS=$'\n' file_names=($(basename -a "${files[@]}"))
 
