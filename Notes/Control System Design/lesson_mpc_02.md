@@ -85,5 +85,313 @@ $$
 \end{aligned}
 $$
 
+and so
+$$
+\begin{aligned}
+\tilde{p} &= \tilde{C}_px(k) + \tilde{D}_{p2}\tilde{w}(k) + \tilde{D}_{p3}\tilde{v}(k) \\
+&= \tilde{p}_0(k) + \tilde{D}_{p3}\tilde{v}(k)
+\end{aligned}
+$$
+with free-response
+$$
+\tilde{p}_0(k) = \tilde{C}_px(k) + \tilde{D}_{p2}\tilde{w}(k)
+$$
+where
+$$
+\tilde{C}_p = \begin{bmatrix}
+C_p \\ C_pA \\ C_pA^2 \\ \vdots \\ C_pA^{N-1}
+\end{bmatrix}\quad \tilde{D}_{p2}= \begin{bmatrix}
+D_{p2} & 0 & \cdots & 0 & 0 \\
+C_pB_2 & D_{p2} & \cdots & 0 & 0 \\
+C_pAB_2 & C_pB_2 & \ddots & \vdots & \vdots \\
+\vdots & \ddots & \ddots & D_{p2}& 0 \\
+C_pA^{N-2}B_2 & \cdots & C_pAB_2 & C_pB_2& D_{p2}
+\end{bmatrix}
+$$
+
+$$
+\tilde{D}_{p3} = \begin{bmatrix}
+D_{p3} & 0 & \cdots & 0 & 0 \\ 
+C_pB_3 & D_{p3} & \cdots & 0 & 0 \\
+C_pAB_3 & C_pB_3 & \ddots & \vdots & \vdots \\
+\vdots & \ddots & \ddots & D_{p3} & 0  \\
+C_pA^{N-1}B_3 & \cdots & C_pAB_3 & C_pB_3 & D_{p3}
+\end{bmatrix}
+$$
 
 
+
+### Noisy case
+
+The model:
+$$
+\begin{aligned}
+x(k+1) &= Ax(k) + B_1e(k) + B_2w(k) + B_3v(k) \\
+y(k) &= C_1x(k) + D_{11}e(k) + D_{12}w(k) \\
+p(k) &= C_px(k) + D_{p1}e(k) + D_{p2}w(k) + D_{p3} v(k)
+\end{aligned}
+$$
+Successive substitution:
+$$
+\begin{aligned}
+\hat{x}(k+j|k) &= A^jx(k) + \sum_{i=1}^j\left(A^{i-1}B_3v(k+j-i) + A^{i-1}B_1\hat{e}(k+j-i|k)\right)\\
+&+ \sum_{i=1}^j A^{i-1}B_2w(k+j-i)
+\end{aligned}
+$$
+Prediction of noise: $\hat{e}(k+j|k)=0$ for $j > 0$ and $e(k) = D^{-1}_{11}\Big(y(k) - C_1x(k) - D_{12}w(k)\Big)$
+
+We assume that $D_{11}$ is an invertible matrix
+$$
+\begin{aligned}
+\tilde{p}(k) &= \tilde{C}_px(k) +\tilde{D}_{p1}e(k) + \tilde{D}_{p2}\tilde{w}(k) + \tilde{D}_{p3}\tilde{v}(k) \\
+&= \tilde{p}_0(k) + \tilde{D}_{p3}\tilde{v}(k)
+\end{aligned}
+$$
+where
+$$
+\tilde{D}_{p1} = \begin{bmatrix}
+D_{p1} \\ C_pB_1 \\ C_pAB_1 \\ \vdots \\ C_pA^{N-1}B_1
+\end{bmatrix}
+$$
+and free-response signal
+$$
+\begin{aligned}
+\tilde{p}_0(k) &= \tilde{C}_px(k) + \tilde{D}_{p1}e(k) + \tilde{D}_{p2}\tilde{w}(k) \\
+&= \tilde{C}_px(k) + \tilde{D}_{p1}D^{-1}_{11}(y(k) - C_1x(k) - D_{12}w(k)) + \tilde{D}_{p2}\tilde{w} \\
+&= (\tilde{C}_p-\tilde{D}_{p1}D^{-1}_{11}C_1)x(k) + \tilde{D}_{p1}D^{-1}_{11}y(k) + (\tilde{D}_{p2}-\tilde{D}_{p1}D^{-1}_{11}D_{12}E_w)\tilde{w}(k)
+\end{aligned}
+$$
+
+### Summary
+
+On basis of model:
+$$
+\begin{aligned}
+x(k+1) &= Ax(k) + B_1e(k) + B_2w(k) + B_3v(k) \\
+y(k) &= C_1x(k) + D_{11}e(k) + D_{12}w(k) \\
+p(k) &= C_px(k) + D_{p1}e(k) + D_{p2}w(k) + D_{p3} v(k)
+\end{aligned}
+$$
+we make prediction:
+$$
+\begin{aligned}
+\tilde{p}(k) &= \tilde{C}_px(k) +\tilde{D}_{p1}e(k) + \tilde{D}_{p2}\tilde{w}(k) + \tilde{D}_{p3}\tilde{v}(k) \\
+&= \tilde{p}_0(k) + \tilde{D}_{p3}\tilde{v}(k)
+\end{aligned}
+$$
+where $e(k) = D^{-1}_{11}\Big(y(k) - C_1x(k) -D_{12}w(k)\Big)$ and where
+$$
+\tilde{C}_p = \begin{bmatrix}C_p \\ C_pA \\ C_pA^2 \\ \vdots \\ C_pA^{N-1}\end{bmatrix}\quad \tilde{D}_{p2}= \begin{bmatrix}D_{p2} & 0 & \cdots & 0 & 0 \\C_pB_2 & D_{p2} & \cdots & 0 & 0 \\C_pAB_2 & C_pB_2 & \ddots & \vdots & \vdots \\\vdots & \ddots & \ddots & D_{p2}& 0 \\C_pA^{N-2}B_2 & \cdots & C_pAB_2 & C_pB_2& D_{p2}\end{bmatrix}
+$$
+
+$$
+\tilde{D}_{p1} = \begin{bmatrix}
+D_{p1} \\ C_pB_1 \\ C_pAB_1 \\ \vdots \\ C_pA^{N-1}B_1
+\end{bmatrix}\quad
+\tilde{D}_{p3} = \begin{bmatrix}D_{p3} & 0 & \cdots & 0 & 0 \\ C_pB_3 & D_{p3} & \cdots & 0 & 0 \\C_pAB_3 & C_pB_3 & \ddots & \vdots & \vdots \\\vdots & \ddots & \ddots & D_{p3} & 0  \\C_pA^{N-1}B_3 & \cdots & C_pAB_3 & C_pB_3 & D_{p3}\end{bmatrix}
+$$
+
+## Standard formulation
+
+### Performance index
+
+Consider the system
+$$
+\begin{aligned}
+x(k+1) &= Ax(k) + B_1e(k) + B_2w(k) + B_3v(k) \\
+y(k) &= C_1x(k) + D_{11}e(k) + D_{12}w(k) \\
+z(k) &= C_2x(k) + D_{21}e(k) + D_{22}w(k) + D_{23}v(k)
+\end{aligned}
+$$
+Define performance index
+$$
+J(v,k) = \sum_{j=0}^{N-1}\hat{z}^T(k+j|k)\Gamma(j)\hat{z}(k+j|k)
+$$
+**LQPC**:
+$$
+J(u,k) = \sum_{j=N_m}^{N} \hat{x}^T(k+j|k)Q\hat{x}(k+j|k)+\sum_{j=1}^Nu^T(k+j-1)Ru(k+j-1)
+$$
+
+$$
+z(k) = \begin{bmatrix}
+Q^{1/2}x(k+1) \\R^{1/2}u(k)
+\end{bmatrix}
+$$
+
+**GPC**:
+$$
+J(u,k)=\sum_{j=N_m}^N|\hat{y}_p(k+j|k)-r(k+j|k)|^2+\lambda^2\sum_{j=1}^{N_c}|\Delta u(k+j-1)|^2
+$$
+
+$$
+z(k) = \begin{bmatrix}
+\hat{y}_p(k+1)-r(k+1) \\ \lambda \Delta u(k)
+\end{bmatrix}
+$$
+
+### LQCP performance index
+
+Consider IO-model
+$$
+\begin{aligned}
+x_o(k+1) &= A_ox_o(k)+K_oe_o(k) + L_od_o(k)+B_ou(k) \\
+y(k) &= C_ox_o(k) + D_He_o(k) + D_Fd_o(k)
+\end{aligned}
+$$
+Choose
+$$
+x(k) = x_o(k),\quad v(k)=u(k), \quad w(k)=d_o(k),\quad e(k)=e_o(k)
+$$
+then
+$$
+\begin{aligned}
+x(k+1) &= A_ox(k) + K_oe(k)+L_od(k) + B_ov(k) \\
+&= Ax(k) + B_1e(k) + B_2w(k) + B_3v(k) \\
+y(k) &= C_1x(k) + D_{11}e(k) + D_{12}w(k)
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+z(k) &= \begin{bmatrix}
+Q^{1/2}x(k+1) \\ R^{1/2}v(k)
+\end{bmatrix} \\
+&= \begin{bmatrix}
+Q^{1/2}A_ox(k) + Q^{1/2}K_oe(k) + Q^{1/2}L_ow(k) + Q^{1/2}B_ov(k) \\
+R^{1/2}v(k)
+\end{bmatrix} \\
+&= \begin{bmatrix}
+Q^{1/2}A_o \\0
+\end{bmatrix}x(k) + \begin{bmatrix}
+Q^{1/2}K_o \\ 0
+\end{bmatrix}e(k) + \begin{bmatrix}
+Q^{1/2}L_o \\ 0
+\end{bmatrix}w(k) + \begin{bmatrix}
+Q^{1/2}B_o \\ R^{1/2}
+\end{bmatrix}v(k) \\
+&= C_2x(k) + D_{21}e(k) + D_{22}w(k) + D_{23}v(k)
+\end{aligned}
+$$
+
+### GPC performance index
+
+Consider IIO-model
+$$
+\begin{aligned}x_i(k+1) &= A_ix_i(k)+K_ie_i(k) + L_id_i(k)+B_i\Delta u(k) \\y(k) &= C_ix_i(k) + D_He_i(k)\end{aligned}
+$$
+The realization $y_p(k) = P(q)y(k)$ described by:
+$$
+\begin{aligned}
+x(k+1) &= A_px_p(k) + B_py(k) \\
+y_p(k) &= C_px_p(k) + D_py(k)
+\end{aligned}
+$$
+
+
+Choose
+$$
+e(k) = e_i(k),\quad v(k) = \Delta u(k)
+$$
+
+$$
+w(k) = \begin{bmatrix}
+d_i(k) \\ r(k+1)
+\end{bmatrix},\qquad x(k) = \begin{bmatrix}
+x_p(k) \\ x_i(k)
+\end{bmatrix}
+$$
+
+
+
+then
+$$
+\begin{aligned}
+\begin{bmatrix}
+x_p(k+1) \\ x_i(k+1)
+\end{bmatrix} = & \begin{bmatrix}
+A_p & B_pC_i \\ 0 & A_i
+\end{bmatrix}\begin{bmatrix}
+x_p(k) \\ x_i(k)
+\end{bmatrix} + \begin{bmatrix}
+B_pD_H \\ K_i
+\end{bmatrix}e_i(k) + \\
+&\begin{bmatrix}
+0 & 0 \\ L_i & 0
+\end{bmatrix}\begin{bmatrix}
+d_i(k) \\ r(k+1)
+\end{bmatrix} + \begin{bmatrix}
+0 \\ B_i
+\end{bmatrix}\Delta u(k) \\
+= & Ax(k) + B_1e(k) + B_2w(k) + B_3v(k) \\
+y(k) =& C_ix(k) + D_He(k) \\
+=& C_1x(k) + D_{11}e(k) + D_{12}w(k)
+\end{aligned}
+$$
+For $y_p(k)$ we find
+$$
+y_p(k) = \begin{bmatrix}
+C_p & D_pC_i
+\end{bmatrix}x(k) + D_pD_He(k)
+$$
+and we obtain the estimate $y_p(k+1)$
+$$
+\begin{aligned}
+y_p(k+1) =& \begin{bmatrix}
+C_pA_p & C_pB_pC_i + D_pC_iA_i
+\end{bmatrix}\begin{bmatrix}
+x_p(k) \\ x_i(k)
+\end{bmatrix} + \\
+&\begin{bmatrix}
+C_pB_pD_H+D_pC_iK_i
+\end{bmatrix}\hat{e}(k) + \\
+&\begin{bmatrix}
+D_pC_iL_i & 0
+\end{bmatrix}\begin{bmatrix}
+d_i(k) \\ r(k+1)
+\end{bmatrix} + \begin{bmatrix}
+D_pC_iB_i
+\end{bmatrix}v(k)
+\end{aligned}
+$$
+where we used the fact that $\hat{e}_i(k+1|k)=0$
+
+Now we find:
+$$
+\begin{aligned}
+z(k) =& \begin{bmatrix}
+y_p(k+1) - r(k+1) \\
+\lambda \Delta u(k)
+\end{bmatrix} \\
+=& \begin{bmatrix}
+C_pA_p & C_pB_pC_i + D_pC_iA_i \\
+0 & 0
+\end{bmatrix}\begin{bmatrix}
+x_p(k) \\x_i(k)
+\end{bmatrix} + \\
+& \begin{bmatrix}
+C_pB_pD_H+D_pC_iK_i \\ 0
+\end{bmatrix}\hat{e}_i(k) + \\
+& \begin{bmatrix}
+D_pC_iL_i & -I \\ 0 & 0
+\end{bmatrix}\begin{bmatrix}
+d_i(k) \\ r(k+1)
+\end{bmatrix} + \begin{bmatrix}
+D_pC_iB_i \\ \lambda I
+\end{bmatrix}v(k) \\
+=& C_2x(k) + D_{21}e(k) + D_{22}w(k) + D_{23}v(k)
+\end{aligned}
+$$
+
+
+### Standard performance index
+
+Define vector $\tilde{z}(k)$ with predictions of $\hat{z}(k+j|k)$:
+$$
+\tilde{z}(k) = \begin{bmatrix}
+\hat{z}(k|k) \\ \hat{z}(k+1|k) \\ \vdots \\ \hat{z}(k+N-1|k)
+\end{bmatrix}
+$$
+Then using the formulas of chapter 3 we obtain:
+$$
+\tilde{z}(k) = \tilde{C}_2
+$$
