@@ -35,7 +35,7 @@ import renderMathInElement from '../submodules/KaTeX/dist/contrib/auto-render';
 
 export default function renderMath() {
   renderMathInElement(document.body, {
-    "output": "html"
+    "output": "html" // Disables mathML output
     // "preProcess": x => {
     //   console.log(x);
     //   return x;

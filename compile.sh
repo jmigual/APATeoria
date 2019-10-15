@@ -68,7 +68,7 @@ PANDOC=$(pandoc \
     --number-sections \
     --filter mermaid-filter \
     --verbose \
-    --katex="" \
+    --mathjax="" \
     --metadata=title:$SELECTED_NAME \
     --metadata=lang:en \
     "${files[@]}")

@@ -209,7 +209,7 @@ $$
 >
 > **EXAMPLE**: Cruise control
 >
-> - Consider: $\dot{x}=ax -b_g\theta+bu,\quad y=x$ ($a$, $b_g$, $b$ constants) where $x=$ speed error, $\theta =$ road angle, $\nu_r = $ desired speed
+> - Consider: $\dot{x}=ax -b_g\theta+bu,\quad y=x$ ($a$, $b_g$, $b$ constants) where $x=$ speed error, $\theta =$ road angle, $\nu_r =$ desired speed
 >
 > $$
 > \frac{d}{dt}\begin{bmatrix}x\\z\end{bmatrix} =
