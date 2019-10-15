@@ -221,3 +221,258 @@ and
 $$
 y_i = M_i^{-1} \mod m_i
 $$
+
+### Legendre Symbol
+
+- Let $p$ be a primer bigger than $2$
+- And consider the mapping
+
+$$
+\begin{aligned}
+\mathbb{F}_p \longrightarrow \mathbb{F}_p \\
+\alpha \longrightarrow \alpha^2
+\end{aligned}
+$$
+
+- The mapping is 2-to-1, meaning therea rea two values that map to the same value
+- This means, half of the elements in the set are quadratic residues, and there are $(p-1)/2$ of them
+- The other half is quadratic non-residuess
+
+$$
+\begin{aligned}
+Q_{11} &= \{1, 3, 4, 5, 9\} \\
+NQ_{11} &= \{2, 6, 7, 8, 10\}
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+a &\longrightarrow b \\
+-a &\longrightarrow b
+\end{aligned}
+$$
+
+- To detect squares modulo a prime $p$, we define a symbol
+
+$$
+\left(\frac{a}{p}\right) = a^{(p-1)/2} \pmod p
+$$
+
+- Legendre symbol is
+  - $0$
+  - $+1$ if $a$ is a quadratic residue
+  - $-1$ if $a$ is a non-quadratic residue
+
+#### Computing Legendre Symbol
+
+$$
+\left(\frac{q}{p}\right) = \left(\frac{p}{q}\right)(-1)^{(p-1)(q-1)/4}
+$$
+
+which means,
+$$
+\left(\frac{q}{p}\right) = \begin{cases}
+- \left(\frac{p}{q}\right) & \text{If } p=q=3\pmod 4 \\
+\left(\frac{p}{q}\right) & \text{Otherwise}
+\end{cases}
+$$
+
+- Additional formulae
+
+$$
+\begin{aligned}
+\left(\frac{q}{p}\right) &= \left(\frac{q\pmod p}{p}\right) \\
+\left(\frac{q \cdot r}{p}\right) &= \left(\frac{q}{p}\right) \cdot \left(\frac{r}{p}\right) \\
+\left(\frac{2}{p}\right) &= (-1)^{(p^2-1)/8}
+\end{aligned}
+$$
+
+### Jacobi Symbol
+
+- Legendre symbol is defined for $p$ being a prime
+- For composite values we have Jacobi symbol
+
+$$
+\left(\frac{a}{n}\right) = \left(\frac{a}{p_1}\right)^{e_1} \left(\frac{a}{p_2}\right)^{e_2} \dotsm\left(\frac{a}{p_k}\right)^{e_k}
+$$
+
+where
+$$
+n = p_1^{e_1}\cdot p_2^{e_2}\dotsm p_k^{e_k}
+$$
+
+- If $\boldsymbol{a}$ is square, Jacobi symbol will be 1
+- However, if the Jacobi symbol is $1$, $\boldsymbol{a}$ might not be square!
+
+## Primality Tests
+
+### The Prime Number Theorem
+
+The number of primes less than $X$ can be given estimated with the following function:
+$$
+\pi(X) \approx \frac{X}{\log X}
+$$
+
+- There are many prime numbers!
+- The probability of a random value to be prime is
+
+$$
+\frac{1}{\log p}
+$$
+
+### Trial Division
+
+- Divide $p$ with all the numbers starting from $2$ to $\sqrt{p}$
+- Not feasible
+  - exponential computation depending on the input
+
+### Prime Numbers
+
+- If we need a real prime number with 100% certainty: Proof of primality!
+  - After Miller-Rabin Tests
+  - Based on Elliptic curves
+- You can also use AKS Algorithm since 2002 
+
+### Fermat's Test
+
+- Recall that
+
+$$
+a^{\Phi(n)} = 1 \mod n
+$$
+
+- If $\boldsymbol{n}$ is a prime, this equality holds
+- However, if this equality holds, not necessarily $\boldsymbol{n}$ is a prime
+- Probably prime
+  - $n$ is composite with a probability $1/2^k$
+  - Prime or so-called probably prime
+  - Be careful with Carmichael numbers
+    - always returns "probably prime"
+
+### Miller-Rabin Test
+
+- Fermat's test is not useful due to Carmichael numbers
+- Miller-Rabin tests is an improved version
+- The chance is $1/4$ for a base $\boldsymbol{a}$: so repeat!
+
+![](images/08/miller_rabin_test.png){width=50%}
+
+
+
+  
+
+## Elliptic Curves
+
+$$
+F: y^2 = x^3 + ax + b \mod p
+$$
+
+Requeriments:
+
+- $p > 3$, otherwise $x^3 = x$ (Fermat)
+- $4a^3 + 27b^2 \ne 0 \mod p$ otherwise $F$ is singular
+- If a point $P$ is on $F$, then also $P+P$, $P+P+P$, etc.
+
+### Point Addition
+
+$$
+\begin{aligned}
+F &: y^2 = x^3 + ax + b \mod p \\
+R &= P+Q
+\end{aligned}
+$$
+
+1. Draw a line from $P$ to $Q$
+2. Find the 3rd intersection on $F$
+3. Reflect on the $x$ axis
+
+![Elliptic curve example](images/08/elliptic_curves.png){width=60%}
+
+
+
+### Point Addition: Doubling
+
+$$
+\begin{aligned}
+F &: y^2 = x^3 + ax + b \mod p \\
+R &= P+P=2P
+\end{aligned}
+$$
+
+1. Draw tangent line from $P$
+2. Find the unique intersection on $F$
+3. Reflect on $x$ axis
+
+![Elliptic curve doubling](images/08/elliptic_doubling.png){width=60%}
+
+
+
+### Zero-Point
+
+- $P + (-P) = 0$
+- $Q + (-Q) = 0$
+- $P+0=0+P=P$
+
+### Addition Rules
+
+We are adding two points $P=(x_1,y_1)$ and $Q=(x_2,y_2)$, the result is $R=(x_x,y_3)$
+
+- If $x_1=x_2$ and $y_1=-y_2$, then $(x_3,y_3) = 0$ (special point at infinity)
+- Else
+
+$$
+\begin{aligned}
+x_3 &= \lambda^2 - x_1 - x_3 \mod p \\
+y_3 &= \lambda (x_1 - x_3) - y_1 \mod p
+\end{aligned}
+$$
+
+where
+$$
+\begin{aligned}
+\lambda &= \frac{y_2 - y_1}{x_2 - x_1} \mod p \text{ IF } P\ne Q \\
+\lambda &= \frac{3x_1^2 + a}{2y_1} \mod p \text{ IF } P=Q
+\end{aligned}
+$$
+
+
+> ***
+>
+> **EXAMPLE**:
+> $$
+> F: y^2 = x^3 + x + 5 \mod 11\quad a=1, b=5, p=11
+> $$
+> We want to check if:
+>
+> -  $P_1=(0,7) \rightarrow$ yes
+> - $P_2=(1,3)$
+>
+> $$
+> 3^2 = 9 \mod 11
+> $$
+>
+> $$
+> 1^3 + 1 + 5 = 7 \mod 11
+> $$
+>
+> $$
+> 7 \ne 9 \mod 11
+> $$
+>
+> - $Q=2P=P+P$
+>
+> $$
+> \lambda = \frac{3x_1^2 + a}{2y_1} = \frac{3\cdot 0 + 1}{2\cdot 7} \mod 11 = \frac{1}{14} \mod 11 = \frac{1}{3} \mod 11 = 4\mod 11
+> $$
+>
+> $$
+> x_3 = 4^2 - 0 - 0 = 16 \mod 11 = 5 \mod 11
+> $$
+>
+> $$
+> y_3 = 4(0 - 5) - 7 \mod 11 = 6 \mod 11
+> $$
+>
+> ***
+
+ 
