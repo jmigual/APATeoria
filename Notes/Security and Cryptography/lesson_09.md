@@ -175,11 +175,12 @@ $$
 - Shared modulus $N$: Not a good idea!
 - Use of a small public exponent: using CRT, RSA can be broken
   - Padding is important
-- Hastad's Attack
-- Franklin-Reiter Attack and Coppersmith's Generalization
-- Wiener's Attack
-- Partial Exposure Attacks
-- Fault Analysis
+- **Attacks that must be learned for the exam**:
+  - Hastad's Attack
+  - Franklin-Reiter Attack and Coppersmith's Generalization
+  - Wiener's Attack
+  - Partial Exposure Attacks
+  - Fault Analysis
 
 ### Knowledge of $\phi(N)$ and factoring
 
@@ -213,4 +214,53 @@ $$
   - From $\boldsymbol{d_1}$, the attacker can compute $\boldsymbol{p}$ and $\boldsymbol{q}$
   - Then the attacker computes $d_2$ from $\boldsymbol{e_2}$, $\boldsymbol{p}$ and $\boldsymbol{q}$
 - Case 2: Attacker is none of the 2 people sharing the modulus
-- TODO: I have not finished yet this lecture (second 1:03:35)
+
+$$
+\begin{alignedat}{2}
+{\color{blue}c_1} &\leftarrow {\color{red}m}^{\color{blue}e_1} \pmod{{\color{blue}N}} & 
+\qquad\qquad{\color{blue}t_1} &\leftarrow {\color{blue}e_1}^{-1} \pmod{{\color{blue}e_2}}\\
+{\color{blue}c_2} &\leftarrow {\color{red}m}^{\color{blue}e_2} \pmod{{\color{blue}N}} & 
+{\color{blue}t_2} &\leftarrow ({\color{blue}t_1}\cdot {\color{blue}e_1} - 1)/{\color{blue}e_2} \\
+\end{alignedat}
+$$
+
+$$
+\begin{aligned}
+{\color{blue}c_1^{t_1}}\cdot{\color{blue}c_2^{-t_2}} &= {\color{red}m}^{{\color{blue}e_1}\cdot {\color{blue}t_1}} \cdot {\color{red}m}^{-{\color{blue}e_2}\cdot {\color{blue}t_2}} \\
+&= {\color{red}m}^{1+{\color{blue}e_2}\cdot{\color{blue}t_2}}\cdot{\color{red}m}^{-{\color{blue}e_2}\cdot{\color{blue}t_2}} \\
+&= {\color{red}m}^{1+{\color{blue}e_2}\cdot{\color{blue}t_2}-{\color{blue}e_2}\cdot{\color{blue}t_2}} \\
+&= {\color{red}m}^1 = {\color{red}m}
+\end{aligned}
+$$
+
+### Use of a Small Public Exponent
+
+- For fast computation, choosing $e$ small is common
+- $e=3$
+
+$$
+\begin{aligned}
+{\color{blue}c_1} &\leftarrow {\color{red}m}^3 \pmod{{\color{blue}N_1}}, \\
+{\color{blue}c_2} &\leftarrow {\color{red}m}^3 \pmod{{\color{blue}N_2}}, \\
+{\color{blue}c_3} &\leftarrow {\color{red}m}^3 \pmod{{\color{blue}N_3}}, \\
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+{\color{blue}X} &= {\color{blue}c_i} \pmod{{\color{blue}N_i}}\text{ for } i = 1,2,3 \\
+{\color{blue}X} &= {\color{red}m}^3 \pmod{{\color{blue}N_1}\cdot{\color{blue}N_2}\cdot{\color{blue}N_3}}
+\end{aligned}
+$$
+
+## Summary
+
+- RSA is the most popular public key algorithm
+- Naive RSA is not IND-CPA secure
+- RSA can be used for signature but should be combined with hashing
+- Using small private exponent is not a good idea
+- Padding for RSA is very important
+- Revealing a proportion of the bits of $p$, $q$ or $d$ can break RSA totally
+
+  
+
