@@ -57,7 +57,7 @@ $$
 $$
 
 
-### Noseless case
+### Noiseless case
 
 $$
 \begin{aligned}
@@ -79,8 +79,9 @@ $$
 
 $$
 \begin{aligned}
-\hat{p}(k+j|k) &= C_p\hat{x}(k+j|k) + D_{p2}w(k+j) + D_{p3}v(k+j) \\
-&= C_pA^jx(k) + \sum_{i=1}^j\left(C_pA^{i-1}B_2w(k+j-i) + C_pA^{i-1}B_3v(k+j-i)\right) \\
+\hat{p}(k+j|k) =&\ C_p\hat{x}(k+j|k) + D_{p2}w(k+j) + D_{p3}v(k+j) \\
+=&\ C_pA^jx(k) \\
+&+ \sum_{i=1}^jC_pA^{i-1}B_2w(k+j-i) + \sum_{i=1}^jC_pA^{i-1}B_3v(k+j-i) \\
 &+ D_{p2}w(k+j) + D_{p3}v(k+j)
 \end{aligned}
 $$
@@ -115,7 +116,7 @@ D_{p3} & 0 & \cdots & 0 & 0 \\
 C_pB_3 & D_{p3} & \cdots & 0 & 0 \\
 C_pAB_3 & C_pB_3 & \ddots & \vdots & \vdots \\
 \vdots & \ddots & \ddots & D_{p3} & 0  \\
-C_pA^{N-1}B_3 & \cdots & C_pAB_3 & C_pB_3 & D_{p3}
+C_pA^{N-2}B_3 & \cdots & C_pAB_3 & C_pB_3 & D_{p3}
 \end{bmatrix}
 $$
 
@@ -134,11 +135,25 @@ $$
 Successive substitution:
 $$
 \begin{aligned}
-\hat{x}(k+j|k) &= A^jx(k) + \sum_{i=1}^j\left(A^{i-1}B_3v(k+j-i) + A^{i-1}B_1\hat{e}(k+j-i|k)\right)\\
+\hat{x}(k+j|k) =& A^jx(k) \\
+&+ \sum_{i=1}^jA^{i-1}B_3v(k+j-i) \\
+&+ \sum_{i=1}^jA^{i-1}B_1\hat{e}(k+j-i|k)\\
 &+ \sum_{i=1}^j A^{i-1}B_2w(k+j-i)
 \end{aligned}
 $$
 Prediction of noise: $\hat{e}(k+j|k)=0$ for $j > 0$ and $e(k) = D^{-1}_{11}\Big(y(k) - C_1x(k) - D_{12}w(k)\Big)$
+
+and so
+$$
+\begin{aligned}
+\hat p(k+j|k) =&\ C_p\hat x(k+j|k) + D_{p2}w(k+j) + D_{p3}v(k+j) \\
+=&\ C_pA^jx(k) + C_pA^{j-1}B_1e(k) \\
+&+ \sum_{i=1}^j C_pA^{i-1}B_pw(k+j-i) \\
+&+ \sum_{i=1}^j C_pA^{i-1}B_3v(k+j-i) \\
+&+ D_{p2}w(k+j) + D_{p3}v(k+j)
+\end{aligned}
+$$
+
 
 We assume that $D_{11}$ is an invertible matrix
 $$
@@ -186,9 +201,9 @@ $$
 
 $$
 \tilde{D}_{p1} = \begin{bmatrix}
-D_{p1} \\ C_pB_1 \\ C_pAB_1 \\ \vdots \\ C_pA^{N-1}B_1
+D_{p1} \\ C_pB_1 \\ C_pAB_1 \\ \vdots \\ C_pA^{N-2}B_1
 \end{bmatrix}\quad
-\tilde{D}_{p3} = \begin{bmatrix}D_{p3} & 0 & \cdots & 0 & 0 \\ C_pB_3 & D_{p3} & \cdots & 0 & 0 \\C_pAB_3 & C_pB_3 & \ddots & \vdots & \vdots \\\vdots & \ddots & \ddots & D_{p3} & 0  \\C_pA^{N-1}B_3 & \cdots & C_pAB_3 & C_pB_3 & D_{p3}\end{bmatrix}
+\tilde{D}_{p3} = \begin{bmatrix}D_{p3} & 0 & \cdots & 0 & 0 \\ C_pB_3 & D_{p3} & \cdots & 0 & 0 \\C_pAB_3 & C_pB_3 & \ddots & \vdots & \vdots \\\vdots & \ddots & \ddots & D_{p3} & 0  \\C_pA^{N-2}B_3 & \cdots & C_pAB_3 & C_pB_3 & D_{p3}\end{bmatrix}
 $$
 
 ## Standard formulation
@@ -279,10 +294,10 @@ Consider IIO-model
 $$
 \begin{aligned}x_i(k+1) &= A_ix_i(k)+K_ie_i(k) + L_id_i(k)+B_i\Delta u(k) \\y(k) &= C_ix_i(k) + D_He_i(k)\end{aligned}
 $$
-The realization $y_p(k) = P(q)y(k)$ described by:
+The realisation $y_p(k) = P(q)y(k)$ described by:
 $$
 \begin{aligned}
-x(k+1) &= A_px_p(k) + B_py(k) \\
+x_p(k+1) &= A_px_p(k) + B_py(k) \\
 y_p(k) &= C_px_p(k) + D_py(k)
 \end{aligned}
 $$
@@ -393,5 +408,208 @@ $$
 $$
 Then using the formulas of chapter 3 we obtain:
 $$
-\tilde{z}(k) = \tilde{C}_2
+\tilde{z}(k) = \tilde{C}_2x(k) + \tilde{D}_{21}e(k) + \tilde{D}_{22}\tilde{w}(k) + \tilde{D}_{23}\tilde{v}(k)
 $$
+
+
+$$
+\tilde{C}_2 = \begin{bmatrix}
+C_2 \\ C_2A \\ C_2A^2 \\ \vdots \\ C_2A^{N-1}
+\end{bmatrix}\quad \tilde{D}_{22}= \begin{bmatrix}
+D_{22} & 0 & \cdots & 0 & 0 \\
+C_2B_2 & D_{22} & \cdots & 0 & 0 \\
+C_2AB_2 & C_2B_2 & \ddots & \vdots & \vdots \\
+\vdots & \ddots & \ddots & D_{22}& 0 \\
+C_2A^{N-2}B_2 & \cdots & C_2AB_2 & C_2B_2& D_{22}
+\end{bmatrix}
+$$
+
+$$
+\tilde{D}_{21} = \begin{bmatrix}
+D_{21} \\ C_2B_1 \\ C_2AB_1 \\ \vdots \\ C_2A^{N-2}B_1
+\end{bmatrix}\quad
+\tilde{D}_{23} = \begin{bmatrix}
+D_{23} & 0 & \cdots & 0 & 0 \\ 
+C_2B_3 & D_{23} & \cdots & 0 & 0 \\
+C_2AB_3 & C_2B_3 & \ddots & \vdots & \vdots \\
+\vdots & \ddots & \ddots & D_{23} & 0  \\
+C_2A^{N-2}B_3 & \cdots & C_2AB_3 & C_2B_3 & D_{23}
+\end{bmatrix}
+$$
+
+Now define
+$$
+\bar{\Gamma} = \begin{bmatrix}
+\Gamma(0) & 0 & \cdots & 0 \\
+0 & \Gamma(1) & & 0 \\
+\vdots & \ddots & \ddots & \vdots \\
+0 & \cdots & 0 & \Gamma(N-1)
+\end{bmatrix}
+$$
+then
+$$
+\begin{aligned}
+J(v,k) &= \sum_{j=0}^{N-1} \hat{z}^T (k+j|k)\Gamma(j)\hat{z}(k+j|k) \\
+&= \tilde{z}^T(k)\Gamma\tilde{z}(k)
+\end{aligned}
+$$
+
+
+
+
+## Handling constraints
+
+Equality constraints
+$$
+E_j\hat{\phi}(k+j|k)=0
+$$
+Stack all constraints at time $k$ on predicted $\phi$ in one vector:
+$$
+\tilde{\phi} = \begin{bmatrix}
+E_1\hat\phi(k+1|k) \\
+E_2\hat\phi(k+2|k) \\
+\vdots \\ E_N\hat\phi(k+N)
+\end{bmatrix}
+$$
+In standard framework, we can express the equality constraints in the form
+$$
+\tilde\phi(k) = \tilde C_3x(k) + \tilde D_{31}e(k) + \tilde D_{32}\tilde w(k) + \tilde D_{33}\tilde v(k) = 0
+$$
+
+### State end-point constraint
+
+$$
+\begin{aligned}
+x(k+N|k) =&\ A^Nx(k) + \begin{bmatrix}
+A^{N-1}B_2 & A^{N-2}B_2 & \cdots B_2
+\end{bmatrix}\tilde w(k) + \\
+&+ A^{N-1}B_1e(k) + \begin{bmatrix}
+A^{N-1}B_3 & A^{N-2}B_3 & \cdots & B_3
+\end{bmatrix}\tilde v(k) \\
+=&\ 0
+\end{aligned}
+$$
+
+by defining
+$$
+\begin{aligned}
+\tilde C_3 &= A^N \\ 
+\tilde D_{31}&=A^{N-1}B_1 \\ 
+\tilde D_{32}&=\begin{bmatrix}A^{N-1}B_2& A^{N-2}B_2 & \cdots & B_2\end{bmatrix} \\
+\tilde D_{33} &= \begin{bmatrix}A^{N-1}B_3 & A^{N-2}B_3 & \cdots & B_3\end{bmatrix}
+\end{aligned}
+$$
+we obtain
+$$
+\tilde \phi(k) = \tilde C_3x(k) + \tilde D_{31}e(k) + \tilde D_{32}\tilde w(k) + \tilde D_{33}\tilde v(k) = 0 
+$$
+
+### Inequality constraints
+
+$$
+\psi(k) \le \Psi(k)
+$$
+
+where $\psi$ reflects states, inputs, outputs and $\Psi$ reflects limitations
+
+> ***
+>
+> **EXAMPLE**:
+> $$
+> \begin{array}{rcccl}
+> x_{1,min} &\le& x_1(k) &\le & x_{1,max} \\
+> & & v(k) &\le & v_{max} \\
+> y_{min} & \le & y(k)
+> \end{array}
+> $$
+> result in:
+> $$
+> \psi(k) = \left[\begin{array}{r}
+> x_1(k) \\ -x_1(k) \\ v(k) \\ -y(k)
+> \end{array}\right]\quad \Psi(k) = \left[\begin{array}{r}
+> x_{1,max} \\ -x_{1,min} \\ v_{max} \\ -y_{min}
+> \end{array}\right]
+> $$
+> So:
+> $$
+> \begin{aligned}
+> \psi(k) &= \left[\begin{array}{r}
+> E_1 \\ -E_1 \\ 0 \\ -C_1
+> \end{array}\right]x(k) + 
+> \left[\begin{array}{r}
+> 0 \\ 0 \\ 0 \\ -D_{11}
+> \end{array}\right]e(k) + \left[\begin{array}{r}
+> 0 \\ 0 \\ 0 \\ -D_{12}
+> \end{array}\right]w(k) + \left[\begin{array}{r}
+> 0 \\ 0 \\ I \\ 0
+> \end{array}\right]v(k) \\
+> &= C_4x(k) + D_{41}e(k) + D_{42}w(k) + D_{43}v(k)
+> \end{aligned}
+> $$
+> where $E_1 = \begin{bmatrix}1 & 0 & \cdots & 0\end{bmatrix}$. 
+>
+> ***
+
+Now we obtain the inequality constraint
+$$
+\psi(k) = C_4x(k) + D_{41}e(k) + D_{42}w(k) + D_{43}v(k) \le \Psi(k)
+$$
+Stack all constraints at time $k$ on predicted $\psi$ in one vector:
+$$
+\tilde \psi(k) = \begin{bmatrix}
+\hat\psi(k+1|k) \\ \hat\psi(k+2|k) \\ \vdots \\ \hat\psi(k+N|k)
+\end{bmatrix} \le \begin{bmatrix}
+\Psi(k+1|k) \\ \Psi(k+2|k) \\ \vdots \\ \Psi(k+N|k)
+\end{bmatrix} = \tilde\Psi(k)
+$$
+Using the formulas of chapter 3, the inequality constraints can be written in the form
+$$
+\tilde\psi(k) = \tilde C_4x(k) + \tilde D_{41}e(k) + \tilde D_{42}\tilde w(k) + \tilde D_{43}\tilde v(k) \le \tilde\Psi(k)
+$$
+where
+
+$$
+\tilde{C}_4 = \begin{bmatrix}
+C_4 \\ C_4A \\ C_4A^2 \\ \vdots \\ C_4A^{N-1}
+\end{bmatrix}\quad \tilde{D}_{42}= \begin{bmatrix}
+D_{42} & 0 & \cdots & 0 & 0 \\C_4B_2 & D_{42} & \cdots & 0 & 0 \\
+C_4AB_2 & C_4B_2 & \ddots & \vdots & \vdots \\
+\vdots & \ddots & \ddots & D_{42}& 0 \\
+C_4A^{N-2}B_2 & \cdots & C_4AB_2 & C_4B_2& D_{42}
+\end{bmatrix}
+$$
+
+$$
+\tilde{D}_{41} = \begin{bmatrix}
+D_{41} \\ C_4B_1 \\ C_4AB_1 \\ \vdots \\ C_4A^{N-2}B_1
+\end{bmatrix}\quad
+\tilde{D}_{43} = \begin{bmatrix}
+D_{43} & 0 & \cdots & 0 & 0 \\ 
+C_4B_3 & D_{43} & \cdots & 0 & 0 \\
+C_4AB_3 & C_4B_3 & \ddots & \vdots & \vdots \\
+\vdots & \ddots & \ddots & D_{43} & 0  \\
+C_4A^{N-2}B_3 & \cdots & C_4AB_3 & C_4B_3 & D_{43}
+\end{bmatrix}
+$$
+
+### Standard formulation
+
+Consider the system
+$$
+\begin{aligned}
+x(k+1) &= Ax(k) + B_1e(k) + B_2w(k) + B_3v(k) \\
+y(k) &= C_1x(k) + D_{11}e(k) + D_{12}w(k) \\
+\tilde z(k) &= \tilde C_2x(k) + \tilde D_{21}e(k) + \tilde D_{22}\tilde w(k) + \tilde D_{23}\tilde v(k) \\
+\tilde\phi(k) &= \tilde C_3x(k) + \tilde D_{31}e(k) + \tilde D_{32}\tilde w(k) + \tilde D_{33}\tilde v(k) \\
+\tilde\psi(k) &= \tilde C_4x(k) + \tilde D_{41}e(k) + \tilde D_{42}\tilde w(k) + \tilde D_{43}\tilde v(k) \\
+\end{aligned}
+$$
+Minimise performance index:
+$$
+\begin{aligned}
+J(v,k) &= \sum_{j=0}^{N-1}\hat z^T (k+j|k)\Gamma(j)\hat z(k+j|k) \\
+&= \tilde z^T(k)\bar\Gamma\tilde z(k)
+\end{aligned}
+$$
+subject to the constraints $\tilde\phi(k) = 0$ and $\tilde\psi(k) \le \tilde\Psi(k)$
+
