@@ -124,6 +124,7 @@ npx "${WEBPACK_COMMAND[@]}" \
     --config $SCRIPT_PATH/webpack/webpack.config.babel.js \
     --display normal
 #    --display errors-only \
+RESULT=$?
 
 if $CLEAN; then
     echo Cleaning up
@@ -139,7 +140,7 @@ ls -lh $OUT_PATH
 end=$(date +%s.%N)
 echo Time: $(echo "$end - $start" | bc)
 
-if [[ $? == 0 ]] && ! $SERVER && $SHOW; then
+if [[ $RESULT == 0 ]] && ! $SERVER && $SHOW; then
     xdg-open "$OUT_PATH"/index.html > /dev/null 2>&1
 fi
 
