@@ -2,6 +2,7 @@
 # set -x
 set -o pipefail
 shopt -s nullglob
+start=$(date +%s.%N)
 
 SCRIPT_NAME=$(basename "$0")
 
@@ -59,27 +60,24 @@ mkdir "$OUT_PATH"
 
 cd "$SELECTED_DIR"
 
-echo Compiling pandoc
-PANDOC=$(pandoc \
-    --from "markdown+emoji" \
-    --to html \
-    --standalone \
-    --toc --toc-depth=2 \
-    --number-sections \
-    --filter mermaid-filter \
-    --verbose \
-    --mathjax="" \
-    --metadata=title:$SELECTED_NAME \
-    --metadata=lang:en \
-    "${files[@]}")
-    # --self-contained \
-    # --katex="" \
-    # --template ../pandoc/template \
+compile_pandoc() {
+    echo Compiling pandoc
+    local PANDOC=$(pandoc \
+        --from "markdown+emoji" \
+        --to html \
+        --standalone \
+        --toc --toc-depth=2 \
+        --number-sections \
+        --filter mermaid-filter \
+        --verbose \
+        --mathjax="" \
+        --metadata=title:$SELECTED_NAME \
+        --metadata=lang:en \
+        "${files[@]}")
 
-
-PANDOC="${PANDOC#*<body>}"
-PANDOC="${PANDOC%</body>*}"
-cat << EOF > $OUT_PATH/pandoc.html
+    PANDOC="${PANDOC#*<body>}"
+    PANDOC="${PANDOC%</body>*}"
+    cat << EOF > "$OUT_PATH/pandoc.html"
 <!DOCTYPE html>
 <html>
   <head>
@@ -92,18 +90,26 @@ cat << EOF > $OUT_PATH/pandoc.html
   </body>
 </html>
 EOF
+}
+
+process_image() {
+    local PATH_IM_REL=$(realpath --relative-to="$PATH_IMAGES" "$1")
+    local PATH_IM_OUT="$OUT_PATH/images/$PATH_IM_REL"
+    mkdir -p $(dirname "$PATH_IM_OUT")
+    npx imagemin $1 > "$PATH_IM_OUT"
+}
 
 cd "$OLDPWD"
 
 if [ -d $PATH_IMAGES ]; then
+    compile_pandoc &
     echo Copying images
     for image in "$PATH_IMAGES"/*/*.{png,jpg,jpeg}; do
-        PATH_IM_REL=$(realpath --relative-to="$PATH_IMAGES" "$image")
-        PATH_IM_OUT="$OUT_PATH/images/$PATH_IM_REL"
-        mkdir -p $(dirname "$PATH_IM_OUT")
-        npx imagemin $image > "$OUT_PATH/images/$PATH_IM_REL" &
+        process_image $image &
     done
     wait
+else
+    compile_pandoc
 fi
 
 WEBPACK_COMMAND=webpack
@@ -129,6 +135,9 @@ fi
 
 echo Compilation finished
 ls -lh $OUT_PATH
+
+end=$(date +%s.%N)
+echo Time: $(echo "$end - $start" | bc)
 
 if [[ $? == 0 ]] && ! $SERVER && $SHOW; then
     xdg-open "$OUT_PATH"/index.html > /dev/null 2>&1
