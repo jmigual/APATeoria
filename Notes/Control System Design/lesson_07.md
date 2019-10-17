@@ -215,5 +215,104 @@ The distance from $L$ from the point $-1$ is a measure of stability and damping.
 
 ![Illustration of stability margins in Nyquist plot](images/07/stability_margins.png){width=50%}
 
-TODO: I stopped here second 1:11:43
+
+
+## Stability in the presence of uncertainty
+
+_Book 12.2_
+
+
+
+![Nyquist criterion](images/07/nyquist_criterion.png){width=50%}
+
+
+
+![Nyquist plot for uncertain system](images/07/stability_nyquist.png){width=50%}
+
+
+$$
+1 + L_{true} = 1+P_{true}C = 1+(P+\Delta)C = 1+L+C\Delta
+$$
+Condition for robust stability:
+$$
+|C(i\omega)\Delta(i\omega)|<|1+L(\omega)|\quad,\quad \forall\omega \ge 0
+$$
+or
+$$
+|\Delta(i\omega)|| < \left|\frac{1+L(i\omega)}{C(i\omega)}\right|\quad,\quad \forall\omega\ge 0 
+$$
+Condition for robust stability (multiplicative uncertainty)
+$$
+|\delta(i\omega)| = \left|\frac{\Delta(i\omega)}{P(i\omega)}\right|<\left|\frac{1+L(i\omega)}{P(i\omega)C(i\omega)}\right|=\left|\frac{1}{T(i\omega)}\right|\quad,\quad\forall\omega\ge 0
+$$
+Infinity norm:
+$$
+||H||_{\infty} = \sup_{\omega}|H(i\omega)|
+$$
+Condition for robust stability (additive uncertainty)
+$$
+|C(i\omega)\Delta(i\omega)|<|1+L(\omega)|\quad,\quad \forall\omega \ge 0 \implies ||\Delta CS||_\infty < 1
+$$
+Condition for robust stability (multiplicative uncertainty)
+$$
+|\delta(i\omega)| = \left|\frac{\Delta(i\omega)}{P(i\omega)}\right|<\left|\frac{1+L(i\omega)}{P(i\omega)C(i\omega)}\right|=\left|\frac{1}{T(i\omega)}\right|\quad,\quad\forall\omega\ge 0 \implies ||\delta T||_\infty < 1
+$$
+
+## Performance in the presence of uncertainty
+
+_Book 12.3_
+
+![Performance in the presence of uncertainty](images/07/performance_uncertainty.png){width=75%}
+
+- **Load disturbance**:
+
+$$
+G_{yd} = \frac{P}{1+PC}
+$$
+
+- **Noise sensitivity**:
+
+$$
+G_{un} = \frac{-C}{1+PC}
+$$
+
+- **Reference tracking**:
+
+$$
+G_{yr} = \frac{PC}{1+PC} = T
+$$
+
+### Load disturbance
+
+$$
+G_{yd} = \frac{P}{1+PC}
+$$
+
+Influence of small variation of $P$ can be studied by:
+$$
+\frac{d\ G_{yd}}{dP} = \frac{d}{dP}\left(\frac{P}{1+PC}\right) = \frac{1}{(1+PC)^2} = \frac{SP}{P(1+PC)} = S\frac{G_{yd}}{P}
+$$
+This means that
+$$
+\frac{d\ G_{yd}}{G_{yd}} = S \frac{d\ P}{P}
+$$
+Response on load disturbance is not sensitive to process change if $|S|$ is small 
+
+### Noise sensitivity
+
+$$
+G_{un} = \frac{-C}{1+PC}
+$$
+
+Influence of small variation of $P$ can be studied by
+$$
+\frac{d\ G_{un}}{d\ P} = \frac{d}{dP}\left(\frac{-C}{1+PC}\right) = \frac{C}{(1+PC)^2}C = -T\frac{G_{un}}{P}
+$$
+This means that
+$$
+\frac{d\ G_{un}}{G_{un}} = -T\frac{d\ P}{P}
+$$
+Input response on measurement noise is not sensitive to process change if $|T|$ is small
+
+  
 
