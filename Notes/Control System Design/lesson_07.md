@@ -114,13 +114,13 @@ Compare open-loop and closed-loop begavior
 
 > ***
 >
-> **EXAMPLE** Influence of modeling uncertainty
+> **EXAMPLE** Influence of modelling uncertainty
 >
 > Similar in open loop but large differences in closed loop::
 > $$
 > P_1(s) = \frac{100}{s+1}\qquad P_2(s) = \frac{100}{(s+1)(0.025s+1)^2}
 > $$
-> ![](images/07/example_01.png){width=75%}
+> ![System response](images/07/example_01.png){width=75%}
 >
 > Because there's a small error then the it oscillates
 >
@@ -134,7 +134,7 @@ Compare open-loop and closed-loop begavior
 > $$
 > P_1(s) = \frac{100}{s+1}\qquad P_2(s) = \frac{100}{s-1}
 > $$
-> ![](images/07/example_02.png){width=75%}
+> ![System response](images/07/example_02.png){width=75%}
 >
 > System 2 is unstable while system 1 is stable. However when adding the closed loop both systems behave the same. 
 >
