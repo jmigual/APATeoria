@@ -358,5 +358,182 @@ $$
   - ${\color{red}k}\leftarrow H({\color{red}v}||{\color{blue}c})$
 - This scheme is IND-CCA secure under ROM
 
+## Secure Signature Schemes
 
+### RSA-FDH
+
+- RSA-Full Domain Hash (Hash and Sign)
+- RSA and Hash functions can be combined for an efficient and secure signature scheme
+  - Take a message $m$ and compute its hash $H(m)$
+  - Sign $H(m)$ with the private key
+  - Compute $H(m)$ upon receiving $m$
+  - Verify the signature using the public key and obtain $H(m)$
+  - Compare if two hashes match
+- This scheme is secure however
+- Codomain of the hash function should match the domain of RSA
+  - Not possible in practice
+
+### RSA-PSS
+
+- RSA-Probabilistic Signature Scheme
+  - $N$ is an RSA modulo size $\boldsymbol{k}$ bits with $\boldsymbol{e}$ and $\boldsymbol{d}$
+  - Define two parameters $k_0$ and $k_1$ such that $k_0 + k_1 < k - 1$
+  - Define the following hash functions
+
+$$
+\begin{aligned}
+G: \{0, 1\}^{k_1} &\rightarrow \{0, 1\}^{k-k_1-1} \\
+H: \{0, 1\}^* &\rightarrow \{0, 1\}^{k_1}
+\end{aligned}
+$$
+
+And
+$$
+\begin{aligned}
+G_1: \{0, 1\}^{k_1} &\rightarrow \{0, 1\}^{k_0} \\
+G_2: \{0, 1\}^{k_2} &\rightarrow \{0, 1\}^{k-k_0-k_1-1}
+\end{aligned}
+$$
+
+$$
+G(w) = G_1(w) ||G_2(w)
+$$
+
+Create new message $w$
+
+- **Signing**: to sign a message $\boldsymbol{m}$, the private key holder performs
+  - ${\color{blue}r} \leftarrow \{0, 1\}^{k_0}$
+  - ${\color{blue}w} \leftarrow H({\color{blue}m}||{\color{blue}r})$
+  - ${\color{blue}y} \leftarrow 0||{\color{blue}w}||(G_1({\color{blue}w}) \oplus {\color{blue}r})||G_2({\color{blue}w})$
+  - ${\color{blue}s} \leftarrow {\color{blue}y}^{\color{red}d}$
+- **Verification**: signature (s, m), the public key holder performs
+  - ${\color{blue}y} \leftarrow {\color{blue}s^e}$
+  - Split $y$ into the components ${\color{blue}b}||{\color{blue}w}||{\color{blue}\alpha}||{\color{blue}\gamma}$ where $\color{blue}b$ is one bit long, $\color{blue}w$ is $k_1$ bits long, $\color{blue}\alpha$ is $k_0$ bits long and $\color{blue}\gamma$ is $k-k_0-k_1-1$ bits long
+  - ${\color{blue}r} \leftarrow {\color{blue}\alpha} \oplus G_1({\color{blue}w})$
+  - The signature is verified as correct if and only if ${\color{blue}b} = 0$ and $G_2({\color{blue}w}) = {\color{blue}\gamma}$ and $H({\color{blue}m}||{\color{blue}r}) = {\color{blue}w}$
+
+### The Digital Signature Algorithm
+
+- Reasons to have a DSA
+  - RSA based schemes are costly in terms of signature generation
+  - RSA based signatures are large
+  - RSA might be broken soon
+- Digital Signature Standard-Digital Signature Algorithm, based on
+  - Finite Field
+  - Elliptic Curves (EC-DSA)
+
+### DSA
+
+- Parameters
+  - A large prime $\boldsymbol{p}$ such that $p-1$ is divisible by another prime $\boldsymbol{q}$
+  - $\boldsymbol{g}$ is a generator of the field in $\mod p$, with an order $q$
+  - A hash function $\boldsymbol{H}$ that maps bit strings to $\mathbb{Z}/p\mathbb{Z}$
+- Key generation
+  - Choose an integer $x$ in $[0, \dotsc, q-1]$, $\boldsymbol{x}$ is the secret key
+  - Compute $h=g^x$, $\boldsymbol{h}$ is the public key
+- **Signing**: Compute the signature $(s,r)$ for a message $m$ in $\mathbb{Z}/q\mathbb{Z}$
+  - ${\color{blue}h} \leftarrow H({\color{blue}m})$
+  - ${\color{red}k}\leftarrow (\mathbb{Z}/{\color{blue}q}\mathbb{Z})^*$
+  - ${\color{blue}r} \leftarrow ({\color{blue}g}^{\color{red}k} \pmod{{\color{blue}p}}) \pmod{{\color{blue}q}}$
+  - ${\color{blue}s}\leftarrow({\color{blue}h}+{\color{red}x}\cdot{\color{blue}r})/{\color{red}k} \pmod{{\color{blue}q}}$
+  - Here $h=H({\color{blue}m})$
+- **Verification**: Using the public key $h$
+  - ${\color{blue}h} \leftarrow H({\color{blue}m})$
+  - ${\color{blue}a} \leftarrow {\color{blue}h}/{\color{blue}s} \pmod{{\color{blue}q}}$. Here $h = H({\color{blue}m})$
+  - ${\color{blue}b} \leftarrow {\color{blue}r}/{\color{blue}s} \pmod{{\color{blue}q}}$
+  - ${\color{blue}v}\leftarrow ({\color{blue}g^a} \cdot {\color{blue}h^b}\pmod{{\color{blue}p}}) \pmod{{\color{blue}q}}$. Here $h$ is the public key
+  - Accept the signature if and only if ${\color{blue}v} = {\color{blue}r}$
+
+### DSA Parameters
+
+- DSA works in the cyclic subgroup of size $q$
+  - $q > 256$ bits (for 128 bit security)
+  - $p > 2048$
+- Slower than RSA
+  - Operations over 2048 values
+  - Expensive operations: computational inverses
+
+### EC-DSA
+
+- Choose a random integer $\boldsymbol{a}$ and point $\boldsymbol{P}$, $\boldsymbol{a}$ is the secret key
+
+- Compute $Q = aP$, $\boldsymbol{Q}$ is the public key
+
+- **Signing**:
+
+  - Choose a random number $k$
+  - Compute $kP = (x_1, y_1)$
+  - Compute $s = k^{-1}[H(M) + ax_1]$
+  - Signature $(x_1, s)$
+
+- **Verification**:
+
+  - Compute $u_1 = H(M)s^{-1}$ and $u_2 = x_1s^{-1}$
+  - Compute $u_1P+u_2Q = (x_0, y_0)$
+  - Check $x_1 = x_0$?
+
+- **Remark**
+
+  - $u_1P + u_2Q = u_2aP = P(u_1 + u_2a)$
+  - $P[H(M)s^{-1} + x_1s^{-1}a] = P[H(M)s^{-1} + k - H(M)s^{-1}]= kP$
+
+  
+
+### Comparison
+
+- Speed For Digital Signature
+  - RSA better than DSA or EC-DSA
+- Key Size
+  - EC-DSA smaller than DSA or RSA
+- Implementation
+  - EC-DSA easier than DSA or RSA
+
+### Schorr Signatures
+
+- $\boldsymbol{G}$ is a public abelian group with generator $\boldsymbol{g}$ of primer order $\boldsymbol{q}$
+  - Private key $\boldsymbol{x}$ in $[0, \dotsc, q-1]$
+  - Public key $h = g^x$
+- **Signing**: a message $\boldsymbol{m}$
+  - ${\color{red}k} \leftarrow \mathbb{Z}/{\color{blue}q}\mathbb{Z}$
+  - ${\color{blue}r} \leftarrow {\color{blue}g}^{\color{red}k}$
+  - ${\color{blue}e} \leftarrow H({\color{blue}m}||{\color{blue}r})$
+  - ${\color{blue}s} \leftarrow {\color{red}k} + {\color{red}x}\cdot {\color{blue}e} \pmod{{\color{blue}q}}$
+- **Verification**
+  - ${\color{blue}r} \leftarrow {\color{blue}g^s}\cdot {\color{blue}h^{-e}}$
+  - The signature is accepted if and only if ${\color{blue}e} = H({\color{blue}m}||{\color{blue}r})$
+
+Verification is simple thus, very useful for smart cards
+
+### Nyberg-Rueppel Signatures
+
+- Discrete log based schemes with message recovery
+- We need redundancy which is easy to revert
+
+$$
+R: \begin{cases}
+\{0, 1\}^{n/2} &\longrightarrow \{0, 1\}^n \\
+m &\longrightarrow m||m
+\end{cases}
+$$
+
+- $\boldsymbol{G}$ is a public abelian group with generator $\boldsymbol{g}$ of primer order $\boldsymbol{q}$
+  - Private key $\boldsymbol{x}$ in $[0,\dotsc,q-1]$
+  - Public key $h=g^x$
+- **Signing**: the signature is $(e,s)$
+  - ${\color{red}k} \leftarrow \mathbb{Z}/{\color{blue}q}\mathbb{Z}$
+  - ${\color{blue}r}\leftarrow{\color{blue}g}^{\color{red}k}\pmod{{\color{blue}p}}$
+  - ${\color{blue}e} \leftarrow R({\color{blue}m})\cdot {\color{blue}r}\pmod{{\color{blue}p}}$
+  - ${\color{blue}s}\leftarrow{\color{red}x}\cdot{\color{blue}e} + {\color{red}k}\pmod{{\color{blue}q}}$
+- **Verification**: verify and recover the message from $(e,s)$
+  - ${\color{blue}u_1}\leftarrow{\color{blue}g^s}\cdot{\color{blue}h}^{-{\color{blue}e}} = {\color{blue}g}^{{\color{blue}s}-{\color{blue}e}\cdot{\color{red}x}} = {\color{blue}g}^{\color{red}k}\pmod{{\color{blue}p}}$
+  - ${\color{blue}u_2}\leftarrow{\color{blue}e}/{\color{blue}u_1}\pmod{{\color{blue}p}}$
+  - Verify that ${\color{blue}u_2}$ lies in the range of the redundancy function, e.g., we must have ${\color{blue}u_2} = R({\color{blue}m})={\color{blue}m}||{\color{blue}m}$. If this does not hold then reject the signature
+  - Recover the message ${\color{blue}m} =R^{-1}({\color{blue}u_2})$ and accept the signature
+
+## Summary
+
+- RSA-OAEP is secure in ROM
+- KEM-DEM paradigm is used in practice
+- RSA-FDH, RSA-PSS are secure
+- DSA is slower but uses less space than RSA
 

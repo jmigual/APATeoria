@@ -12,7 +12,7 @@
 
 - Choose primes $p$ and $q$ with $p,k \in \{0, 1\}^\kappa$, $\kappa$ is a security parameter
 - $N = p\cdot q$
-- $e \in_R \mathbb{Z}_N^*$ ($\in_R$ means choose a random value)
+- $e \in_R \mathbb{Z}_{\phi(N)}^*$ ($\in_R$ means choose a random value)
 - $\phi(N) = (p-1)(q-1)$
 - $e \cdot d \equiv 1 \mod \phi(N)$
 - In practice $e \in \{3,7,65537\}$
