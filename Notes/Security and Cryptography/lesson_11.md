@@ -238,3 +238,107 @@ $$
 
 
 
+## Forward Secrecy
+
+- A compromise on key should not lead to security problem on the previous messages decrypted before that time
+  - All schemes up to now are not forward secure
+  - Once compromised, all messages in the past can be decrypted
+
+### Diffie-Hellman Key Exchange Protocol
+
+- Enables two entities to establish a symmetric key even though they have never met before
+- Based on discrete log problem
+  - Finite field version on abelian group $G$ of order $q$
+  - Elliptic curve version
+
+ ![DH Key Exchange Protocol](images/11/dh_exchange.png){width=75%}
+
+
+
+- Man-in-the-middle attack is possible
+
+![Man-in-the-middle attack](images/11/dh_man_in_the_middle.png){width=50%}
+
+
+
+### Station-to-Station (STS) Protocol
+
+The idea is to connect the identity of the people to the key
+$$
+\begin{alignedat}{2}
+A &\longrightarrow B: {\color{blue}\mathfrak{ek}_A} = {\color{blue}g}^{\color{red}a}, \\
+B &\longrightarrow A: {\color{blue}\mathfrak{ek}_B} = {\color{blue}g}^{\color{red}b},{\color{blue}e}_{\color{red}k}({\color{blue}\mathsf{Sig}_{\color{red}\mathfrak{sk}_B}}({\color{blue}\mathfrak{ek}_B},{\color{blue}\mathfrak{ek}_A})) & \qquad\qquad\text{where } {\color{red}k} &\leftarrow H({\color{blue}\mathfrak{ek}_A}^{\color{red}b}), \\
+A &\longrightarrow B: {\color{blue}e}_{\color{red}k}({\color{blue}\mathsf{Sig}_{\color{red}\mathfrak{sk}_A}}({\color{blue}\mathfrak{ek}_A},{\color{blue}\mathfrak{ek}_B})) & \qquad\qquad\text{where } {\color{red}k} &\leftarrow H({\color{blue}\mathfrak{ek}_B}^{\color{red}a}),
+\end{alignedat}
+$$
+
+- Another variant with MAC
+
+$$
+\begin{alignedat}{2}
+A &\longrightarrow B: {\color{blue}\mathfrak{ek}_A} = {\color{blue}g}^{\color{red}a}, \\
+B &\longrightarrow A: {\color{blue}\mathfrak{ek}_B} = {\color{blue}g}^{\color{red}b},{\color{blue}e}_{\color{red}k}({\color{blue}\mathsf{Sig}_{\color{red}\mathfrak{sk}_B}}({\color{blue}\mathfrak{ek}_B},{\color{blue}\mathfrak{ek}_A})),{\color{blue}\mathsf{Mac}}_{\color{red}k'}({\color{blue}S_B}) & \qquad\qquad\text{where } {\color{red}k}||{\color{red}k'} &\leftarrow H({\color{blue}\mathfrak{ek}_A}^{\color{red}b}), \\
+A &\longrightarrow B: {\color{blue}e}_{\color{red}k}({\color{blue}\mathsf{Sig}_{\color{red}\mathfrak{sk}_A}}({\color{blue}\mathfrak{ek}_A},{\color{blue}\mathfrak{ek}_B})),{\color{blue}\mathsf{Mac}}_{\color{red}k'}({\color{blue}S_A}) & \qquad\qquad\text{where } {\color{red}k}||{\color{red}k'} &\leftarrow H({\color{blue}\mathfrak{ek}_B}^{\color{red}a}),
+\end{alignedat}
+$$
+
+### Blake-Wilson-Menezes Protocol
+
+- Can we achieve authentication without signatures and MACs?
+- Alice has a long-term key $(g^a, a)$
+- Bob has a long-term key $(g^b, b)$
+- They obtain each others public key via certificates
+- And then,
+
+$$
+\begin{aligned}
+A &\longrightarrow B: {\color{blue}\mathfrak{ek}_A} = {\color{blue}g}^{\color{red}x} \\
+B &\longrightarrow A: {\color{blue}\mathfrak{ek}_B} = {\color{blue}g}^{\color{red}y}
+\end{aligned}
+$$
+
+- Alice computes: ${\color{red} k}\leftarrow H({\color{blue}\mathfrak{pk}_B}^{\color{red}x},{\color{blue}\mathfrak{ek}_B}^{\color{red}a}) = H({\color{blue}g}^{{\color{red}b}\cdot {\color{red}x}},{\color{blue}g}^{{\color{red}y}\cdot{\color{red}a}})$
+- Bob computes: ${\color{red} k}\leftarrow H({\color{blue}\mathfrak{pk}_A}^{\color{red}x},{\color{blue}\mathfrak{ek}_A}^{\color{red}a}) = H({\color{blue}g}^{{\color{red}x}\cdot {\color{red}b}},{\color{blue}g}^{{\color{red}a}\cdot{\color{red}y}})$
+
+### Menezes, Qu and Vanstone (MQV) Protocol
+
+- Alice and Bob should perform 3 exponentiations in the previous version
+- MQV protocol
+  - Alice has a long-term key $(g^a, a)$
+  - Bob has a long-term key $(g^b, b)$
+  - They obtain each others public key via certificates
+
+$$
+\begin{aligned}
+A&\longrightarrow B : {\color{blue}\mathfrak{ek}_A} = {\color{blue}g}^x \\
+B&\longrightarrow A: {\color{blue}\mathfrak{ek}_B} = {\color{blue}g}^y
+\end{aligned}
+$$
+
+- The last step
+- I denotes half the bit size of the order of $G$
+
+- Alice computes
+  - Convert $\color{blue}\mathfrak{ek}_A$ to integer ${\color{blue}i}$
+  - ${\color{blue}s_A} \leftarrow({\color{blue}i}\pmod{2^{\color{blue}l}}) + 2^{\color{blue}l}$
+  - Convert $\color{blue}\mathfrak{ek}_B$ to an integer $\color{blue}j$
+  - ${\color{blue}t_A} \leftarrow ({\color{blue}j}\pmod{2^{\color{blue}l}}) + 2^{\color{blue}l}$
+  - ${\color{red}h_A}\leftarrow{\color{red}x}+{\color{blue}s_A}\cdot{\color{red}a}\pmod{{\color{blue}q}}$
+  - ${\color{red}K_A}\leftarrow({\color{blue}\mathfrak{ek}_B},{\color{blue}\mathfrak{pk}_B^{t_A}})^{\color{red}h_A}$
+- Bob computes
+  - Convert $\color{blue}\mathfrak{ek}_B$ to integer ${\color{blue}i}$
+  - ${\color{blue}s_B} \leftarrow({\color{blue}i}\pmod{2^{\color{blue}l}}) + 2^{\color{blue}l}$
+  - Convert $\color{blue}\mathfrak{ek}_A$ to an integer $\color{blue}j$
+  - ${\color{blue}t_B} \leftarrow ({\color{blue}j}\pmod{2^{\color{blue}l}}) + 2^{\color{blue}l}$
+  - ${\color{red}h_B}\leftarrow{\color{red}x}+{\color{blue}s_B}\cdot{\color{red}b}\pmod{{\color{blue}q}}$
+  - ${\color{red}K_B}\leftarrow({\color{blue}\mathfrak{ek}_A},{\color{blue}\mathfrak{pk}_A^{t_B}})^{\color{red}h_B}$
+
+## Summary
+
+- Certificates bind a key to some other information e.g. an identity
+- There are several PKI with advantages and disadvantages
+- Implicit certificates reduce the bandwidth needed but introduce other drawbacks
+- There are several key agreement protocols based on e.g. TTP symmetric encryption
+- Diffie-Hellman can be used for key agreement but man-in-the-middle attack is possible
+- To overcome this problem, STS, BWM and MQV protocols were proposed
+

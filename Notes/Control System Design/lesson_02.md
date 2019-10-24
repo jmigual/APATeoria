@@ -301,7 +301,7 @@ If $A^TP + PA < 0$ the function $V(x)$ is a Lyapunov function
 >
 > **EXAMPLE**: regular pendulum with damping
 > $$
-> ml^2 \ddot{\theta} + k\dot{\theta} + mgl \sin\theta = 0 \quad \text{pick} x= 
+> ml^2 \ddot{\theta} + k\dot{\theta} + mgl \sin\theta = 0 \quad \text{pick } x= 
 > \begin{bmatrix}
 > \theta \\ \dot{\theta}
 > \end{bmatrix}
