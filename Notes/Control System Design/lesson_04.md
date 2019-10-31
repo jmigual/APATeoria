@@ -214,7 +214,7 @@ _Book 6.1_
   $$
   \operatorname{rank}\begin{bmatrix}
   \lambda I - A \\ C
-  \end{bmatrix} = n, \forall \lambda \in C
+  \end{bmatrix} = n, \forall \lambda \in \mathbb{C}
   $$
 
 > ***
@@ -468,7 +468,7 @@ A_r &= \begin{bmatrix}
 0 & 1 & 0 & \cdots & 0 \\
 \vdots & \ddots & \ddots & \ddots & \vdots \\
 0 & \cdots & 0& 1 & 0
-\end{bmatrix},\quad &B_r &= \begin{bmatrix}1 \\ 0 \\ vdots \\ 0 \\ 0\end{bmatrix}\\
+\end{bmatrix},\quad &B_r &= \begin{bmatrix}1 \\ 0 \\ \vdots \\ 0 \\ 0\end{bmatrix}\\
 C_r &= \begin{bmatrix}c_1 & c_2 & c_3 & \cdots & c_n\end{bmatrix}, &
 D_r &= \begin{bmatrix}d\end{bmatrix}
 \end{aligned}

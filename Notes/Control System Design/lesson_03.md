@@ -95,7 +95,7 @@ $$
 >
 > $$
 > \frac{dx}{dt} = \begin{bmatrix}
-> 0 & 1 \\ -\omega_0^2 & 2 \zeta\omega_o
+> 0 & 1 \\ -\omega_0^2 & -2 \zeta\omega_o
 > \end{bmatrix} \boldsymbol{x} + \begin{bmatrix}
 > 0 \\ k\omega_o^2
 > \end{bmatrix} u, \quad y = \begin{bmatrix}
@@ -163,7 +163,7 @@ $$
 
 - Properties of $\mathcal{L}$
   - $\mathcal{L}(af(t) + bg(t)) = a\mathcal{L}f(t) + b\mathcal{L}g(t) = aF(s) + bG(s)$
-  - $\mathcal{L}\frac{df(t)}{df} = -f(0) + s\mathcal{L}f(t) = -f(0) + sF(s)$
+  - $\mathcal{L}\frac{df(t)}{dt} = -f(0) + s\mathcal{L}f(t) = -f(0) + sF(s)$
   - $\mathcal{L}\int_0^t f(\tau)d\tau = \frac{1}{s}\mathcal{L}f(t) = \frac{F(s)}{s}$
   - $\mathcal{L}((f*g)(t)) = F(s)G(s)$
 - Now consider the system

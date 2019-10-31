@@ -234,6 +234,8 @@ $$
 PA + A^TP - PBQ_u^{-1}B^TP+Q_x = 0
 $$
 
+
+
 - Solution of ARE exists under proper conditions
 - ARE can be solved numerically in MATLAB with command `lqr` (Linear Quadratic Regulator)
 - Solution depends on choice of $Q_x$, $Q_u$ (often taken as diagonal matrices)
