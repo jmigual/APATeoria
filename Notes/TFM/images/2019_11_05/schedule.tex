@@ -1,0 +1,21 @@
+
+\documentclass{standalone}
+\usepackage{tikz}
+\usepackage{pgfgantt}
+
+\begin{document}
+\begin{ganttchart}{1}{12}
+    \gantttitlelist{1,...,12}{1} \\
+    \ganttbar{Core 1}{1}{8} \\
+    \ganttbar{Core 2}{1}{5} 
+    \ganttbar[bar/.append style={dashed}]{}{6}{9}
+    \\
+    \ganttbar{Core 3}{1}{10} 
+    \ganttbar[bar/.append style={dashed}]{}{11}{11}
+    \\
+    \ganttbar{Core 4}{1}{8}
+
+    \ganttvrule{}{8}
+    \end{ganttchart}
+\end{document}
+
