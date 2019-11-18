@@ -58,8 +58,6 @@ fi
 
 mkdir "$OUT_PATH"
 
-cd "$SELECTED_DIR"
-
 compile_pandoc() {
     echo Compiling pandoc
     local PANDOC=$(pandoc \
@@ -99,12 +97,12 @@ process_image() {
     npx imagemin $1 > "$PATH_IM_OUT"
 }
 
-cd "$OLDPWD"
-
 if [ -d $PATH_IMAGES ]; then
     compile_pandoc &
-    echo Copying images
-    for image in "$PATH_IMAGES"/*/*.{png,jpg,jpeg}; do
+    echo Copying images from "$PATH_IMAGES"
+    IMAGES=$(find "$PATH_IMAGES" -regextype posix-extended -regex ".*/.*\.(png|jpe?g)")
+    for image in $IMAGES; do
+        echo Image: $image
         process_image $image &
     done
     wait
@@ -139,6 +137,10 @@ ls -lh $OUT_PATH
 
 end=$(date +%s.%N)
 echo Time: $(echo "$end - $start" | bc)
+
+if [[ $RESULT != 0 ]]; then
+    echo Error occurred during Compilation
+fi
 
 if [[ $RESULT == 0 ]] && ! $SERVER && $SHOW; then
     xdg-open "$OUT_PATH"/index.html > /dev/null 2>&1
