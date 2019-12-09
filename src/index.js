@@ -1,5 +1,6 @@
-import './base.scss';
-import './code.scss';
+import './css/base.scss';
+import './css/theme.scss';
+import './css/code.scss';
 
 import renderMath from './math';
 

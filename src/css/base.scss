@@ -1,0 +1,16 @@
+img {
+  border: 0;
+  -ms-interpolation-mode: bicubic;
+  vertical-align: middle;
+}
+
+.figure, figure {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+
+  & img {
+    border: none;
+    margin: 0 auto;
+  }
+}
