@@ -20,19 +20,19 @@
     \foreach \x in {0,...,\xwidth} \node[anchor=north] at (\x,-.2) {\x};
 
     \node[anchor=east] (TB) at (0, .5) {Task B};
-    \draw[interval] ($(TB) + (10, 0)$) -- ++ (2, 0);
+    \draw[interval] ($(TB.east) + (10, 0)$) -- ++ (2, 0);
 
     \node[anchor=east] (TA) at ($(TB.east) + (0, 1)$) {Task A};
-    \draw[interval] (TA) -- ++(12, 0);
+    \draw[interval] (TA.east) -- ++(12, 0);
 
-    \node[anchor=east] (core0) at ($(TA.east) + (0, 1)$) {Core 0};
+    \node[anchor=east] (core0) at ($(TA.east) + (0, 1)$) {Core 1};
     \draw[dashed, fill=white] ($(core0.east) + (4, -.25)$) rectangle ($(core0.east) + (6, .25)$);
     \draw[fill=white] ($(core0.east) + (0, -.25)$) rectangle ($(core0.east) + (4, .25)$);
 
-    \node[anchor=east] (core1) at ($(core0.east) + (0, 1)$) {Core 1};
+    \node[anchor=east] (core1) at ($(core0.east) + (0, 1)$) {Core 2};
     \draw[fill=white] ($(core1.east) + (0, -.25)$) rectangle ($(core1.east) + (6, .25)$);
 
-    \node[anchor=east] (core2) at ($(core1.east) + (0, 1)$) {Core 2};
+    \node[anchor=east] (core2) at ($(core1.east) + (0, 1)$) {Core 3};
     \draw[dashed, fill=white] ($(core2.east) + (6, -.25)$) rectangle ($(core2.east) + (8, .25)$);
     \draw[fill=white] ($(core2.east) + (0, -.25)$) rectangle ($(core2.east) + (6, .25)$);
 \end{tikzpicture}
