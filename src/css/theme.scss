@@ -6,8 +6,6 @@ $laptop_screen: "only screen and (min-width: 769px)";
 
 html {
     font-size: 13px;
-    overflow-x: scroll;
-    overflow-y: visible;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
 }
@@ -260,18 +258,14 @@ body {
     background: #fefefe;
 
     @media #{$phone_screen} {
-        font-size: 16px;
         box-shadow: none;
-        margin: 0;
         padding: 1em;
         max-width: 100%;
 
-        &>div {
-            overflow-x: scroll;
-        }
-
+        &>div,
         & span .katex {
             overflow-x: scroll;
+            overflow-y: hidden;
         }
     }
 
