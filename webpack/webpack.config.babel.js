@@ -34,6 +34,7 @@ export default function (env) {
     module: {
       rules: [{
           test: /\.js/,
+          include: path.resolve(ROOT, 'src'),
           exclude: /(node_modules)/,
           use: [{
             loader: 'babel-loader',
@@ -45,6 +46,7 @@ export default function (env) {
         },
         {
           test: /\.(html)$/,
+          include: [path.resolve(ROOT, 'src'), path.resolve(ROOT, 'dist')],
           exclude: /(node_modules)/,
           use: {
             loader: 'html-loader',
