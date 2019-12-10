@@ -225,23 +225,31 @@ div.sourceCode {
 }
 
 table {
-    margin: {
-        left: auto;width: 100%;
-    }
+    display: block;
+    width: 100%;
+
+    border-collapse: collapse;
+    border-spacing: 0;
 
     & th {
-        padding: .2em 1em;
-        background-color: #eee;
-        border-top: 1px solid #ddd;
-        border-left: 1px solid #ddd;
+        font-weight: 600;
     }
 
-    & td {
-        padding: .2em 1em;
-        border-top: 1px solid #ddd;
-        border-left: 1px solid #ddd;
-        vertical-align: top;
+    & th, & td {
+        border: 1px solid #dfe2e5;
+        padding: 6px 13px;
     }
+
+    & tr {
+        background-color: #fff;
+        border-top: 1px solid #c6cbd1;
+    }
+    & tr:nth-child(2n) {
+        background-color: #f6f8fa;
+    }
+}
+td, th {
+    padding: 0;
 }
 
 .author {
