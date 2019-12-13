@@ -1,3 +1,6 @@
 videos/
 Tex/
 
+# Python related
+__pycache__/
+*.py[cod]
