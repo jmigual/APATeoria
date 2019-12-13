@@ -25,11 +25,15 @@ class GangAnimation(GraphScene):
         self.colors = ["#67EB34", "#F269FF"]
 
         self.setup_axes(animate=True)
+        # self.y_axis_label_mob.shift(1.5*LEFT)
+        y_axis_label = self.y_axis_label_mob.copy()
+        y_axis_label.set_color("#000000")
+        y_axis_label.shift(1.5*LEFT)
         self.play(
             ApplyMethod(self.x_axis_label_mob.set_color, "#000000"),
-            ApplyMethod(self.y_axis_label_mob.set_color, "#000000")
+            Transform(self.y_axis_label_mob, y_axis_label),
         )
-        self.play(ApplyMethod(self.y_axis_label_mob.shift, 1.5*LEFT))
+        # self.play()
 
         tasks = [[[5, 3], [7.5, 2], [15, 1]], [[6, 2], [12, 1]]]
         self.show_possible_executions(tasks)
@@ -40,17 +44,22 @@ class GangAnimation(GraphScene):
     def show_possible_executions(self, tasks: List[List[List[int]]]):
         for task, color in zip(tasks, self.colors):
             main_rec = None
+            main_text = None
             for width, height in task:
                 rec = self.create_coords_rec(width, height, color)
+                text = TextMobject(f"{height} threads" if height > 1 else f"{height} thread")
+                text.set_color("#000000")
                 rec.move_to(self.coords_to_point(width/2, height/2))
+                text.move_to(self.coords_to_point(width/2, height/2))
                 if main_rec is not None:
-                    self.play(Transform(main_rec, rec))
+                    self.play(Transform(main_rec, rec), Transform(main_text, text))
                 else:
                     main_rec = rec
+                    main_text = text
                     self.bring_to_back(main_rec)
-                    self.play(Write(rec))
+                    self.play(Write(rec), ShowCreation(text))
                 self.wait(1)
-            self.play(FadeOut(main_rec))
+            self.play(FadeOut(main_rec), FadeOut(main_text))
 
     def show_schedules(self, tasks: List[List[List[int]]]):
         core = 0
@@ -66,16 +75,38 @@ class GangAnimation(GraphScene):
 
         # Create possible task sets
         task_sets = self.get_schedules(tasks)
-        print(task_sets
-              )
+        for task_set in task_sets:
+            new_recs = [
+                self.create_coords_rec(
+                    tasks[task_id][subtask_id][0], tasks[task_id][subtask_id][1],
+                    self.colors[task_id])
+                for task_id, subtask_id in task_set]
+            core = 0
+            transforms = []
+            for [task_id, subtask_id], rec in zip(task_set, recs):
+                new_rec = self.create_coords_rec(
+                    tasks[task_id][subtask_id][0], tasks[task_id][subtask_id][1],
+                    self.colors[task_id])
+                new_rec.move_to(self.coords_to_point(tasks[task_id][subtask_id][0]/2,
+                                                     tasks[task_id][subtask_id][1]/2 + core))
 
-        new_rec = [
-            self.create_coords_rec(tasks[0][1][0], tasks[0][1][1], self.colors[0]),
-            self.create_coords_rec(tasks[1][0][0], tasks[1][0][1], self.colors[1]),
-        ]
-        new_rec[0].move_to(self.coords_to_point(tasks[0][1][0]/2, tasks[0][1][1]/2))
-        new_rec[1].move_to(self.coords_to_point(tasks[1][0][0]/2, tasks[1][0][1]/2 + tasks[0][1][1]))
-        self.play(Transform(recs[0], new_rec[0]), Transform(recs[1], new_rec[1]))
+                transforms.append(Transform(rec, new_rec))
+                core += tasks[task_id][subtask_id][1]
+
+            self.play(*transforms)
+            self.wait(1)
+
+        self.wait(1)
+
+        transforms = []
+        time = 0
+        for task, color, rec in zip(tasks, self.colors, recs):
+            new_rec = self.create_coords_rec(task[0][0], task[0][1], color)
+            new_rec.move_to(self.coords_to_point(task[0][0]/2 + time, task[0][1]/2))
+            time += task[0][0]
+            transforms.append(Transform(rec, new_rec))
+        self.play(*transforms)
+        self.wait(2)
 
     def create_coords_rec(self, width: Num, height: Num, color: str = "#000000",
                           color_stroke: str = "#000000") -> Rectangle:
@@ -86,7 +117,8 @@ class GangAnimation(GraphScene):
         rec.set_fill(color, opacity=1.)
         return rec
 
-    def get_schedules(self, tasks: List[List[List[int]]], task: int = 0, sched: List[List[int]] = None, cores = 0) -> List[List[List[int]]]:
+    def get_schedules(self, tasks: List[List[List[int]]], task: int = 0, sched: List[List[int]] = None, cores=0) -> \
+            List[List[List[int]]]:
         if sched is None:
             sched = []
         if cores > 4:
@@ -102,5 +134,7 @@ class GangAnimation(GraphScene):
 
 
 if __name__ == "__main__":
-    module_name = os.path.basename(__file__)
-    os.system(f"manim --leave_progress_bars -p -m -c white {module_name} {sys.argv[1]}")
+    module_name = os.path.realpath(__file__)
+    command = f"manim --leave_progress_bars -c white {' '.join(sys.argv[1:-1])} {module_name} {sys.argv[-1]}"
+    print(f"Running: '{command}'")
+    os.system(command)
