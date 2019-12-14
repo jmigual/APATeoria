@@ -62,51 +62,98 @@ class GangAnimation(GraphScene):
             self.play(FadeOut(main_rec), FadeOut(main_text))
 
     def show_schedules(self, tasks: List[List[List[int]]]):
+        # Draw how every task is added to the pile
         core = 0
         recs = []
+        texts = []
         for task, color in zip(tasks, self.colors):
-            rec = self.create_coords_rec(task[0][0], task[0][1], color)
-            rec.move_to(self.coords_to_point(task[0][0]/2, task[0][1]/2 + core))
+            width, height = task[0]
+            rec = self.create_coords_rec(width, height, color)
+            point = self.coords_to_point(width/2, height/2 + core)
+            rec.move_to(point)
             recs.append(rec)
-            core += task[0][1]
             self.bring_to_back(rec)
-            self.play(Write(rec))
+
+            text = TextMobject(f"${width} \\times {height} = {width*height:.0f}$")
+            text.set_color("#000000")
+            text.move_to(point)
+            texts.append(text)
+
+            core += height
+            self.play(Write(rec), Write(text))
             self.wait(1)
 
-        # Create possible task sets
+        # Draw tasks in sequence
+        transforms = []
+        time_value = 0
+        max_time = 0
+        used_resources = 0
+        for task, color, rec, text in zip(tasks, self.colors, recs, texts):
+            width, height = task[0]
+            new_rec = self.create_coords_rec(width, height, color)
+            point = self.coords_to_point(width/2 + time_value, height/2)
+            new_rec.move_to(point)
+            transforms.append(Transform(rec, new_rec))
+
+            new_text = TextMobject(f"{width*height:.0f}")
+            new_text.set_color("#000000")
+            new_text.move_to(point)
+            transforms.append(Transform(text, new_text))
+
+            time_value += width
+            max_time = max(max_time, time_value)
+            used_resources += width*height
+
+        rec_slack = self.create_coords_rec(max_time, 4)
+        rec_slack.move_to(self.coords_to_point(max_time/2, 4/2))
+        self.bring_to_back(rec_slack)
+        transforms.append(FadeIn(rec_slack))
+
+        text_slack = TextMobject(f"Slack: {4*max_time - used_resources:.0f}")
+        text_slack.set_color("#000000")
+        text_slack.move_to(self.coords_to_point(7.5, 5))
+        transforms.append(FadeIn(text_slack))
+
+        self.play(*transforms)
+        self.wait(2)
+
+        # Draw all the possible task sets
         task_sets = self.get_schedules(tasks)
         for task_set in task_sets:
-            new_recs = [
-                self.create_coords_rec(
-                    tasks[task_id][subtask_id][0], tasks[task_id][subtask_id][1],
-                    self.colors[task_id])
-                for task_id, subtask_id in task_set]
             core = 0
             transforms = []
-            for [task_id, subtask_id], rec in zip(task_set, recs):
-                new_rec = self.create_coords_rec(
-                    tasks[task_id][subtask_id][0], tasks[task_id][subtask_id][1],
-                    self.colors[task_id])
-                new_rec.move_to(self.coords_to_point(tasks[task_id][subtask_id][0]/2,
-                                                     tasks[task_id][subtask_id][1]/2 + core))
-
+            max_time = 0
+            used_resources = 0
+            for [task_id, subtask_id], rec, text in zip(task_set, recs, texts):
+                width, height = tasks[task_id][subtask_id]
+                new_rec = self.create_coords_rec(width, height, self.colors[task_id])
+                point = self.coords_to_point(width/2, height/2 + core)
+                new_rec.move_to(point)
                 transforms.append(Transform(rec, new_rec))
-                core += tasks[task_id][subtask_id][1]
+
+                new_text = TextMobject(f"{width*height:.0f}")
+                new_text.set_color("#000000")
+                new_text.move_to(point)
+                transforms.append(Transform(text, new_text))
+
+                core += height
+                max_time = max(max_time, width)
+                used_resources += width*height
+
+            new_rec_slack = self.create_coords_rec(max_time, 4)
+            new_rec_slack.move_to(self.coords_to_point(max_time/2, 4/2))
+            transforms.append(Transform(rec_slack, new_rec_slack))
+
+            new_text_slack = TextMobject(
+                f"Slack: {4*max_time:.0f} - {used_resources:.0f} = {4*max_time - used_resources:.0f}")
+            new_text_slack.set_color("#000000")
+            new_text_slack.move_to(self.coords_to_point(7.5, 5))
+            transforms.append(Transform(text_slack, new_text_slack))
 
             self.play(*transforms)
             self.wait(1)
 
         self.wait(1)
-
-        transforms = []
-        time = 0
-        for task, color, rec in zip(tasks, self.colors, recs):
-            new_rec = self.create_coords_rec(task[0][0], task[0][1], color)
-            new_rec.move_to(self.coords_to_point(task[0][0]/2 + time, task[0][1]/2))
-            time += task[0][0]
-            transforms.append(Transform(rec, new_rec))
-        self.play(*transforms)
-        self.wait(2)
 
     def create_coords_rec(self, width: Num, height: Num, color: str = "#000000",
                           color_stroke: str = "#000000") -> Rectangle:
