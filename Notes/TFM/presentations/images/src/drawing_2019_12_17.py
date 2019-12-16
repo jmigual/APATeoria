@@ -180,8 +180,56 @@ class GangAnimation(GraphScene):
         return all_schedules
 
 
+class ElasticButtazzo(Scene):
+    CONFIG = {
+        "x_min": 0,
+        "x_max": 15,
+        "y_min": 0,
+        "y_max": 4,
+        "x_axis_width": 10,
+        "y_axis_height": 3,
+    }
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.colors = []
+        self.x_min: float = 0
+        self.x_max: float = 0
+        self.y_min: float = 0
+        self.y_max: float = 0
+        self.x_axis_width: float = 0
+        self.y_axis_height: float = 0
+
+    def construct(self):
+        self.colors = ["#67EB34", "#F269FF"]
+
+        tasks = [[5, 10], [6, 10]]
+
+        time = 0
+        height = 0
+        objects = []
+        for task in tasks:
+            line = Line(self.coords_to_point(self.x_min, height), self.coords_to_point(self.x_max, height))
+            line.set_color("#000000")
+            objects.append(line)
+
+            height += 2
+
+        self.play(ShowCreation(VGroup(*objects)))
+        self.wait(5)
+
+    def coords_to_point(self, x: float, y: float) -> np.ndarray:
+        new_x = ((x - self.x_min)/(self.x_max - self.x_min))*self.x_axis_width - self.x_axis_width/2
+        new_y = ((y - self.y_min)/(self.y_max - self.y_min))*self.y_axis_height - self.y_axis_height/2
+        return np.array([new_x, new_y, 0])
+
+
 if __name__ == "__main__":
-    module_name = os.path.realpath(__file__)
-    command = f"manim --leave_progress_bars -c white {' '.join(sys.argv[1:-1])} {module_name} {sys.argv[-1]}"
-    print(f"Running: '{command}'")
-    os.system(command)
+    try:
+        module_name = os.path.realpath(__file__)
+        command = f"manim --leave_progress_bars -c white {' '.join(sys.argv[1:-1])} {module_name} {sys.argv[-1]}"
+        print(f"Running: '{command}'")
+        os.system(command)
+    except KeyboardInterrupt:
+        print("Stopping")
+
