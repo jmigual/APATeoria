@@ -203,67 +203,113 @@ class ElasticButtazzo(Scene):
 
     def construct(self):
         self.colors = ["#67EB34", "#F269FF"]
-
-        tasks = [[5, 10], [6, 10]]
-
-        time_line = 0
-        height = 2
         objects = []
-        vecs_deadline = []
-        for task, color in zip(tasks, self.colors):
-            line = self.create_coords_line((self.x_min, height), (self.x_max, height))
-            objects.append(line)
 
-            vec_release = self.create_coords_vec(0, 1, "#0000ff")
-            vec_release.shift(self.coords_to_point(0, height))
-            objects.append(vec_release)
-
-            vec_deadline = self.create_coords_vec(0, -1, "#ff0000")
-            vec_deadline.shift(self.coords_to_point(task[1], height + 1))
-            objects.append(vec_deadline)
-            vecs_deadline.append(vec_deadline)
-
-            height += 2
-            time_line += task[0]
+        uti_height = -1
+        uti_width = 8
+        uti_offset = 3.5
 
         # Utilization line
-        line_uti = self.create_coords_line((self.x_min, 0), (self.x_max, 0))
+        line_uti = self.create_coords_line((uti_offset, uti_height), (uti_width + uti_offset, uti_height))
         objects.append(line_uti)
 
         # 1 utilization
-        line_temp = self.create_coords_line((10, 0), (10, 1.5), "#ff0000")
-        objects.append(line_temp)
+        line_uti_1 = self.create_coords_line((uti_width + uti_offset, uti_height),
+                                             (uti_width + uti_offset, uti_height + 1.5), "#ff0000")
+        objects.append(line_uti_1)
+        text_uti = TextMobject("1", color=COLOR_MAP["BLACK"])
+        text_uti.move_to(self.coords_to_point(uti_width + uti_offset, uti_height - .5))
+        objects.append(text_uti)
 
         self.play(ShowCreation(VGroup(*objects)))
-        self.wait(1)
 
+        # Show tasks and its utilization
+        tasks = [[5, 10], [6, 10]]
         time_line = 0
         height = 2
         recs = []
         recs_uti = []
-        recs_write = []
-        x_uti = 0
+        vecs_deadline = []
+        x_uti = uti_offset
+        first = True
         for task, color in zip(tasks, self.colors):
-            rec_width, rec_height = task[0], 1
+            animations = []
+            line = self.create_coords_line((self.x_min, height), (self.x_max, height))
+
+            rec_width, rec_height = task[0], .7
             rec = self.create_coords_rec(rec_width, rec_height, color)
             self.bring_to_back(rec)
             rec.move_to(self.coords_to_point(time_line + rec_width/2, height + rec_height/2))
             recs.append(rec)
-            recs_write.append(Write(rec))
+            animations.append(Write(rec))
 
-            rec_uti_width, rec_uti_height = (task[0]/task[1]*10), 1
+            rec_uti_width, rec_uti_height = (task[0]/task[1]*uti_width), 1
             rec_uti = self.create_coords_rec(rec_uti_width, rec_uti_height, color)
             self.bring_to_back(rec_uti)
-            rec_uti.move_to(self.coords_to_point(x_uti + rec_uti_width/2, 0 + rec_uti_height/2))
+            rec_uti.move_to(self.coords_to_point(x_uti + rec_uti_width/2, uti_height + rec_uti_height/2))
             recs_uti.append(rec_uti)
-            recs_write.append(Write(rec_uti))
+            animations.append(Write(rec_uti))
 
-            self.play(Write(rec), Write(rec_uti))
-            self.wait(.5)
+            vec_release = self.create_coords_vec(0, 1, "#0000ff")
+            vec_release.shift(self.coords_to_point(0, height))
+
+            vec_deadline = self.create_coords_vec(0, -1, "#ff0000")
+            vec_deadline.shift(self.coords_to_point(task[1], height + 1))
+            vecs_deadline.append(vec_deadline)
+            animations.append(ShowCreation(VGroup(vec_deadline, vec_release, line)))
+
+            if first:
+                first = False
+                for i in range(0, 16, 5):
+                    line = self.create_coords_line((i, 2), (i, 2 - .1))
+
+                    text = TextMobject(f"{i}", color=COLOR_MAP["BLACK"])
+                    text.move_to(self.coords_to_point(i, 2 - .5))
+                    animations.append(ShowCreation(VGroup(text, line)))
+
+            self.play(*animations)
+            self.wait(1.5)
 
             height += 2
             time_line += task[0]
             x_uti += rec_uti_width
+
+        self.wait(2)
+        transforms = []
+
+        new_vec_deadline = self.create_coords_vec(0, -1, "#ff0000")
+        new_vec_deadline.shift(self.coords_to_point(12, 4 + 1))
+        transforms.append(Transform(vecs_deadline[1], new_vec_deadline))
+
+        # new_rec_width, new_rec_height = tasks[1][0], .7
+        # new_rec = self.create_coords_rec(new_rec_width, new_rec_height, self.colors[1])
+        # new_rec.move_to(self.coords_to_point(tasks[0][0] + tasks[1][0]/2, 4 + new_rec_height/2))
+        # transforms.append(Transform(recs[1], new_rec))
+
+        new_rec_uti = self.create_coords_rec(.5*uti_width, 1, self.colors[1])
+        new_rec_uti.move_to(self.coords_to_point((.5 + .5/2)*uti_width + uti_offset, uti_height + 1/2))
+        transforms.append(Transform(recs_uti[1], new_rec_uti))
+        self.play(*transforms)
+        self.wait(2)
+
+        transforms = []
+        new_deadlines = [10.9, 11.1]
+        height = 2
+        x_uti = uti_offset
+        for new_deadline, rec_uti, vec_deadline, task, color in zip(new_deadlines, recs_uti, vecs_deadline, tasks,
+                                                                    self.colors):
+            new_vec_deadline = self.create_coords_vec(0, -1, "#ff0000")
+            new_vec_deadline.shift(self.coords_to_point(new_deadline, height + 1))
+            transforms.append(Transform(vec_deadline, new_vec_deadline))
+
+            new_rec_uti_width, new_rec_uti_height = (task[0]/new_deadline)*uti_width, 1
+            new_rec_uti = self.create_coords_rec(new_rec_uti_width, new_rec_uti_height, color)
+            new_rec_uti.move_to(self.coords_to_point(x_uti + new_rec_uti_width/2, uti_height + new_rec_uti_height/2))
+            transforms.append(Transform(rec_uti, new_rec_uti))
+            x_uti += new_rec_uti_width
+            height += 2
+
+        self.play(*transforms)
 
         self.wait(5)
 
