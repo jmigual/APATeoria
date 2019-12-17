@@ -1,6 +1,7 @@
-from typing import List, Union
+from typing import List, Union, Tuple
 
 Num = Union[int, float]
+Coord = Tuple[Num, Num]
 
 from manimlib.imports import *
 
@@ -104,15 +105,15 @@ class GangAnimation(GraphScene):
             max_time = max(max_time, time_value)
             used_resources += width*height
 
-        rec_slack = self.create_coords_rec(max_time, 4)
-        rec_slack.move_to(self.coords_to_point(max_time/2, 4/2))
-        self.bring_to_back(rec_slack)
-        transforms.append(FadeIn(rec_slack))
+        # rec_slack = self.create_coords_rec(max_time, 4)
+        # rec_slack.move_to(self.coords_to_point(max_time/2, 4/2))
+        # self.bring_to_back(rec_slack)
+        # transforms.append(FadeIn(rec_slack))
 
-        text_slack = TextMobject(f"Slack: {4*max_time - used_resources:.0f}")
-        text_slack.set_color("#000000")
-        text_slack.move_to(self.coords_to_point(7.5, 5))
-        transforms.append(FadeIn(text_slack))
+        # text_slack = TextMobject(f"Slack: {4*max_time - used_resources:.0f}")
+        # text_slack.set_color("#000000")
+        # text_slack.move_to(self.coords_to_point(7.5, 5))
+        # transforms.append(FadeIn(text_slack))
 
         self.play(*transforms)
         self.wait(2)
@@ -140,15 +141,15 @@ class GangAnimation(GraphScene):
                 max_time = max(max_time, width)
                 used_resources += width*height
 
-            new_rec_slack = self.create_coords_rec(max_time, 4)
-            new_rec_slack.move_to(self.coords_to_point(max_time/2, 4/2))
-            transforms.append(Transform(rec_slack, new_rec_slack))
+            # new_rec_slack = self.create_coords_rec(max_time, 4)
+            # new_rec_slack.move_to(self.coords_to_point(max_time/2, 4/2))
+            # transforms.append(Transform(rec_slack, new_rec_slack))
 
-            new_text_slack = TextMobject(
-                f"Slack: {4*max_time:.0f} - {used_resources:.0f} = {4*max_time - used_resources:.0f}")
-            new_text_slack.set_color("#000000")
-            new_text_slack.move_to(self.coords_to_point(7.5, 5))
-            transforms.append(Transform(text_slack, new_text_slack))
+            # new_text_slack = TextMobject(
+            #     f"Slack: {4*max_time:.0f} - {used_resources:.0f} = {4*max_time - used_resources:.0f}")
+            # new_text_slack.set_color("#000000")
+            # new_text_slack.move_to(self.coords_to_point(7.5, 5))
+            # transforms.append(Transform(text_slack, new_text_slack))
 
             self.play(*transforms)
             self.wait(1)
@@ -205,18 +206,86 @@ class ElasticButtazzo(Scene):
 
         tasks = [[5, 10], [6, 10]]
 
-        time = 0
-        height = 0
+        time_line = 0
+        height = 2
         objects = []
-        for task in tasks:
-            line = Line(self.coords_to_point(self.x_min, height), self.coords_to_point(self.x_max, height))
-            line.set_color("#000000")
+        vecs_deadline = []
+        for task, color in zip(tasks, self.colors):
+            line = self.create_coords_line((self.x_min, height), (self.x_max, height))
             objects.append(line)
 
+            vec_release = self.create_coords_vec(0, 1, "#0000ff")
+            vec_release.shift(self.coords_to_point(0, height))
+            objects.append(vec_release)
+
+            vec_deadline = self.create_coords_vec(0, -1, "#ff0000")
+            vec_deadline.shift(self.coords_to_point(task[1], height + 1))
+            objects.append(vec_deadline)
+            vecs_deadline.append(vec_deadline)
+
             height += 2
+            time_line += task[0]
+
+        # Utilization line
+        line_uti = self.create_coords_line((self.x_min, 0), (self.x_max, 0))
+        objects.append(line_uti)
+
+        # 1 utilization
+        line_temp = self.create_coords_line((10, 0), (10, 1.5), "#ff0000")
+        objects.append(line_temp)
 
         self.play(ShowCreation(VGroup(*objects)))
+        self.wait(1)
+
+        time_line = 0
+        height = 2
+        recs = []
+        recs_uti = []
+        recs_write = []
+        x_uti = 0
+        for task, color in zip(tasks, self.colors):
+            rec_width, rec_height = task[0], 1
+            rec = self.create_coords_rec(rec_width, rec_height, color)
+            self.bring_to_back(rec)
+            rec.move_to(self.coords_to_point(time_line + rec_width/2, height + rec_height/2))
+            recs.append(rec)
+            recs_write.append(Write(rec))
+
+            rec_uti_width, rec_uti_height = (task[0]/task[1]*10), 1
+            rec_uti = self.create_coords_rec(rec_uti_width, rec_uti_height, color)
+            self.bring_to_back(rec_uti)
+            rec_uti.move_to(self.coords_to_point(x_uti + rec_uti_width/2, 0 + rec_uti_height/2))
+            recs_uti.append(rec_uti)
+            recs_write.append(Write(rec_uti))
+
+            self.play(Write(rec), Write(rec_uti))
+            self.wait(.5)
+
+            height += 2
+            time_line += task[0]
+            x_uti += rec_uti_width
+
         self.wait(5)
+
+    def create_coords_rec(self, width: Num, height: Num, color: str = "#000000",
+                          color_stroke: str = "#000000") -> Rectangle:
+        point = self.coords_to_point(width, height)
+        point -= self.coords_to_point(0, 0)
+        rec = Rectangle(width=point[0], height=point[1], color=color)
+        rec.set_stroke(color_stroke, opacity=1.)
+        rec.set_fill(color, opacity=1.)
+        return rec
+
+    def create_coords_vec(self, x: Num, y: Num, color: str = "#000000") -> Vector:
+        point = self.coords_to_point(x, y)
+        point -= self.coords_to_point(0, 0)
+        vec = Vector(point, color=color)
+        return vec
+
+    def create_coords_line(self, p_a: Coord, p_b: Coord, color: str = "#000000") -> Line:
+        point_a, point_b = self.coords_to_point(*p_a), self.coords_to_point(*p_b)
+        line = Line(point_a, point_b, color=color)
+        return line
 
     def coords_to_point(self, x: float, y: float) -> np.ndarray:
         new_x = ((x - self.x_min)/(self.x_max - self.x_min))*self.x_axis_width - self.x_axis_width/2
@@ -232,4 +301,3 @@ if __name__ == "__main__":
         os.system(command)
     except KeyboardInterrupt:
         print("Stopping")
-
