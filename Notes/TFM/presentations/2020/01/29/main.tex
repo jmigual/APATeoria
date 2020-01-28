@@ -1,0 +1,82 @@
+\documentclass[pdf]{beamer}
+
+\usepackage{graphicx}
+\usepackage{tikzsymbols}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage[linesnumbered]{algorithm2e}
+
+
+\usepackage{hyperref}
+
+\usetheme{Antibes}
+\usecolortheme{default}
+
+\title{Weekly meeting}
+\date{29th of January, 2020}
+\author{Joan Marcè i Igual}
+
+\begin{document}
+    
+\begin{frame}
+    \maketitle
+\end{frame}
+
+\section{Done}
+
+\begin{frame}
+    \frametitle{What has been done?}
+
+    \begin{itemize}
+        \item Submit short paper to CAPITAL (accepted \Laughey)
+        \item Prepare Related work for paper
+        \item Write proofs for $t_{avail}$ and $t_h$ (need to be reviewed)
+        \item Decide on pseudocode for new scheduler
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Pseudocode}
+    \begin{algorithm}[H]
+        \scriptsize
+        \newcommand{\cbusy}{\ensuremath{c_{busy}}}
+        \newcommand{\creserved}{\ensuremath{c_{res}}}
+        \SetKwFunction{Ready}{readySortedByPriority}
+        \SetKwFunction{Schedule}{schedule}
+        
+        $m := $ total number of cores\;
+        $\cbusy :=$ number of cores executing non-preemptive jobs\;
+        $\creserved :=$ 0 \tcp*[l]{number of cores reserved by unscheduled jobs}
+        
+        \ForEach{$J_i \in $ \Ready{$t$}}{
+            \uIf(\tcp*[h]{if enough cores are available (not busy and not reserved)}){$s_i^{\min} \le (m - \cbusy) \land s_i^{\min} \le (m - \creserved)$}{
+                \Schedule{$J_i$}\;
+                $\cbusy := \cbusy + s_i^{\min}$\;
+                \If(\tcp*[h]{only if some cores were already reserved}){$\creserved > 0$}{
+                    $\creserved := \creserved + s_i^{\min}$\;
+                }
+            }
+            \uElseIf(\tcp*[h]{if too many cores are busy}){$s_i^{\min} > (m - \cbusy) \land s_i^{\min} \le (m - \creserved)$}{
+                $\creserved := \creserved + s_i^{\min}$\;
+            }
+            \Else(\tcp*[h]{if too many cores are reserved, i.e., $s_i^{\min} > (m - \creserved)$}){
+                \Return
+            }
+        }
+    \end{algorithm}
+\end{frame}
+
+\section{In Progress}
+
+\begin{frame}
+    \frametitle{What's next}
+
+    \begin{itemize}
+        \item Test proposed scheduler (work started)
+        \item Create a schedule for the project
+        \item Run schedulability analysis of Limited-Preemptive Malleable Gang Scheduling with JLFP scheduler
+        \item Create schedulability analysis mathematical formulation for Limited-Preemptive Malleable Gang Scheduling with new scheduler
+    \end{itemize}
+    
+\end{frame}
+
+\end{document}
