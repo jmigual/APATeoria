@@ -1,0 +1,38 @@
+\documentclass[varwidth]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm2e}
+
+\begin{document}
+\begin{algorithm}[H]
+    \SetKwFunction{RandomInt}{randomValues}
+    \SetKwFunction{Ceil}{ceil}
+    \SetKwFunction{Floor}{floor}
+
+    \SetKwData{CRange}{cores\_range}
+    \SetKwData{CAdd}{cores\_add}
+    \SetKwData{CMin}{cores\_min}
+    \SetKwData{CMax}{cores\_max}
+    \SetKwData{COver}{cores\_over}
+    \SetKwData{CBelow}{cores\_below}
+    \SetKwData{Tasks}{num\_tasks}
+
+    \KwIn{$m$ \Tasks}
+    
+    $\CRange\leftarrow$ \RandomInt{1, $m$, \Tasks}\;
+    $\CAdd\leftarrow$ \RandomInt{$-m/2$, $m/2$, \Tasks}\;
+    \BlankLine
+    $\CMax\leftarrow$ \Ceil{$\CRange/2 + \CAdd + m/2$}\;
+    $\CMin \leftarrow \CMax - \CRange$\;
+    \BlankLine
+    \tcp{Find values outside the $[1, m]$ range}
+    $\COver \leftarrow \CMax - m$ \tcp*[r]{Values that go over $m$}
+    $\CBelow\leftarrow \CMin - 1$ \tcp*[r]{Values that go below 1}
+    $\COver[\COver < 0] \leftarrow 0$\;
+    $\CBelow[\CBelow > 0] \leftarrow 0$\;
+    \BlankLine
+    \tcp{Move the values to the $[1, m]$ range}
+    $\CMax \leftarrow \CMax - \COver - \CBelow$\;
+    $\CMin \leftarrow \CMin - \COver - \CBelow$\;
+    \KwRet{\CMax, \CMin}
+\end{algorithm}
+\end{document}
