@@ -1,4 +1,4 @@
-# Extra 1: Measurement-based performance evaluation
+# Measurement-based performance evaluation
 
 - For safety systems, the systems should not rely on unreliable connections and should evaluate the safety by themselves
 - How can we **prove** safety?
