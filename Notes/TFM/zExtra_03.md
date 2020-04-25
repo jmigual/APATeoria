@@ -46,3 +46,12 @@ Now that we have identified the problem we will attempt to fix it in a way that 
 Now in this case there is a job with a higher priority than $J_2$  however, this job now requires 2 cores so it cannot immediatly start executing.
 
 ### Set of segments that have a higher priority and that can alwyas start before $J_i$
+
+The idea of this set is to search for all the higher-priority segments that can always start before $J_i$ and thus "steal" the processors. It can be defined as follows:
+$$
+\mathcal{S}(v, J_i) = \Big\{ J_k | \underbrace{(\exists J_j | J_k \in succ(J_j) \land J_j \in \mathcal{X}(v))}_{\substack{\text{is successor of a} \\ \text{certainly running job}}} \land \underbrace{J_k \in hp_i}_{\substack{\text{has higher} \\ \text{priority}}}  \land \underbrace{t_{pred}(J_k) \le A_{m_k^{\min}}^{\min}(v)}_{\text{is ready}} \land \underbrace{A^{\min}_{m_k^{\min}} \le A^{\min}_{m_i^{\min}}}_{\substack{\text{enough cores available} \\ \text{to execute segment}}}\Big\}
+$$
+Where $t_{pred}(v, J_i)$ represents the earliest time at which we certainly know that a job will only wait for 1 predecessor. It can be computed as follows:
+$$
+t_{pred}(J_i) = \max\{ EFT_j, \{LFT_k | J_k \in pred(J_i) \setminus \{J_j\}\} \} \text{ where } \underbrace{J_j = J_k : LFT_k = \max_{J_k \in pred(J_i)}\{LFT_k\}\}}_{}
+$$
