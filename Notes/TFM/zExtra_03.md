@@ -4,15 +4,15 @@
 
 When using precedence constraints and we are evaluating a low priority task $J_i$, we use $t_{high}$ to compute the time at which a high priority task can start. This works well for tasks without precedence constraints however, when such tasks exist as it can be possible that $J_i$ cannot start as the high priority task can start as soon as its predecessor finish. This is not contemplated in the current formulation.
 
-Let's visualize this with an example. Let's suppose that we have the following system:
+Let's visualise this with an example. Let's suppose that we have the following system:
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $s_i$ | $P_i$ |
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ |
 | ----- | ------------ | ------------ | ----- | ----- |
 | $J_0$ | 15           | 25           | 1     | 0     |
 | $J_1$ | 20           | 30           | 3     | 1     |
 | $J_2$ | 10           | 10           | 1     | 2     |
 
-![Precedences example image][precedence_single]
+![Example system scenario][precedence_single]
 
 With this state we have three options:
 
@@ -36,7 +36,7 @@ With this state we have three options:
 
 Now that we have identified the problem we will attempt to fix it in a way that it also works for gang scheduling (as this is the focus of our work). Let's extend the previous example with gang scheduling.
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $s_i$ | $P_i$ | $prec(J_i)$ |
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$ |
 | ----- | ------------ | ------------ | ----- | ----- | ----------- |
 | $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$ |
 | $J_1$ | 20           | 30           | 3     | 1     | $\emptyset$ |
@@ -58,7 +58,7 @@ $$
 
 ### Free cores for low-priority job
 
-Once we have $\mathcal{S}(v, J_i)$ we can compute the number of cores that are not taken by high-priority jobs with segments and thus are "free" $m^F$
+Once we have $\mathcal{S}(v, J_i)$ we can compute the number of cores that are not taken by high-priority jobs with segments and thus are "free", let's call it $m^F$
 $$
 m^F = m - \sum_{J_k \in \mathcal{S}(v, J_i)} m_k^{\min}
 $$
@@ -71,11 +71,11 @@ This will be the availability of the "free" cores.
 
 Examples to test the model that we are building
 
-### Single precedence single core
+### Single precedence global
 
 In this case the high-priority segment only has one precedence constraint
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $s_i$ | $P_i$ | $prec(J_i)$            |
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
 | ----- | ------------ | ------------ | ----- | ----- | ---------------------- |
 | $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$            |
 | $J_1$ | 20           | 30           | 3     | 0     | $\emptyset$            |
@@ -84,7 +84,7 @@ In this case the high-priority segment only has one precedence constraint
 
 We thus have the following state and we are wondering whether $J_2$ will be scheduled next or not: 
 
-![Precedences example image][precedence_single]
+![System state before scheduling $J_2$][precedence_single]
 
 - **Option A**: If $prec(J_3) = \{J_0\}$:
   - $EST_2^1 = 20$ and $LST_2^1 = 24$
@@ -92,10 +92,77 @@ We thus have the following state and we are wondering whether $J_2$ will be sche
   - $EST_2^1 = 15$ and $LST_2^1 = 25$
 
 Which would produce the following options:
-![Precedences example image][precedence_single_AB]
+
+![System state with possible $J_2$ $EST_2^1$ and $LST_2^1$ for options A and B][precedence_single_AB]
+
+**Extracted rule 1:** A segment $J_k$ with higher-priority than $J_i$ that can start as soon as its predecessor finishes acts as if $J_k$ reserves the core.
+
+### Single precedence constraint gang
+
+In this example the high-priority segment only has one precedence constraint but it needs 3 cores
+
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
+| ----- | ------------ | ------------ | ----- | ----- | ---------------------- |
+| $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$            |
+| $J_1$ | 20           | 30           | 3     | 0     | $\emptyset$            |
+| $J_2$ | 10           | 10           | 1     | 1     | $\emptyset$            |
+| $J_3$ | 10           | 10           | 3     | 0     | $\{J_0\}$ or $\{J_1\}$ |
+
+We continue to have the same initial state and we are wondering how can $J_2$ be scheduled next:
+
+![System state before scheduling $J_2$][precedence_single]
+
+In this case with the two options we obtain:
+
+- **Option A**: If $prec(J_3) = \{J_0\}$:
+  - $EST_2^1 = 15$ and $LST_2^1 = 25$ since $J_3$ could still be waiting for the necessary cores to run
+- **Option B**: If $prec(J_3) = \{J_1\}$
+  - $EST_2^1 = 15$ and $LST_2^1 = 25$
+
+![Possible scheduling times of $J_2$ for options A and B][precedence_single_AB_multicore]
+
+**Extracted rule 2**: If a segment $J_k$ with higher-priority than $J_i$ requires more cores than $J_i$ (so $m_i^{\min} < m_k^{\min}$) then $J_i$ can possibly execute while $J_k$ is waiting for the cores
+
+### Single precedence constraint global but lower job is gang
+
+This example is very similar to the previous one but with the difference that the lower-priority job is a gang job while the high-priority segment is a single thread job.
+
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
+| ----- | ------------ | ------------ | ----- | ----- | ---------------------- |
+| $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$            |
+| $J_1$ | 20           | 30           | 3     | 0     | $\emptyset$            |
+| $J_2$ | 10           | 10           | 3     | 1     | $\emptyset$            |
+| $J_3$ | 10           | 10           | 1     | 0     | $\{J_0\}$ or $\{J_1\}$ |
 
 
 
+- **Option A**: If $prec(J_3) = \{J_0\}$:
+  - $EST_2^1 = 20$ and $LST_2^1 = 24$ since $J_3$ could still be waiting for the necessary cores to run
+- **Option B**: If $prec(J_3) = \{J_1\}$
+  - $EST_2^1 = 25$ and $LST_2^1 = 24$ and thus scheduling is not possible
+
+### Multiple precedence constraints global
+
+In this example the high-priority segment has more than one precedence constraint but it only needs 1 core. In this case $m = 2$.
+
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$     |
+| ----- | ------------ | ------------ | ----- | ----- | --------------- |
+| $J_0$ | 10           | 20           | 1     | 0     | $\emptyset$     |
+| $J_1$ | 10           | 20           | 1     | 0     | $\emptyset$     |
+| $J_2$ | 10           | 10           | 1     | 1     | $\emptyset$     |
+| $J_3$ | 10           | 10           | 1     | 0     | $\{J_0 , J_1\}$ |
+
+In this case $J_3$ has to wait for both its parents to finish execution so $J_2$ can be scheduled with:
+
+- $EST_2^1 = 10$
+- $LST_2^1 = 19$
+
+**Extracted rule**: If there are multiple precedence constraints and one of them requires more cores than the ones needed for $J_i$ then $J_i$ can be scheduled while the high-priority segments cannot possibly start
+
+[precedence_single]: images/extra_03/precedence_single.png "Example single core" {width=70%}
 
 [precedence_single_AB]: images/extra_03/precedence_single_AB.png "Example single core" {width=70%}
-[precedence_single]: images/extra_03/precedence_single_AB.png "Example single core" {width=70%}
+
+[precedence_single_AB_multicore]: images/extra_03/precedence_single_AB_multicore.png "Example single core" {width=70%}
+
+
