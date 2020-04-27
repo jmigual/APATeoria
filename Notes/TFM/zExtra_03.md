@@ -12,7 +12,7 @@ Let's visualize this with an example. Let's suppose that we have the following s
 | $J_1$ | 20           | 30           | 3     | 1     |
 | $J_2$ | 10           | 10           | 1     | 2     |
 
-![Precedences example image](images/extra_03/precedence-JLFP.png){width=50%}
+![Precedences example image][precedence_single]
 
 With this state we have three options:
 
@@ -43,9 +43,9 @@ Now that we have identified the problem we will attempt to fix it in a way that 
 | $J_2$ | 10           | 20           | 1     | 2     | $\emptyset$ |
 | $J_3$ | 10           | 20           | 2     | 0     | $\{ J_0\}$  |
 
-Now in this case there is a job with a higher priority than $J_2$  however, this job now requires 2 cores so it cannot immediatly start executing.
+Now in this case there is a job with a higher priority than $J_2$  however, this job now requires 2 cores so it cannot immediately start executing.
 
-### Set of segments that have a higher priority and that can alwyas start before $J_i$
+### Set of segments that have a higher priority and that can always start before $J_i$
 
 The idea of this set is to search for all the higher-priority segments that can always start before $J_i$ and thus "steal" the processors. It can be defined as follows:
 $$
@@ -53,5 +53,49 @@ $$
 $$
 Where $t_{pred}(v, J_i)$ represents the earliest time at which we certainly know that a job will only wait for 1 predecessor. It can be computed as follows:
 $$
-t_{pred}(J_i) = \max\{ EFT_j, \{LFT_k | J_k \in pred(J_i) \setminus \{J_j\}\} \} \text{ where } \underbrace{J_j = J_k : LFT_k = \max_{J_k \in pred(J_i)}\{LFT_k\}\}}_{}
+t_{pred}(J_i) = \max\{ EFT_j, \{LFT_k | J_k \in pred(J_i) \setminus \{J_j\}\} \} \text{ where } \underbrace{J_j = J_k : LFT_k = \max_{J_k \in pred(J_i)}\{LFT_k\}\}}_{\text{job with largest LFT}}
 $$
+
+### Free cores for low-priority job
+
+Once we have $\mathcal{S}(v, J_i)$ we can compute the number of cores that are not taken by high-priority jobs with segments and thus are "free" $m^F$
+$$
+m^F = m - \sum_{J_k \in \mathcal{S}(v, J_i)} m_k^{\min}
+$$
+
+### New free availability
+
+This will be the availability of the "free" cores.
+
+## Examples
+
+Examples to test the model that we are building
+
+### Single precedence single core
+
+In this case the high-priority segment only has one precedence constraint
+
+| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $s_i$ | $P_i$ | $prec(J_i)$            |
+| ----- | ------------ | ------------ | ----- | ----- | ---------------------- |
+| $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$            |
+| $J_1$ | 20           | 30           | 3     | 0     | $\emptyset$            |
+| $J_2$ | 10           | 10           | 1     | 1     | $\emptyset$            |
+| $J_3$ | 10           | 10           | 1     | 0     | $\{J_0\}$ or $\{J_1\}$ |
+
+We thus have the following state and we are wondering whether $J_2$ will be scheduled next or not: 
+
+![Precedences example image][precedence_single]
+
+- **Option A**: If $prec(J_3) = \{J_0\}$:
+  - $EST_2^1 = 20$ and $LST_2^1 = 24$
+- **Option B**: If $prec(J_3) = \{J_1\}$
+  - $EST_2^1 = 15$ and $LST_2^1 = 25$
+
+Which would produce the following options:
+![Precedences example image][precedence_single_AB]
+
+
+
+
+[precedence_single_AB]: images/extra_03/precedence_single_AB.png "Example single core" {width=70%}
+[precedence_single]: images/extra_03/precedence_single_AB.png "Example single core" {width=70%}
