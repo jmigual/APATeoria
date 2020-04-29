@@ -185,17 +185,15 @@ In this case there are three different scenarios depending in the number of core
 
 ### Rules found
 
-For a job $J_i$ if there is a segment with higher priority $J_k$ with predecessors $J_j$ (so $pred(J_k) = \{J_{j,1}, J_{j,2}, ...\}$):
+For a job $J_i$ if $\exists\ J_k | m_i^{\min} \ge m_k^{\min} \land p_i < p_k \land \big((pred(J_k) \cap \mathcal{X}(v)) \ne \emptyset\big)$ and:
 
-- We have to look at the cores that will always be "taken" by $J_k$ and set $A^{\min}$ to the value of $A^{\max}$ for those cores **only when computing** $EST_{\boldsymbol{i}}^p(v)$
-- One or more cores will be always "taken" by $J_k$ if:
-  - $m_i^{\min} \ge m_k^{\min}$
-  - and $p_i < p_k$
-  - and scheduling of $J_i$ would use all the cores currently in use by $pred(J_k) \cap \mathcal{X}(v)$ in a first instance
+- Scheduling $J_i$ with the current availability we would always possibly use the cores currently in use by $pred(J_k) \cap\mathcal{X}(v)$ 
+
+We have to compute the new availability times **only to compute** $EST_i^p(v)$
 
 ### New availability
 
-To solve the issue a new availability **only used to compute** $EST_i^p(v)$ is created. In this availability all the $A^{\min}$ values matching the $EFT_j(v)$ for all $J_j \in pred(J_k) \cap \mathcal{X}(v)$  such that $J_k$ that matches the previous conditions, are increased until not all the $EFT_j(v)$ are required.
+To solve the issue a new availability **only used to compute** $EST_i^p(v)$ is created. In this new availability the $A^{\min}(v)$ values of the cores used by $pred(J_k) \cap \mathcal{X}(v)$ are increased to the next available $A^{\min}(v)$ value and then it's checked whether $J_i$ would always possibly use all cores used by $pred(J_k) \cap \mathcal{X}(v)$
 
 ### Example
 
@@ -203,9 +201,17 @@ To solve the issue a new availability **only used to compute** $EST_i^p(v)$ is c
 
 | $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$     |
 | ----- | ------------ | ------------ | ----- | ----- | --------------- |
-| $J_0$ | 5            | 20           | 1     | 0     | $\emptyset$     |
-| $J_1$ | 10           | 25           | 1     | 0     | $\emptyset$     |
-| $J_2$ | 15           | 30           | 1     | 0     | $\emptyset$     |
-| $J_3$ | 20           | 35           | 1     | 0     | $\emptyset$     |
-| $J_4$ | 10           | 10           | 2     | 0     | $\{J_0 , J_1\}$ |
-| $J_5$ | 10           | 10           | 2     | 1     | $\emptyset$     |
+| $J_0$ | 5            | 25           | 1     | 0     | $\emptyset$     |
+| $J_1$ | 10           | 30           | 1     | 0     | $\emptyset$     |
+| $J_2$ | 15           | 35           | 1     | 0     | $\emptyset$     |
+| $J_3$ | 20           | 40           | 1     | 0     | $\emptyset$     |
+| $J_4$ | 10           | 10           | 3     | 0     | $\{J_0 , J_1\}$ |
+| $J_5$ | 10           | 10           | 3     | 1     | $\emptyset$     |
+
+In this example we are trying to schedule $J_5$ and jobs $J_0$, $J_1$, $J_2$ and $J_3$ have already been scheduled so we have the following system state:
+
+![Current system state before trying to schedule $J_5$. In dark green there are the predecessors of $J_4$](images/extra_03/precedence_solution_01.png){width=70%}
+
+Now in order to schedule $J_5$ we know that cores 0, 1 and 2 will be always possibly used. That means that we are planning on using all the cores now being used by $pred(J_4) \cap \mathcal{X}(v) = \{J_0, J_1\}$. We will then find the availability value from which we will not need to use all these cores anymore. This occurs at time 20 and then we get an availability like this:
+
+![Current system state before trying to schedule $J_5$. In dark green there are the predecessors of $J_4$](images/extra_03/precedence_solution_01_03.png){width=70%}
