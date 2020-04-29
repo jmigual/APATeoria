@@ -185,7 +185,7 @@ In this case there are three different scenarios depending in the number of core
 
 ### Rules found
 
-For a job $J_i$ if $\exists\ J_k | m_i^{\min} \ge m_k^{\min} \land p_i < p_k \land \big((pred(J_k) \cap \mathcal{X}(v)) \ne \emptyset\big)$ and:
+For a job $J_i$ if $\exists\ J_k | p_i \ge m_k^{\min} \land P_i > P_k \land \big((pred(J_k) \cap \mathcal{X}(v)) \ne \emptyset\big)$ and:
 
 - Scheduling $J_i$ with the current availability we would always possibly use the cores currently in use by $pred(J_k) \cap\mathcal{X}(v)$ 
 
@@ -215,3 +215,24 @@ In this example we are trying to schedule $J_5$ and jobs $J_0$, $J_1$, $J_2$ and
 Now in order to schedule $J_5$ we know that cores 0, 1 and 2 will be always possibly used. That means that we are planning on using all the cores now being used by $pred(J_4) \cap \mathcal{X}(v) = \{J_0, J_1\}$. We will then find the availability value from which we will not need to use all these cores anymore. This occurs at time 20 and then we get an availability like this:
 
 ![Current system state before trying to schedule $J_5$. In dark green there are the predecessors of $J_4$](images/extra_03/precedence_solution_01_03.png){width=70%}
+
+Then once we have found the time at which the job can be scheduled properly:
+
+![$EST_5^3(v)$ and $LST_5^3(v)$ times for $J_5$](images/extra_03/precedence_solution_01_03_job.png){width=70%}
+
+### Formulation
+
+We thus change from:
+$$
+EST_i^p(v) = \max\{R_i, A^{\min}_p\}
+$$
+
+
+To:
+$$
+EST_i^p(v) = \max\{R_i, A_p^{\min}, t_{hs}\}
+$$
+Where $t_{hs}$ is the time taken by higher priority segments and is the time at which the possibly always used cores are not all the cores of segments with currently running predecessors. So let $\mathcal{S}(v) = \{J_k | pred(J_k) \cap \mathcal{X}(v) \ne \emptyset \land p \ge m_k^{\min} \land P_i > P_k\}$ be the set of segments with a certainly running predecessor and higher priority than $J_i$ that also require less or the same number of cores than $J_i$
+$$
+t_{hs} = \min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in (pred(J_k)\cap \mathcal{X}(v))} p_j\right) \ge p\right\}
+$$
