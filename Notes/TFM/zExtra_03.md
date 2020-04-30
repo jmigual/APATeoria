@@ -222,6 +222,12 @@ Then once we have found the time at which the job can be scheduled properly:
 
 ### Formulation
 
+#### Notation
+
+During this formulation we are using $J_i$ for the current evaluated job, $J_k$ for the higher-priority segment with a certainly running predecessor (so $\exists J_j | J_j \in \{pred(J_k) \cap \mathcal{X}(v)\}$) and $J_j$ for the certainly running predecessors of $J_k$.
+
+#### The change
+
 We thus change from:
 $$
 EST_i^p(v) = \max\{R_i, A^{\min}_p\}
@@ -234,5 +240,34 @@ EST_i^p(v) = \max\{R_i, A_p^{\min}, t_{hs}\}
 $$
 Where $t_{hs}$ is the time taken by higher priority segments and is the time at which the possibly always used cores are not all the cores of segments with currently running predecessors. So let $\mathcal{S}(v) = \{J_k | pred(J_k) \cap \mathcal{X}(v) \ne \emptyset \land p \ge m_k^{\min} \land P_i > P_k\}$ be the set of segments with a certainly running predecessor and higher priority than $J_i$ that also require less or the same number of cores than $J_i$
 $$
-t_{hs} = \min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in (pred(J_k)\cap \mathcal{X}(v))} p_j\right) \ge p\right\}
+t_{hs} = \min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right\}
 $$
+
+#### Explanation
+
+So let's go step by step:
+$$
+J_j \in \underbrace{\{pred(J_k)\cap \mathcal{X}(v)\}}_{\substack{\text{certainly running} \\ \text{predecessor}}} \land \underbrace{EFT^*_j(v) \le A_q^{\min}}_{\substack{\text{using cores at} \\ \text{time } A_q^{\min}}}
+$$
+These are the jobs that are certainly running predecessors of $J_k$ so some of the cores currently being used by them could be used by $J_i$. Then:
+$$
+\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j
+$$
+These are the minimum number of cores used by a certainly running predecessor of predecessor of $J_k$. Then:
+$$
+q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j
+$$
+Is the number of cores that $J_i$ can take without taking all the cores of a predecessor of $J_k$. Then:
+$$
+\left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p
+$$
+Is true only if $J_i$ requires less cores than the ones that are available without "disturbing" a job in $\mathcal{S}(v)$ and finally:
+$$
+\min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right\}
+$$
+Is the minimum $A_q^{\min}$ such that job $J_i$ can be scheduled with $p$ cores without "stealing" the cores that belong to "hunter jobs".
+
+#### Comments
+
+With this solution we can actually work with the fact that $EFT_j != A_q^{\min}$ for any $q$ which is what we can have when doing merges.
+
