@@ -1,4 +1,4 @@
-# Precedence constraints pessimism
+# Reducing precedence constraints pessimism
 
 ## The problem
 
