@@ -238,36 +238,55 @@ To:
 $$
 EST_i^p(v) = \max\{R_i, A_p^{\min}, t_{hs}\}
 $$
-Where $t_{hs}$ is the time taken by higher priority segments and is the time at which the possibly always used cores are not all the cores of segments with currently running predecessors. So let $\mathcal{S}(v) = \{J_k | pred(J_k) \cap \mathcal{X}(v) \ne \emptyset \land p \ge m_k^{\min} \land P_i > P_k\}$ be the set of segments with a certainly running predecessor and higher priority than $J_i$ that also require less or the same number of cores than $J_i$
+Where $t_{hs}$ is the time taken by higher priority segments and is the time at which the possibly always used cores are not all the cores of segments with currently running predecessors. 
 $$
-t_{hs} = \min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right\}
+t_{hs} = \min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \left| \left(q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right.\right\}
 $$
+
+Where:
+$$
+\mathcal{S}_i(v) = \left\{J_k \left| \mathcal{X}^{pred}_i(v) \ne \emptyset \land p \ge m_k^{\min} \land P_i > P_k \land \left(\sum_{J_j \in \mathcal{X}_k^{pred}(v)}p_j\right) \le p\right.\right\}
+$$
+Is the set of segments with a certainly running predecessor and higher priority than $J_i$ that use the same or less cores than $J_i$ or that their predecessors use the same or less cores than $J_i$. Where:
+$$
+\mathcal{X}^{pred}_i(v) = \{pred(J_i) \cap \mathcal{X}(v)\}
+$$
+Is the set of certainly running predecessors of $J_i$.
 
 #### Explanation
 
 So let's go step by step:
 $$
-J_j \in \underbrace{\{pred(J_k)\cap \mathcal{X}(v)\}}_{\substack{\text{certainly running} \\ \text{predecessor}}} \land \underbrace{EFT^*_j(v) \le A_q^{\min}}_{\substack{\text{using cores at} \\ \text{time } A_q^{\min}}}
+J_j \in \underbrace{\mathcal{X}^{pred}_k(v)}_{\substack{\text{certainly running} \\ \text{predecessor}}} \land \underbrace{EFT^*_j(v) \le A_q^{\min}}_{\substack{\text{using cores at} \\ \text{time } A_q^{\min}}}
 $$
 These are the jobs that are certainly running predecessors of $J_k$ so some of the cores currently being used by them could be used by $J_i$. Then:
 $$
-\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j
+\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j
 $$
 These are the minimum number of cores used by a certainly running predecessor of predecessor of $J_k$. Then:
 $$
-q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j
+q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j
 $$
 Is the number of cores that $J_i$ can take without taking all the cores of a predecessor of $J_k$. Then:
 $$
-\left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p
+\left(q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p
 $$
 Is true only if $J_i$ requires less cores than the ones that are available without "disturbing" a job in $\mathcal{S}(v)$ and finally:
 $$
-\min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}(v)}\min_{J_j \in \{pred(J_k)\cap \mathcal{X}(v)\} \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right\}
+\min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right\}
 $$
 Is the minimum $A_q^{\min}$ such that job $J_i$ can be scheduled with $p$ cores without "stealing" the cores that belong to "hunter jobs".
 
+#### Proof
+
+We want to proof that a job $J_i$ that has low priority in a system where jobs with precedence constraints and higher priority are running can be scheduled at the earliest at time $t_s \ge t_{hs}$. We are going to prove that by contradiction:
+
+By contradiction, let's assume that job $J_i$ is scheduled at time $t_s < t_{hs}$ with $p$ and that there are other jobs such that $S_i(v)\ne \emptyset$. Here we can have two possibilities: either (a) there are jobs such that $J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le t_s$ or they aren't (b). 
+
+- If (a), by definition of availability this time can be at the earliest $A_p^{\min}$. This means that if $J_i$ where to be scheduled next it would use all the cores used currently by predecessors of a waiting higher priority job $J_k$ which would mean that the predecessors of $J_k$ had finished they execution. By rules 1 and 4 $J_k$ would be scheduled next instead of $J_i$ which contradicts the assumption that $J_i$ is the next job to be scheduled. Either $t_s \ge t_{hs}$ or there aren't jobs such that $J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le t_s$. 
+- Otherwise if (b), by definition of availability this time can be at earliest $t_s = A_p^{\min}$. Then the equation then is simplified into $\min_{\forall q: p \le q\le m}^{\infty}\left\{A_q^{\min}|q \ge p\right\}$ which means that $t_{hs} = A_q^{\min}$. This contradicts the assumption that $t_s < t_{hs}$. 
+
 #### Comments
 
-With this solution we can actually work with the fact that $EFT_j != A_q^{\min}$ for any $q$ which is what we can have when doing merges.
+With this solution we can actually work with the fact that $EFT_j \ne A_q^{\min}$ for any $q$ which is what we can have when doing merges.
 
