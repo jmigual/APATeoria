@@ -134,6 +134,7 @@ $B = \{(A_i^{store}, M_i) | A_i^{store} \le EST_i^p(v) \land (A_i^{store}, M_i) 
 $C = A^{store}(v) \setminus B$\;
 $B:= $ sorted\_descending($B$, by=$M_i$)\;
 
+$p_2 := p$\;
 \While{$p > 0$}{
 $m := \min(p, B_{0, M})$\;
 $B_{0, M} := B_{0, M} - m$\;
@@ -152,7 +153,19 @@ $PA = \{(EST_i^p, p)\} \cup \{ (\max(A_i^{store}, EST_i^p(v)), M_i) | (A_i^{stor
 \end{algorithm}
 ```
 
+#### Proof
 
+*(Variation of what's already written in the paper)*
+
+First, since $v'$ considers all possible system states result from dispatching job $J_i$ on $p$ cores, at least $p$ cores will become available no earlier than the earliest finish $EFT_i$ time of $J_i$ in any system state represented by $v'$. Therefore, $PA$ must contain a new pair with $EFT_i^p$ and $p$.
+
+Second, by Rule 8, $J_i$ will always be dispatched on the $p$ first cores that become available. Therefore, the earliest time at which the $(m - p)$ remaining cores may become available is given by the earliest time at which the $(m - p)$ latest cores could become available before dispatching $J_i$, i.e., in any system state represented by $v$. Those times are given by $A^{\min}_k(v) : p < k \le m$.
+
+Given that the data is stored by pairing availability times with number of cores, we have to remove the used cores by $J_i$ from the $A^{store}(v)$ values. $J_i$ can only use cores possibly available at $EST_i^p(v)$ and these are the ones such that $A_k^{\min} \le EST_i^p(v)$, represented in $B$. From these groups of cores we have to remove up to $p$ cores, starting with the biggest ones as otherwise this would mean removing the possibilities of multiple small groups of cores being released at different times. We can prove this by contradiction, let's assume that there is a single group taking $p$ cores possibly available at time $t_1$ and then $p$ groups of 1 core that are possibly available at times $t_{2,1}, ...,t_{2,p}$, adding a total of $p$ cores. By contradiction the next $A^{store}(v)$ will be $\{(t_1, p), (EFT_i^p(v), p)\}$. However this discards all the scenarios where $1$ to $p - 1$ cores would be available at different times. 
+
+Finally, since job $J_i$ is the first job dispatched by the scheduler in any state represented by $v$, and because $EST_i^p$ is the earliest time at which $J_i$ may be dispatched, no core can become available to dispatch new workload before $EST_i^p$.
+
+Combining the three facts above, we prove our claim.
 
 ### Merge phase
 
