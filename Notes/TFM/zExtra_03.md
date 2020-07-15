@@ -1,5 +1,51 @@
 # Reducing precedence constraints pessimism
 
+## Formulation
+
+$$
+\mathcal{R}v(v) = \{ J_i, | J_i \in \mathcal{J} \setminus \mathcal{S}(v) \land pred(J_i) \subseteq \mathcal{S}(v) \}
+$$
+
+
+$$
+EST^p_i = \max\{R_i^{\min}(v), t_{gang}(v)\}
+$$
+
+$$
+t^p_{gang}(v) = \begin{cases}
+A_p^{\min}(v) & \text{if } p = m_i^{\max} \\
+A_p^{exact}(v) & \text{otherwise}
+\end{cases}
+$$
+
+$$
+LST_i^p = \min\{t^p_{avail}(v), t_{wc}(v), t_{high}(v) - 1\}
+$$
+
+$$
+t^p_{avail}(v) = \begin{cases}
+A_{p+1}^{\max}(v) - 1 & \text{if } p < m_i^{\max} \\
++\infty & \text{otherwise}
+\end{cases}
+$$
+
+$$
+t_{wc}(v) = \min_{J_j \in \mathcal{R}(v)}\{\max\{R_j^{\max}(v), A_{m_j^{\min}}^{\max}\}\}
+$$
+
+$$
+t^p_{high}(v) = \min^{\infty}_{J_j \in \{\operatorname{hp}_i \cap \mathcal{R}(v)\}} \Big\{\max\big\{t_h^p(J_i, J_j), \max^0\{LFT_y^*(v) | J_y \in pred(J_i) \setminus pred(J_j)\}\big\}\Big\}
+$$
+
+$$
+t^p_h(J_i, J_j) = \begin{cases}
+r_j^{\max} & \text{if } m_j^{\min} \le p \\
+\max\{r_j^{\max}, A_{m_j^{\min}}^{\max}\} & \text{otherwise}
+\end{cases}
+$$
+
+
+
 ## The problem
 
 When using precedence constraints and we are evaluating a low priority task $J_i$, we use $t_{high}$ to compute the time at which a high priority job can start. This works well for jobs without precedence constraints however, when such jobs exist as it can be possible that $J_i$ cannot start as a high priority segment could always start as soon as its predecessor finishes. The current formulation provides a pessimist answer to this problem.
