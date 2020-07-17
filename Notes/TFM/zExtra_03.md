@@ -3,7 +3,7 @@
 ## Formulation
 
 $$
-\mathcal{R}v(v) = \{ J_i, | J_i \in \mathcal{J} \setminus \mathcal{S}(v) \land pred(J_i) \subseteq \mathcal{S}(v) \}
+\mathcal{R}(v) = \{ J_i, | J_i \in \mathcal{J} \setminus \mathcal{S}(v) \land pred(J_i) \subseteq \mathcal{S}(v) \}
 $$
 
 
@@ -88,12 +88,12 @@ The job in **bold** is the next one that we are trying to see if it can be sched
 
 In this case the high-priority segment only has one precedence constraint
 
-- | $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
-  | ------------------ | ------------ | ------------ | ----- | ----- | ---------------------- |
-  | $J_0$              | 15           | 25           | 1     | 0     | $\emptyset$            |
-  | $J_1$              | 20           | 30           | 3     | 0     | $\emptyset$            |
-  | $\boldsymbol{J_2}$ | 10           | 10           | 1     | 1     | $\emptyset$            |
-  | $J_3$              | 10           | 10           | 1     | 0     | $\{J_0\}$ or $\{J_1\}$ |
+| $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
+| ------------------ | ------------ | ------------ | ----- | ----- | ---------------------- |
+| $J_0$              | 15           | 25           | 1     | 0     | $\emptyset$            |
+| $J_1$              | 20           | 30           | 3     | 0     | $\emptyset$            |
+| $\boldsymbol{J_2}$ | 10           | 10           | 1     | 1     | $\emptyset$            |
+| $J_3$              | 10           | 10           | 1     | 0     | $\{J_0\}$ or $\{J_1\}$ |
 
 
 - We thus have the following state and we are wondering whether $\boldsymbol{J_2}$ will be scheduled next or not: 
@@ -139,12 +139,12 @@ In this case with the two options we obtain:
 
 This example is very similar to the previous one but with the difference that the lower-priority job is a gang job while the high-priority segment is a single thread job.
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
-| ----- | ------------ | ------------ | ----- | ----- | ---------------------- |
-| $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$            |
-| $J_1$ | 20           | 30           | 3     | 0     | $\emptyset$            |
-| $J_2$ | 10           | 10           | 3     | 1     | $\emptyset$            |
-| $J_3$ | 10           | 10           | 1     | 0     | $\{J_0\}$ or $\{J_1\}$ |
+| $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
+| ------------------ | ------------ | ------------ | ----- | ----- | ---------------------- |
+| $J_0$              | 15           | 25           | 1     | 0     | $\emptyset$            |
+| $J_1$              | 20           | 30           | 3     | 0     | $\emptyset$            |
+| $\boldsymbol{J_2}$ | 10           | 10           | 3     | 1     | $\emptyset$            |
+| $J_3$              | 10           | 10           | 1     | 0     | $\{J_0\}$ or $\{J_1\}$ |
 
 
 
@@ -161,12 +161,12 @@ This example is very similar to the previous one but with the difference that th
 
 This example is very similar to the previous one but with the difference that both the lower and higher priority jobs are gang tasks. In this case $m=2$
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
-| ----- | ------------ | ------------ | ----- | ----- | ---------------------- |
-| $J_0$ | 15           | 25           | 1     | 0     | $\emptyset$            |
-| $J_1$ | 20           | 30           | 1     | 0     | $\emptyset$            |
-| $J_2$ | 10           | 10           | 2     | 1     | $\emptyset$            |
-| $J_3$ | 10           | 10           | 2     | 0     | $\{J_0\}$ or $\{J_1\}$ |
+| $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$            |
+| ------------------ | ------------ | ------------ | ----- | ----- | ---------------------- |
+| $J_0$              | 15           | 25           | 1     | 0     | $\emptyset$            |
+| $J_1$              | 20           | 30           | 1     | 0     | $\emptyset$            |
+| $\boldsymbol{J_2}$ | 10           | 10           | 2     | 1     | $\emptyset$            |
+| $J_3$              | 10           | 10           | 2     | 0     | $\{J_0\}$ or $\{J_1\}$ |
 
 
 
@@ -183,12 +183,13 @@ This example is very similar to the previous one but with the difference that bo
 
 In this example the high-priority segment has more than one precedence constraint but it only needs 1 core. In this case $m = 2$.
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$     |
-| ----- | ------------ | ------------ | ----- | ----- | --------------- |
-| $J_0$ | 10           | 20           | 1     | 0     | $\emptyset$     |
-| $J_1$ | 10           | 20           | 1     | 0     | $\emptyset$     |
-| $J_2$ | 10           | 10           | 1     | 1     | $\emptyset$     |
-| $J_3$ | 10           | 10           | 1     | 0     | $\{J_0 , J_1\}$ |
+- | $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$     |
+  | ------------------ | ------------ | ------------ | ----- | ----- | --------------- |
+  | $J_0$              | 10           | 20           | 1     | 0     | $\emptyset$     |
+  | $J_1$              | 10           | 20           | 1     | 0     | $\emptyset$     |
+  | $\boldsymbol{J_2}$ | 10           | 10           | 1     | 1     | $\emptyset$     |
+  | $J_3$              | 10           | 10           | 1     | 0     | $\{J_0 , J_1\}$ |
+
 
 ![System state before scheduling $J_2$](images/extra_03/precedence_multi.png){width=70%}
 
@@ -203,27 +204,27 @@ In this case $J_3$ has to wait for both its parents to finish execution so $J_2$
 
 In this example the high-priority segment has more than one precedence constraint but it only needs 1 core. In this case $m = 4$.
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$                 | $P_i$ | $prec(J_i)$     |
-| ----- | ------------ | ------------ | --------------------- | ----- | --------------- |
-| $J_0$ | 10           | 20           | 1                     | 0     | $\emptyset$     |
-| $J_1$ | 15           | 25           | 1                     | 0     | $\emptyset$     |
-| $J_2$ | 20           | 25           | 2                     | 0     | $\emptyset$     |
-| $J_3$ | 10           | 10           | 1 (A), 2 (B) or 3 (C) | 1     | $\emptyset$     |
-| $J_4$ | 10           | 10           | 2                     | 0     | $\{J_0 , J_1\}$ |
+| $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$                 | $P_i$ | $prec(J_i)$     |
+| ------------------ | ------------ | ------------ | --------------------- | ----- | --------------- |
+| $J_0$              | 10           | 20           | 1                     | 0     | $\emptyset$     |
+| $J_1$              | 15           | 25           | 1                     | 0     | $\emptyset$     |
+| $J_2$              | 20           | 25           | 2                     | 0     | $\emptyset$     |
+| $\boldsymbol{J_3}$ | 10           | 10           | 1 (A), 2 (B) or 3 (C) | 1     | $\emptyset$     |
+| $J_4$              | 10           | 10           | 2                     | 0     | $\{J_0 , J_1\}$ |
 
 ![System state before scheduling $J_2$](images/extra_03/precedence_multi_gang.png){width=70%}
 
 In this case there are three different scenarios depending in the number of cores that $J_3$ is assigned. Also, $J_4$ has to wait for both its parents to finish execution. So:
 
 - **Option A**: $m_3 = 1$:
-  - $EST_2^1 = 10$
-  - $LST_2^1 = 20$
+  - $EST_3^1 = 10$
+  - $LST_3^1 = 20$
 - **Option B**: $m_3 = 2$:
-  - $EST_2^1 = 20$
-  - $LST_2^1 = 24$
+  - $EST_3^1 = 20$
+  - $LST_3^1 = 24$
 - **Option C**: $m_3 = 3$
-  - $EST_2^1 = 20$
-  - $LST_2^1 = 24$
+  - $EST_3^1 = 20$
+  - $LST_3^1 = 24$
 
 ![Possible scheduling times of $J_2$](images/extra_03/precedence_multi_gang_job.png){width=70%}
 
@@ -245,14 +246,14 @@ To solve the issue a new availability **only used to compute** $EST_i^p(v)$ is c
 
 
 
-| $J_i$ | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$     |
-| ----- | ------------ | ------------ | ----- | ----- | --------------- |
-| $J_0$ | 5            | 25           | 1     | 0     | $\emptyset$     |
-| $J_1$ | 10           | 30           | 1     | 0     | $\emptyset$     |
-| $J_2$ | 15           | 35           | 1     | 0     | $\emptyset$     |
-| $J_3$ | 20           | 40           | 1     | 0     | $\emptyset$     |
-| $J_4$ | 10           | 10           | 3     | 0     | $\{J_0 , J_1\}$ |
-| $J_5$ | 10           | 10           | 3     | 1     | $\emptyset$     |
+| $J_i$              | $C_i^{\min}$ | $C_i^{\max}$ | $m_i$ | $P_i$ | $prec(J_i)$     |
+| ------------------ | ------------ | ------------ | ----- | ----- | --------------- |
+| $J_0$              | 5            | 25           | 1     | 0     | $\emptyset$     |
+| $J_1$              | 10           | 30           | 1     | 0     | $\emptyset$     |
+| $J_2$              | 15           | 35           | 1     | 0     | $\emptyset$     |
+| $J_3$              | 20           | 40           | 1     | 0     | $\emptyset$     |
+| $J_4$              | 10           | 10           | 3     | 0     | $\{J_0 , J_1\}$ |
+| $\boldsymbol{J_5}$ | 10           | 10           | 3     | 1     | $\emptyset$     |
 
 In this example we are trying to schedule $J_5$ and jobs $J_0$, $J_1$, $J_2$ and $J_3$ have already been scheduled so we have the following system state:
 
