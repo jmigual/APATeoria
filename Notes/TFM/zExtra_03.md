@@ -299,6 +299,10 @@ $$
 \mathcal{X}^{pred}_i(v) = \{pred(J_i) \cap \mathcal{X}(v)\}
 $$
 Is the set of certainly running predecessors of $J_i$.
+$$
+\mathcal{Q}_i(v)= \bigg\{J_k \bigg| \underbrace{\Big(\Big\{pred(J_i) \cap \mathcal{X}(v)\Big\} \ne \emptyset\Big)}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(A_p^{\min} \ge \max\left\{R_k^{\min}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{if } J_i \text{ can start, so does } J_k}\land J_k \in \operatorname{hp}_i\bigg\}
+$$
+
 
 #### Explanation
 
