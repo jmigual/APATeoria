@@ -74,25 +74,25 @@ $$
 $$
 **Proof**: by definition of $pred(J_x)$, these are the predecessors of $J_x$, and then, by definition of $\mathcal{X}(v)$, these are certainly running jobs at state $v$. Thus the intersection are certainly running jobs that are predecessors of $J_x$ and proving our claim.
 
-Then, 
-
-
-
-Then, $J_i$ cannot start if, as soon as it does, so does another higher-priority job that's ready and waiting for a previous segment to finish. Then, for a state $v$, if $J_i$ can start at the earliest at time $t$, these jobs can be expressed by:
+Then, at time $t$ and state $v$, higher-priority jobs with precedence constraints that can certainly start if $J_i$ does are defined as follows:
 $$
-\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\Big(\Big\{pred(J_k) \cap \mathcal{X}(v)\Big\} \ne \emptyset\Big)}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred} \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
 $$
 **Proof**: Since these jobs have to meet three conditions we will prove them separately:
 
 - $\Big\{pred(J_k) \cap \mathcal{X}(v)\Big\} \ne \emptyset$, by definition of $pred(J_x)$, these are the predecessors of $J_k$ and we only take the ones that are certainly running at state $v$, by definition of $\mathcal{X}(v)$. Thus this condition is met only if $J_k$ has certainly running predecessor jobs.
-- $t \ge \max\left\{r_k^{\min}, A_{m_k^{\min}}^{\min}\right\}$, by rule 2 a job cannot start before begin released (so $t \ge r_k^{\min}$) and cannot start until at least $m_k^{\min}$ cores are available. Thus this condition is met only if $J_k$ can start at time $t$.
+- $t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}$, by rule 2 a job cannot start before begin released (so $t \ge r_k^{\max}$) and cannot start until at least $m_k^{\min}$ cores are available. Thus this condition is met only if $J_k$ can certainly start at time $t$.
 - $J_k \in \operatorname{hp}_i$, by definition of $\operatorname{hp}_i$, this condition is only met if $J_k$ has a higher priority than $J_i$.
 
 Thus we prove the claim $\blacksquare$
 
-These are jobs that could start, now we have to check whether $J_i$ executing would mean that all the predecessors of a job in $\mathcal{Q}(v, t)$ have finished and thus the higher-priority job can start too.
+These are jobs that can certainly start if $J_i$ does but, since they have precedence constraints, these constraints may prevent the job from starting. Now we have to check whether $J_i$ starting means that these constraints have been fulfilled and thus the higher-priority jobs should have been executed. To do so, we check whether at time $t$ there are enough cores to execute without "needing" the cores used by the predecessors of a job in $\mathcal{Q}(v, t)$. 
 
-
+The number of cores possibly available at time $t$ is defined as follows:
+$$
+q^{\min}(v, t) = \max_{1 \le q \le m} \{q | A_q^{\min}(v) \ge t\}
+$$
+Now, a higher-priority job will not certainly start executing if at least one predecessor is still running. Thus, the lower priority job $J_i$ can use the cores freed by other finished predecessors. So, 
 
 
 
