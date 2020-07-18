@@ -1,5 +1,11 @@
 # Reducing precedence constraints pessimism
 
+## Problem
+
+When considering the execution of a low-priority job $J_i$, the current formulation does not consider the case where a higher-priority job $J_k$ is waiting for its predecessors ($J_j$) jobs to finish their execution. This allows $J_i$ to be scheduled before $J_k$. While this scenario may be possible, there's a case where $J_i$ ends up replacing $J_k$'s valid execution. This happens when we are **certain** that at dispatch time $t$, job $J_i$ will use the cores just freed by the completion of $J_j$. If $J_j$ just finished this means that $J_k$ would have been scheduled first instead of $J_i$. 
+
+The solution to this problem is to find a lower bound $t_{pred}$ such that if $J_i$ starts at this time we are not certain that $J_k$ may have started. The explanation that follows is how to find such lower bound.
+
 ## Original formulation
 
 $$
@@ -60,9 +66,21 @@ $$
 
 > We have to find the earliest time such that $J_i$ can be scheduled without replacing a valid execution of a higher-priority job that was waiting for a predecessor to finish and that we are certain that the higher-priority job could execute if $J_i$ could also execute.
 
-First, higher-priority jobs with a certainly running predecessor that can execute if $J_i$ can execute at time $t$ from state $v$:
+Even if $J_i$ could start, higher-priority jobs may be scheduled before it. If these higher-priority jobs have precedence constraints, we have to look for the time $t_{pred}$ at which $J_i$ can start but these higher-priority jobs may not.
+
+First, we define the certainly running predecessors of a job $J_x$, for state $v$ as:
 $$
-\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\Big(\Big\{pred(J_k) \cap \mathcal{X}(v)\Big\} \ne \emptyset\Big)}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\min}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
+\mathcal{X}_x^{pred}(v) = \Big\{pred(J_x) \cap \mathcal{X}(v)\Big\}
+$$
+**Proof**: by definition of $pred(J_x)$, these are the predecessors of $J_x$, and then, by definition of $\mathcal{X}(v)$, these are certainly running jobs at state $v$. Thus the intersection are certainly running jobs that are predecessors of $J_x$ and proving our claim.
+
+Then, 
+
+
+
+Then, $J_i$ cannot start if, as soon as it does, so does another higher-priority job that's ready and waiting for a previous segment to finish. Then, for a state $v$, if $J_i$ can start at the earliest at time $t$, these jobs can be expressed by:
+$$
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\Big(\Big\{pred(J_k) \cap \mathcal{X}(v)\Big\} \ne \emptyset\Big)}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
 $$
 **Proof**: Since these jobs have to meet three conditions we will prove them separately:
 
@@ -70,9 +88,9 @@ $$
 - $t \ge \max\left\{r_k^{\min}, A_{m_k^{\min}}^{\min}\right\}$, by rule 2 a job cannot start before begin released (so $t \ge r_k^{\min}$) and cannot start until at least $m_k^{\min}$ cores are available. Thus this condition is met only if $J_k$ can start at time $t$.
 - $J_k \in \operatorname{hp}_i$, by definition of $\operatorname{hp}_i$, this condition is only met if $J_k$ has a higher priority than $J_i$.
 
-Thus we prove that a higher-priority job that can $\blacksquare$
+Thus we prove the claim $\blacksquare$
 
-
+These are jobs that could start, now we have to check whether $J_i$ executing would mean that all the predecessors of a job in $\mathcal{Q}(v, t)$ have finished and thus the higher-priority job can start too.
 
 
 
