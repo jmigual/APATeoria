@@ -76,7 +76,7 @@ $$
 
 Then, at time $t$ and state $v$, higher-priority jobs with precedence constraints that can certainly start if $J_i$ does are defined as follows:
 $$
-\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i \land \underbrace{\Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)}_{\text{All predecessors scheduled}}\bigg\}
 $$
 **Proof**: Since these jobs have to meet three conditions we will prove them separately:
 
@@ -92,93 +92,40 @@ The number of cores possibly available at time $t$ is defined as follows:
 $$
 q^{\min}(v, t) = \max_{1 \le q \le m} \{q | A_q^{\min}(v) \ge t\}
 $$
-Now, $J_i$ will not start executing if, to do so, it would certainly use the cores of all the predecessors of a job $J_k \in \mathcal{Q}_i(v, t)$. 
+**Lemma**: $J_i$ will not possibly start executing if, by doing it so, it would certainly use cores from all the certainly running predecessors of a job $J_k \in \mathcal{Q}_i(v, t)$.
 
-**Lemma**: $J_i$ will not be the next scheduled job if it requires the cores freed by the predecessor job of $J_k \in \mathcal{Q}_i(v,t)$ with the least amount of cores:
+**Proof**: By contradiction, let's assume that $J_i$ is scheduled at time $t$ and uses cores from all the certainly running predecessors of $J_k$. As $J_i$ uses cores from all the certainly running predecessors of $J_k$ this means that all the precedence constraints of $J_k$ have been fulfilled. Then, by rule 4, $J_k$ would be scheduled first, instead of $J_i$ at time $t$. This contradicts the assumption that $J_i$ is scheduled at time $t$, and thus proves our claim. $\blacksquare$
+
+Now, in order to check if $J_i$ would use cores from all the certainly running predecessors of a job $J_k$ we know that $J_i$ can use the possibly available cores, $q^{\min}(v, t)$, minus the number of cores that would ensure that $J_i$ is certainly running on cores freed by the predecessors of $J_k$. 
+
+**Lemma**: The number of cores that ensures that $J_i$ is not using cores from all the certainly running predecessors of $J_k$ is defined by:
 $$
-\operatorname{arg\,min}_{J_j \in \mathcal{X}_k^{pred}} p_j
+p_k^{pred} = \min_{J_j \in \mathcal{X}_k^{pred}(v)} p_j
 $$
-**Proof**, by contradiction let's assume that $J_x$, with $p_x$ cores, is not the predecessor with the least amount of cores. This means that there's a $J_y$ such that $p_y < p_x$. Let's also assume that $m = p_x + p_y$.
-
-Now, a higher-priority job will not certainly start executing if at least one predecessor is still running. Thus, the lower priority job $J_i$ can use the cores freed by other finished predecessors. So, the job 
-
-
-
-the number of cores that we are certain that cannot be used by $J_i$ from a job $J_k \in \mathcal{Q}_i(v, t)$ are:
+**Corollary 1**: The job with the minimum number of cores is defined by:
 $$
-\min_{J_j \in \mathcal{X}_k^{pred}(v)} p_j
+J_k^{pred,\min} = \operatorname*{arg\,min}_{J_j \in \mathcal{X}_k^{pred}(v)} p_j
 $$
-
-
-
-
-During this formulation we are using $J_i$ for the current evaluated job, $J_k$ for the higher-priority segment with a certainly running predecessor (so $\exists J_j | J_j \in \{pred(J_k) \cap \mathcal{X}(v)\}$) and $J_j$ for the certainly running predecessors of $J_k$.
-
-#### The change
-
-We thus change from:
+**Corollary 2**: If there's only one higher-priority job $J_k$, then in order for $J_i$ to be scheduled at time $t$ it needs to fulfil the following condition:
 $$
-EST_i^p(v) = \max\{R_i, A^{\min}_p\}
+q^{\min}(v, t) - p_k^{pred} \ge p
 $$
 
 
-To:
-$$
-EST_i^p(v) = \max\{R_i, A_p^{\min}, t_{hs}\}
-$$
-Where $t_{hs}$ is the time taken by higher priority segments and is the time at which the possibly always used cores are not all the cores of segments with currently running predecessors. 
-$$
-t_{hs} = \min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \left| \left(q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right.\right\}
-$$
+**Proof**: By contradiction, let's assume that $p_k^{pred}$ is not the minimum among all the certainly running predecessors $\mathcal{X}_k^{pred}(v)$. This means that $J_i$ cannot be scheduled with more than $q^{\min}(v, t) - p^{pred}_k$ cores without using cores from all the certainly running predecessors of $J_k$. As we assumed that $p_k^{pred}$ is not the minimum among all the certainly running predecessors, this means that there's a job $J_x$ such that $p_x < p_k^{pred} \land J_x \in \mathcal{X}_k^{pred}$. Now, we can see how we can schedule $J_i$ with $q^{\min}(v, t) - p_x$ cores and still not use the cores from all the predecessors, as the cores from $J_x$ where not used. This contradicts the assumption that $p_k^{pred}$ is not the minimum among all the certainly running predecessors $\mathcal{X}_k^{pred}(v)$ of $J_k \in \mathcal{Q}_i(v, t)$.
 
-Where:
+**Lemma**: For multiple higher-priority jobs $J_k \in \mathcal{Q}_i(v, t)$. The jobs whose number of cores cannot be used by $J_i$ are defined by:
 $$
-\mathcal{S}_i(v) = \left\{J_k \left| \mathcal{X}^{pred}_i(v) \ne \emptyset \land p \ge m_k^{\min} \land P_i > P_k \land \left(\sum_{J_j \in \mathcal{X}_k^{pred}(v)}p_j\right) \le p\right.\right\}
+\mathcal{Q}_i^{pred}(v, t) = \left\{ J_k^{pred,\min} \Bigg| \mathcal{Q}_i(v, t) \right\}
 $$
-Is the set of segments with a certainly running predecessor and higher priority than $J_i$ that use the same or less cores than $J_i$ or that their predecessors use the same or less cores than $J_i$. Where:
+Note that it is a set, so there are no repeated jobs
+
+**Corollary**: $J_i$ may be scheduled at time $t$ at the earliest if it matches the following condition:
 $$
-\mathcal{X}^{pred}_i(v) = \{pred(J_i) \cap \mathcal{X}(v)\}
+q^{\min}(v, t) - \sum_{J_j \in \mathcal{Q}_i^{pred}(v, t)} p_j \ge p
 $$
-Is the set of certainly running predecessors of $J_i$.
-$$
-\mathcal{Q}_i(v)= \bigg\{J_k \bigg| \underbrace{\Big(\Big\{pred(J_i) \cap \mathcal{X}(v)\Big\} \ne \emptyset\Big)}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(A_p^{\min} \ge \max\left\{R_k^{\min}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{if } J_i \text{ can start, so does } J_k}\land J_k \in \operatorname{hp}_i\bigg\}
-$$
+**Proof**: By definition of $J_k^{pred,\min}$, this is the job whose number of cores cannot be used by $J_i$, as there are multiple higher-priority jobs in $J_k \in\mathcal{Q}
+_i(v, t)$,  each of them has their own $J_k^{pred,\min}$. Thus, $J_i$ cannot use the cores from any of the $J_k^{pred,\min}$.
 
 
-#### Explanation
-
-So let's go step by step:
-$$
-J_j \in \underbrace{\mathcal{X}^{pred}_k(v)}_{\substack{\text{certainly running} \\ \text{predecessor}}} \land \underbrace{EFT^*_j(v) \le A_q^{\min}}_{\substack{\text{using cores at} \\ \text{time } A_q^{\min}}}
-$$
-These are the jobs that are certainly running predecessors of $J_k$ so some of the cores currently being used by them could be used by $J_i$. Then:
-$$
-\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j
-$$
-These are the minimum number of cores used by a certainly running predecessor of predecessor of $J_k$. Then:
-$$
-q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j
-$$
-Is the number of cores that $J_i$ can take without taking all the cores of a predecessor of $J_k$. Then:
-$$
-\left(q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p
-$$
-Is true only if $J_i$ requires less cores than the ones that are available without "disturbing" a job in $\mathcal{S}(v)$ and finally:
-$$
-\min_{\forall q | p \le q \le m}^{\infty}\left\{A_q^{\min} \Big| \left(q - \sum_{J_k \in \mathcal{S}_i(v)}\min_{J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le A_q^{\min}} p_j\right) \ge p\right\}
-$$
-Is the minimum $A_q^{\min}$ such that job $J_i$ can be scheduled with $p$ cores without "stealing" the cores that belong to "hunter jobs".
-
-#### Proof
-
-We want to proof that a job $J_i$ that has low priority in a system where jobs with precedence constraints and higher priority are running can be scheduled at the earliest at time $t_s \ge t_{hs}$. We are going to prove that by contradiction:
-
-By contradiction, let's assume that job $J_i$ is scheduled at time $t_s < t_{hs}$ with $p$ and that there are other jobs such that $S_i(v)\ne \emptyset$. Here we can have two possibilities: either (a) there are jobs such that $J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le t_s$ or they aren't (b). 
-
-- If (a), by definition of availability this time can be at the earliest $A_p^{\min}$. This means that if $J_i$ where to be scheduled next it would use all the cores used currently by predecessors of a waiting higher priority job $J_k$ which would mean that the predecessors of $J_k$ had finished they execution. By rules 1 and 4 $J_k$ would be scheduled next instead of $J_i$ which contradicts the assumption that $J_i$ is the next job to be scheduled. Either $t_s \ge t_{hs}$ or there aren't jobs such that $J_j \in \mathcal{X}^{pred}_k(v) \land EFT^*_j(v) \le t_s$. 
-- Otherwise if (b), by definition of availability this time can be at earliest $t_s = A_p^{\min}$. Then the equation then is simplified into $\min_{\forall q: p \le q\le m}^{\infty}\left\{A_q^{\min}|q \ge p\right\}$ which means that $t_{hs} = A_q^{\min}$. This contradicts the assumption that $t_s < t_{hs}$. 
-
-#### Comments
-
-With this solution we can actually work with the fact that $EFT_j \ne A_q^{\min}$ for any $q$ which is what we can have when doing merges.
 
