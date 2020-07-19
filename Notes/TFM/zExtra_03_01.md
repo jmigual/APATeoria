@@ -72,15 +72,15 @@ First, we define the certainly running predecessors of a job $J_x$, for state $v
 $$
 \mathcal{X}_x^{pred}(v) = \Big\{pred(J_x) \cap \mathcal{X}(v)\Big\}
 $$
-**Proof**: by definition of $pred(J_x)$, these are the predecessors of $J_x$, and then, by definition of $\mathcal{X}(v)$, these are certainly running jobs at state $v$. Thus the intersection are certainly running jobs that are predecessors of $J_x$ and proving our claim.
+**Proof**: by definition of $pred(J_x)$, these are the predecessors of $J_x$, and then, by definition of $\mathcal{X}(v)$, these are certainly running jobs at state $v$. Thus the intersection are certainly running jobs that are predecessors of $J_x$ and proving our claim.  $\blacksquare$
 
 Then, at time $t$ and state $v$, higher-priority jobs with precedence constraints that can certainly start if $J_i$ does are defined as follows:
 $$
-\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred} \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i\bigg\}
 $$
 **Proof**: Since these jobs have to meet three conditions we will prove them separately:
 
-- $\Big\{pred(J_k) \cap \mathcal{X}(v)\Big\} \ne \emptyset$, by definition of $pred(J_x)$, these are the predecessors of $J_k$ and we only take the ones that are certainly running at state $v$, by definition of $\mathcal{X}(v)$. Thus this condition is met only if $J_k$ has certainly running predecessor jobs.
+- $\mathcal{X}_k^{pred}(v) \ne \emptyset$, by definition of $\mathcal{X}_k^{pred(v)}$, it contains the certainly running predecessors of $J_k$. Thus this condition is met only if $J_k$ has certainly running predecessors.
 - $t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}$, by rule 2 a job cannot start before begin released (so $t \ge r_k^{\max}$) and cannot start until at least $m_k^{\min}$ cores are available. Thus this condition is met only if $J_k$ can certainly start at time $t$.
 - $J_k \in \operatorname{hp}_i$, by definition of $\operatorname{hp}_i$, this condition is only met if $J_k$ has a higher priority than $J_i$.
 
@@ -92,7 +92,23 @@ The number of cores possibly available at time $t$ is defined as follows:
 $$
 q^{\min}(v, t) = \max_{1 \le q \le m} \{q | A_q^{\min}(v) \ge t\}
 $$
-Now, a higher-priority job will not certainly start executing if at least one predecessor is still running. Thus, the lower priority job $J_i$ can use the cores freed by other finished predecessors. So, 
+Now, $J_i$ will not start executing if, to do so, it would certainly use the cores of all the predecessors of a job $J_k \in \mathcal{Q}_i(v, t)$. 
+
+**Lemma**: $J_i$ will not be the next scheduled job if it requires the cores freed by the predecessor job of $J_k \in \mathcal{Q}_i(v,t)$ with the least amount of cores:
+$$
+\operatorname{arg\,min}_{J_j \in \mathcal{X}_k^{pred}} p_j
+$$
+**Proof**, by contradiction let's assume that $J_x$, with $p_x$ cores, is not the predecessor with the least amount of cores. This means that there's a $J_y$ such that $p_y < p_x$. Let's also assume that $m = p_x + p_y$.
+
+Now, a higher-priority job will not certainly start executing if at least one predecessor is still running. Thus, the lower priority job $J_i$ can use the cores freed by other finished predecessors. So, the job 
+
+
+
+the number of cores that we are certain that cannot be used by $J_i$ from a job $J_k \in \mathcal{Q}_i(v, t)$ are:
+$$
+\min_{J_j \in \mathcal{X}_k^{pred}(v)} p_j
+$$
+
 
 
 
