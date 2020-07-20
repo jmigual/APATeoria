@@ -1,3 +1,9 @@
+---
+geometry: margin=2.5cm
+---
+
+
+
 # Reducing precedence constraints pessimism
 
 ## Problem
@@ -20,7 +26,7 @@ $$
 \mathcal{R}(v) = \{ J_i, | J_i \in \mathcal{J} \setminus \mathcal{S}(v) \land pred(J_i) \subseteq \mathcal{S}(v) \}
 $$
 
-#### Earliest Start Time
+### Earliest Start Time
 
 
 $$
@@ -34,7 +40,7 @@ A_p^{exact}(v) & \text{otherwise}
 \end{cases}
 $$
 
-#### Latest Start Time
+### Latest Start Time
 
 $$
 LST_i^p = \min\{t^p_{avail}(v), t_{wc}(v), t_{high}(v) - 1\}
@@ -64,20 +70,21 @@ $$
 
 ## The solution
 
-> We have to find the earliest time such that $J_i$ can be scheduled without replacing a valid execution of a higher-priority job that was waiting for a predecessor to finish and that we are certain that the higher-priority job could execute if $J_i$ could also execute.
+A job $J_i$, can start before a higher-priority job $J_k$ if $J_k$ has precedence constraints. However, sometimes if $J_i$ can start, so does $J_k$ as this would mean that the running precedence constraints jobs have just finished. We have to find the time $t_i^{pred}(v)$ at which $J_i$ can start without certainly using cores from all the predecessors of a higher priority job $J_k$.
 
-Even if $J_i$ could start, higher-priority jobs may be scheduled before it. If these higher-priority jobs have precedence constraints, we have to look for the time $t_{pred}$ at which $J_i$ can start but these higher-priority jobs may not.
-
-First, we define the certainly running predecessors of a job $J_x$, for state $v$ as:
+First, we define the certainly running predecessors of a job $J_x$:
 $$
 \mathcal{X}_x^{pred}(v) = \Big\{pred(J_x) \cap \mathcal{X}(v)\Big\}
 $$
 **Proof**: by definition of $pred(J_x)$, these are the predecessors of $J_x$, and then, by definition of $\mathcal{X}(v)$, these are certainly running jobs at state $v$. Thus the intersection are certainly running jobs that are predecessors of $J_x$ and proving our claim.  $\blacksquare$
 
-Then, at time $t$ and state $v$, higher-priority jobs with precedence constraints that can certainly start if $J_i$ does are defined as follows:
-$$
-\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i \land \underbrace{\Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)}_{\text{All predecessors scheduled}}\bigg\}
-$$
+Usually, a higher-priority job $J_k$ would be always scheduled before $J_i$. However, since $J_k$ has precedence constraints, $J_i$ can start executing before $J_k$ if that execution scenario does not mean that $J_i$ is making use of cores freed by all the predecessors of $J_k$. So, we have to check all possible jobs $J_k$ to see if $J_i$ being dispatched at time $t$ could be a real execution scenario or not. So, the properties of jobs $J_k$ that have to be checked are:
+
+- If $J_i$ can start running, so does $J_k$. This means that $J_k$ has been released, at least $m_k^{\min}$ cores are available and all the predecessors of $J_k$ have been scheduled already.
+- $J_k$ has certainly running predecessors.
+- $J_k$ has a higher priority than $J_i$.
+
+**Lemma**: The set of jobs to be checked because $J_i$ can use cores from their certainly running predecessors is defined by:
 $$
 \mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big) \land \Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)}_{\text{$J_k$ can start at time $t$}}\land\underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land  J_k \in \operatorname{hp}_i\bigg\}
 $$
@@ -86,8 +93,9 @@ $$
 
 **Proof**: Since these jobs have to meet three conditions we will prove them separately:
 
+- $t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}$, by rule 2 a job cannot start before begin released (so $t \ge r_k^{\max}$) and cannot start until at least $m_k^{\min}$ cores are available. Thus this condition is met only if $J_k$ can possibly start at time $t$.
+- $pred(J_k) \subseteq \mathcal{S}(v)$, as defined in the task model, a job cannot start executing until all its predecessors have been scheduled and finished.
 - $\mathcal{X}_k^{pred}(v) \ne \emptyset$, by definition of $\mathcal{X}_k^{pred(v)}$, it contains the certainly running predecessors of $J_k$. Thus this condition is met only if $J_k$ has certainly running predecessors.
-- $t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}$, by rule 2 a job cannot start before begin released (so $t \ge r_k^{\max}$) and cannot start until at least $m_k^{\min}$ cores are available. Thus this condition is met only if $J_k$ can certainly start at time $t$.
 - $J_k \in \operatorname{hp}_i$, by definition of $\operatorname{hp}_i$, this condition is only met if $J_k$ has a higher priority than $J_i$.
 
 Thus we prove the claim $\blacksquare$
@@ -133,5 +141,99 @@ $$
 **Proof**: By definition of $J_k^{pred,\min}$, this is the job whose number of cores cannot be used by $J_i$, as there are multiple higher-priority jobs in $J_k \in\mathcal{Q}
 _i(v, t)$,  each of them has their own $J_k^{pred,\min}$. Thus, $J_i$ cannot use the cores from any of the $J_k^{pred,\min}$.
 
+## Final formulation
 
+## 
+
+$$
+R_i^{\min} = \max\big\{r_i^{\min}, \max^{0}\{EFT_x^*(v) | J_x \in pred(J_i)\}\big\}
+$$
+
+$$
+R_i^{\max} = \max\big\{r_i^{\max}, \max^0 \{LFT_x^*(v) | J_x \in pred(J_i)\}\big\}
+$$
+
+$$
+\mathcal{R}(v) = \{ J_i, | J_i \in \mathcal{J} \setminus \mathcal{S}(v) \land pred(J_i) \subseteq \mathcal{S}(v) \}
+$$
+
+$$
+\mathcal{X}_x^{pred}(v) = \big\{pred(J_x) \cap \mathcal{X}(v)\big\}
+$$
+
+$$
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big) \land \Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)\land\mathcal{X}_k^{pred}(v) \ne \emptyset \land  J_k \in \operatorname{hp}_i\bigg\}
+$$
+
+
+
+### Earliest Start Time
+
+
+$$
+EST^p_i = \max\{R_i^{\min}(v), t_{gang}(v), t_i^{pred}\}
+$$
+
+$$
+t^p_{gang}(v) = \begin{cases}
+A_p^{\min}(v) & \text{if } p = m_i^{\max} \\
+A_p^{exact}(v) & \text{otherwise}
+\end{cases}
+$$
+
+#### Computing $t_i^{pred}$
+
+```{=latex}
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+
+\Input{State $v$, $p$ and $J_i$}
+\Output{$t_i^{pred}$}
+\BlankLine
+
+$r := p$\;
+$t_i^{pred} := R_i^{\min}$\;
+\While{$r \le m$}{
+	$t_i^{pred} := \max\{t_i^{pred}, A_r^{\min}\}$\;
+	\If{$q^{\min}(v, t_i^{pred}) - \sum_{J_j \in \mathcal{Q}_i^{pred}(v, t_i^{pred})} p_j \ge p$}{
+		\Return $t_i^{pred}$\;
+	}
+	$r := r + 1$\;
+}
+
+\Return $+\infty$\;
+
+\caption{Algorithm to find lower bound of $t_i^{pred}$}
+\end{algorithm}
+```
+
+
+
+### Latest Start Time
+
+$$
+LST_i^p = \min\{t^p_{avail}(v), t_{wc}(v), t_{high}(v) - 1\}
+$$
+
+$$
+t^p_{avail}(v) = \begin{cases}
+A_{p+1}^{\max}(v) - 1 & \text{if } p < m_i^{\max} \\
++\infty & \text{otherwise}
+\end{cases}
+$$
+
+$$
+t_{wc}(v) = \min_{J_j \in \mathcal{R}(v)}\{\max\{R_j^{\max}(v), A_{m_j^{\min}}^{\max}\}\}
+$$
+
+$$
+t^p_{high}(v) = \min^{\infty}_{J_j \in \{\operatorname{hp}_i \cap \mathcal{R}(v)\}} \Big\{\max\big\{t_h^p(J_i, J_j), \max^0\{LFT_y^*(v) | J_y \in pred(J_i) \setminus pred(J_j)\}\big\}\Big\}
+$$
+
+$$
+t^p_h(J_i, J_j) = \begin{cases}
+r_j^{\max} & \text{if } m_j^{\min} \le p \\
+\max\{r_j^{\max}, A_{m_j^{\min}}^{\max}\} & \text{otherwise}
+\end{cases}
+$$
 
