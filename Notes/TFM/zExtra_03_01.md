@@ -78,6 +78,12 @@ Then, at time $t$ and state $v$, higher-priority jobs with precedence constraint
 $$
 \mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big)}_{\text{$J_k$ can start at time $t$}}\land J_k \in \operatorname{hp}_i \land \underbrace{\Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)}_{\text{All predecessors scheduled}}\bigg\}
 $$
+$$
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \underbrace{\Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big) \land \Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)}_{\text{$J_k$ can start at time $t$}}\land\underbrace{\mathcal{X}_k^{pred}(v) \ne \emptyset}_{\substack{\text{Have a certainly} \\ \text{running predecessor}}} \land  J_k \in \operatorname{hp}_i\bigg\}
+$$
+
+
+
 **Proof**: Since these jobs have to meet three conditions we will prove them separately:
 
 - $\mathcal{X}_k^{pred}(v) \ne \emptyset$, by definition of $\mathcal{X}_k^{pred(v)}$, it contains the certainly running predecessors of $J_k$. Thus this condition is met only if $J_k$ has certainly running predecessors.
@@ -98,7 +104,7 @@ $$
 
 Now, in order to check if $J_i$ would use cores from all the certainly running predecessors of a job $J_k$ we know that $J_i$ can use the possibly available cores, $q^{\min}(v, t)$, minus the number of cores that would ensure that $J_i$ is certainly running on cores freed by the predecessors of $J_k$. 
 
-**Lemma**: The number of cores that ensures that $J_i$ is not using cores from all the certainly running predecessors of $J_k$ is defined by:
+**Lemma**: The minimum number of cores that ensures that $J_i$ is not using cores from all the certainly running predecessors of $J_k$ is defined by:
 $$
 p_k^{pred} = \min_{J_j \in \mathcal{X}_k^{pred}(v)} p_j
 $$
@@ -116,7 +122,7 @@ $$
 
 **Lemma**: For multiple higher-priority jobs $J_k \in \mathcal{Q}_i(v, t)$. The jobs whose number of cores cannot be used by $J_i$ are defined by:
 $$
-\mathcal{Q}_i^{pred}(v, t) = \left\{ J_k^{pred,\min} \Bigg| \mathcal{Q}_i(v, t) \right\}
+\mathcal{Q}_i^{pred}(v, t) = \left\{ J_k^{pred,\min} \Bigg| J_k \in \mathcal{Q}_i(v, t) \right\}
 $$
 Note that it is a set, so there are no repeated jobs
 
