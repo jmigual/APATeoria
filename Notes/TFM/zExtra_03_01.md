@@ -1,5 +1,7 @@
 ---
 geometry: margin=2.5cm
+header-includes:
+	- \usepackage[linesnumbered]{algorithm2e}
 ---
 
 
@@ -141,9 +143,7 @@ $$
 **Proof**: By definition of $J_k^{pred,\min}$, this is the job whose number of cores cannot be used by $J_i$, as there are multiple higher-priority jobs in $J_k \in\mathcal{Q}
 _i(v, t)$,  each of them has their own $J_k^{pred,\min}$. Thus, $J_i$ cannot use the cores from any of the $J_k^{pred,\min}$.
 
-## Final formulation
-
-## 
+## Final formulation 
 
 $$
 R_i^{\min} = \max\big\{r_i^{\min}, \max^{0}\{EFT_x^*(v) | J_x \in pred(J_i)\}\big\}
@@ -155,14 +155,6 @@ $$
 
 $$
 \mathcal{R}(v) = \{ J_i, | J_i \in \mathcal{J} \setminus \mathcal{S}(v) \land pred(J_i) \subseteq \mathcal{S}(v) \}
-$$
-
-$$
-\mathcal{X}_x^{pred}(v) = \big\{pred(J_x) \cap \mathcal{X}(v)\big\}
-$$
-
-$$
-\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big) \land \Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)\land\mathcal{X}_k^{pred}(v) \ne \emptyset \land  J_k \in \operatorname{hp}_i\bigg\}
 $$
 
 
@@ -182,6 +174,33 @@ A_p^{exact}(v) & \text{otherwise}
 $$
 
 #### Computing $t_i^{pred}$
+
+$$
+\mathcal{X}_x^{pred}(v) = \big\{pred(J_x) \cap \mathcal{X}(v)\big\}
+$$
+
+
+$$
+\mathcal{Q}_i(v, t)= \bigg\{J_k \bigg| \Big(t \ge \max\left\{r_k^{\max}, A_{m_k^{\min}}^{\min}\right\}\Big) \land \Big(pred(J_k) \subseteq \mathcal{S}(v)\Big)\land\mathcal{X}_k^{pred}(v) \ne \emptyset \land  J_k \in \operatorname{hp}_i\bigg\}
+$$
+
+$$
+J_k^{pred,\min} = \operatorname*{arg\,min}_{J_j \in \mathcal{X}_k^{pred}(v)} p_j
+$$
+
+$$
+\mathcal{Q}_i^{pred}(v, t) = \left\{ J_k^{pred,\min} \Bigg| J_k \in \mathcal{Q}_i(v, t) \right\}
+$$
+
+$$
+q^{\min}(v, t) = \max_{1 \le q \le m} \{q | A_q^{\min}(v) \ge t\}
+$$
+
+$$
+q^{\min}(v, t) - \sum_{J_j \in \mathcal{Q}_i^{pred}(v, t)} p_j \ge p
+$$
+
+
 
 ```{=latex}
 \begin{algorithm}[H]
